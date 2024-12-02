@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "WeddingApp",
-    "slug": "WeddingApp",
+    "name": "Wedding",
+    "slug": "Wedding",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
