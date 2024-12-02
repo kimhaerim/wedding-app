@@ -1,0 +1,44 @@
+import React from "react";
+import styled from "styled-components/native";
+import { color } from "../enum";
+
+const OuterContainer = styled.View`
+  align-items: center;
+  margin-top: 100%;
+`;
+
+const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
+  background-color: ${({ disabled }) => (disabled ? "#F2F3F2" : color.BLACK)};
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: ${({ width }) => (width ? width : "100%")};
+`;
+
+const ButtonText = styled.Text<ButtonContainerProps>`
+  color: ${({ disabled }) => (disabled ? "#D2D2D2" : color.WHITE)};
+  font-weight: bold;
+`;
+
+interface ButtonContainerProps {
+  width?: string;
+  disabled?: boolean;
+}
+
+interface ButtonProps extends ButtonContainerProps {
+  title: string;
+  onPress: () => void;
+}
+
+const ActiveButton: React.FC<ButtonProps> = (props) => {
+  const { width, title, onPress, disabled } = props;
+  return (
+    <OuterContainer>
+      <ButtonContainer onPress={onPress} width={width} disabled={disabled}>
+        <ButtonText disabled={disabled}>{title}</ButtonText>
+      </ButtonContainer>
+    </OuterContainer>
+  );
+};
+export default ActiveButton;

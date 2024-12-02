@@ -1,7 +1,7 @@
-import React, { Children } from "react";
-import { StyleSheet } from "react-native";
+import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import styled from "styled-components/native";
+
 import CustomText from "./Text";
 import { color } from "../enum";
 
@@ -28,7 +28,7 @@ interface BackButtonProps {
 const BackButton: React.FC<BackButtonProps> = (props) => {
   return (
     <HeaderContainer>
-      <BackButtonContainer onPress={() => console.log("뒤로 가기")}>
+      <BackButtonContainer onPress={props.onPress}>
         <Icon name="arrow-back" size={30} color={color.BLACK} />
       </BackButtonContainer>
       <CustomText title={props.title} fontSize={15} />

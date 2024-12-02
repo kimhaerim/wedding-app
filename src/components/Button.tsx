@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 
 const OuterContainer = styled.View`
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
@@ -12,7 +13,7 @@ const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
   justify-content: center;
   height: 50px;
   width: ${({ width }) => (width ? width : "100%")};
-  border: ${({ outlined }) => (outlined ? "1px solid black" : "none")};
+  border: ${({ outlined }) => (outlined ? "1px solid gray" : "none")};
 `;
 
 const ButtonText = styled.Text<ButtonInnerTextProps>`

@@ -10,7 +10,7 @@ const LoginScreen = () => {
   return (
     <CenteredSafeArea justifyContent="center">
       <CustomText title="웨딩의 시작과 끝을 함께하는 나만의 웨딩 플래너" fontSize={18} centered></CustomText>
-      <CustomText title="WEDDING" fontSize={50} marginBottom={100} centered bold></CustomText>
+      <CustomText title="WEDDING" fontSize={50} margin-="0px 0px 100px 0px" centered bold></CustomText>
 
       <CustomButton
         title="카카오로 시작하기"

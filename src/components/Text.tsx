@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 
 const TextContainer = styled.Text<TextContainerProps>`
@@ -7,13 +6,13 @@ const TextContainer = styled.Text<TextContainerProps>`
   border-radius: 5px;
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : "30px")};
   font-weight: bold;
-  margin-bottom: ${({ marginBottom }) => marginBottom};
-  text-align: ${(centered) => (centered ? "center" : "left")};
+  text-align: ${({ centered }) => (centered ? "center" : "left")};
+  margin: ${({ margin }) => margin || "0px"};
 `;
 
 interface TextContainerProps {
   fontSize?: number;
-  marginBottom?: number;
+  margin?: string;
   centered?: boolean;
   bold?: boolean;
 }
@@ -23,9 +22,10 @@ interface TextProps extends TextContainerProps {
 }
 
 const CustomText: React.FC<TextProps> = (props) => {
-  const { title, fontSize, marginBottom, centered, bold } = props;
+  const { title, fontSize, margin, centered, bold } = props;
+  console.log(margin);
   return (
-    <TextContainer fontSize={fontSize} marginBottom={marginBottom} centered={centered} bold={bold}>
+    <TextContainer fontSize={fontSize} margin={margin} centered={centered} bold={bold}>
       {title}
     </TextContainer>
   );
