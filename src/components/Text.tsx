@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 const TextContainer = styled.Text<TextContainerProps>`
-  padding: 10px 20px;
+  padding: ${({ padding }) => padding || "0px"};
   border-radius: 5px;
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : "30px")};
   font-weight: bold;
@@ -13,6 +13,7 @@ const TextContainer = styled.Text<TextContainerProps>`
 interface TextContainerProps {
   fontSize?: number;
   margin?: string;
+  padding?: string;
   centered?: boolean;
   bold?: boolean;
 }
@@ -22,10 +23,10 @@ interface TextProps extends TextContainerProps {
 }
 
 const CustomText: React.FC<TextProps> = (props) => {
-  const { title, fontSize, margin, centered, bold } = props;
+  const { title, fontSize, margin, centered, bold, padding } = props;
   console.log(margin);
   return (
-    <TextContainer fontSize={fontSize} margin={margin} centered={centered} bold={bold}>
+    <TextContainer fontSize={fontSize} margin={margin} centered={centered} bold={bold} padding={padding}>
       {title}
     </TextContainer>
   );

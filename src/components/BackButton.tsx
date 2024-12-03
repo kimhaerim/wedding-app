@@ -31,7 +31,7 @@ const BackButton: React.FC<BackButtonProps> = (props) => {
       <BackButtonContainer onPress={props.onPress}>
         <Icon name="arrow-back" size={30} color={color.BLACK} />
       </BackButtonContainer>
-      <CustomText title={props.title} fontSize={15} />
+      <CustomText title={props.title} fontSize={15} margin="0px 0px 10px 0px" />
     </HeaderContainer>
   );
 };

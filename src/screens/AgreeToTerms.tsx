@@ -52,7 +52,7 @@ const AgreeToTermsScreen = () => {
   return (
     <CenteredSafeArea>
       <BackButton title="이메일 회원가입" onPress={() => console.log("뒤로 가기")}></BackButton>
-      <CustomText title="이용약관에 동의해 주세요." fontSize={20} margin="30px 0px 0px 0px" />
+      <CustomText title="이용약관에 동의해 주세요." fontSize={20} margin="30px 0px 0px 0px" padding="10px 20px" />
 
       <CheckBox
         onValueChange={handleAllAgreed}

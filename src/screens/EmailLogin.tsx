@@ -21,11 +21,13 @@ const EmailLoginScreen = () => {
         placeholder={"이메일"}
         margin="20px 0px 0px 0px"
         onChangeText={(text) => setEmail(text)}
+        width="80%"
       ></CustomInput>
       <CustomInput
         placeholder={"비밀번호"}
         margin="15px 0px 20px 0px"
         onChangeText={(text) => setPassword(text)}
+        width="80%"
         secureTextEntry={true}
       ></CustomInput>
 
