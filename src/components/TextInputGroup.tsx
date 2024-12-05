@@ -25,7 +25,7 @@ const TextInputGroup: React.FC<InputGroupProps> = (props) => {
   const isError = !isValid && value.length === 0 && errorMessage;
   return (
     <InputGroupContainer>
-      <CustomText title={title} fontSize={16} margin="0px 0px 10px 0px" />
+      <CustomText title={title} fontSize={16} margin="0px 0px 10px 0px" bold />
       <CustomInput placeholder={placeholder} onChangeText={onChangeText} secureTextEntry={secureTextEntry} />
       {isError && <ErrorText message={errorMessage}></ErrorText>}
     </InputGroupContainer>

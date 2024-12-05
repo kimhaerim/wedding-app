@@ -18,7 +18,7 @@ const LoginScreen = () => {
       <CustomText
         title="WEDDING"
         fontSize={50}
-        margin-="0px 0px 100px 0px"
+        margin-="0px 0px 0px 0px"
         padding="10px 20px"
         centered
         bold
@@ -30,6 +30,7 @@ const LoginScreen = () => {
         backgroundColor={color.KAKAO}
         innerTextColor="#191919"
         width="80%"
+        innerTextBold
       />
       <CustomButton
         title="@ 이메일로 시작하기"
@@ -37,6 +38,7 @@ const LoginScreen = () => {
         backgroundColor={color.WHITE}
         width="80%"
         outlined
+        innerTextBold
       />
       <CustomRow>
         <CustomButton
@@ -45,6 +47,7 @@ const LoginScreen = () => {
           backgroundColor={color.WHITE}
           innerTextColor={color.DARK_GRAY}
           fontSize={14}
+          innerTextBold
         />
         <CustomButton
           title="아이디 / 비밀번호 찾기 >"
@@ -52,6 +55,7 @@ const LoginScreen = () => {
           backgroundColor={color.WHITE}
           innerTextColor={color.DARK_GRAY}
           fontSize={14}
+          innerTextBold
         />
       </CustomRow>
     </CenteredSafeArea>

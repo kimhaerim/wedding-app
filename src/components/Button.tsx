@@ -19,6 +19,7 @@ const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
 const ButtonText = styled.Text<ButtonInnerTextProps>`
   color: ${({ innerTextColor }) => innerTextColor || "black"};
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : "16px")};
+  font-weight: ${({ innerTextBold }) => (innerTextBold ? "bold" : "normal")};
 `;
 
 interface ButtonContainerProps {
@@ -30,6 +31,7 @@ interface ButtonContainerProps {
 interface ButtonInnerTextProps {
   innerTextColor?: string;
   fontSize?: number;
+  innerTextBold?: boolean;
 }
 
 interface ButtonProps extends ButtonContainerProps, ButtonInnerTextProps {
@@ -38,11 +40,11 @@ interface ButtonProps extends ButtonContainerProps, ButtonInnerTextProps {
 }
 
 const CustomButton: React.FC<ButtonProps> = (props) => {
-  const { backgroundColor, outlined, width, innerTextColor, fontSize, title, onPress } = props;
+  const { backgroundColor, outlined, width, innerTextColor, fontSize, title, onPress, innerTextBold } = props;
   return (
     <OuterContainer>
       <ButtonContainer onPress={onPress} backgroundColor={backgroundColor} width={width} outlined={outlined}>
-        <ButtonText innerTextColor={innerTextColor} fontSize={fontSize}>
+        <ButtonText innerTextColor={innerTextColor} fontSize={fontSize} innerTextBold={innerTextBold}>
           {title}
         </ButtonText>
       </ButtonContainer>

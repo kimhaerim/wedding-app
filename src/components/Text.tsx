@@ -1,13 +1,16 @@
 import React from "react";
 import styled from "styled-components/native";
 
+const TextWrapper = styled.View<TextContainerProps>`
+  margin: ${({ margin }) => margin || "0px"};
+`;
+
 const TextContainer = styled.Text<TextContainerProps>`
   padding: ${({ padding }) => padding || "0px"};
   border-radius: 5px;
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : "30px")};
-  font-weight: bold;
+  font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
   text-align: ${({ centered }) => (centered ? "center" : "left")};
-  margin: ${({ margin }) => margin || "0px"};
 `;
 
 interface TextContainerProps {
@@ -24,10 +27,13 @@ interface TextProps extends TextContainerProps {
 
 const CustomText: React.FC<TextProps> = (props) => {
   const { title, fontSize, margin, centered, bold, padding } = props;
+  console.log(margin);
   return (
-    <TextContainer fontSize={fontSize} margin={margin} centered={centered} bold={bold} padding={padding}>
-      {title}
-    </TextContainer>
+    <TextWrapper margin={margin}>
+      <TextContainer fontSize={fontSize} centered={centered} bold={bold} padding={padding}>
+        {title}
+      </TextContainer>
+    </TextWrapper>
   );
 };
 
