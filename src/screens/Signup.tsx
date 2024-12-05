@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import CenteredSafeArea from "../components/CenteredSafeArea";
 import BackButton from "../components/BackButton";
 import ActiveButton from "../components/ActiveButton";
-import InputGroup from "../components/InputGroup";
+import TextInputGroup from "../components/TextInputGroup";
 
 const enum SignupField {
   EMAIL = "email",
@@ -44,7 +44,7 @@ const SignupScreen = () => {
     <CenteredSafeArea>
       <BackButton title="이메일 회원가입" onPress={() => console.log("뒤로 가기")} />
 
-      <InputGroup
+      <TextInputGroup
         title="이메일"
         placeholder="wedding@email.com"
         value={formData.email}
@@ -53,7 +53,7 @@ const SignupScreen = () => {
         errorMessage="유효한 이메일을 입력하세요."
       />
 
-      <InputGroup
+      <TextInputGroup
         title="비밀번호 입력"
         placeholder="비밀번호"
         value={formData.password}
@@ -61,7 +61,7 @@ const SignupScreen = () => {
         secureTextEntry
       />
 
-      <InputGroup
+      <TextInputGroup
         title="비밀번호 확인"
         placeholder="비밀번호 확인"
         value={formData.confirmPassword}

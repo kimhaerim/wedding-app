@@ -19,7 +19,6 @@ const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
 const ButtonText = styled.Text<ButtonInnerTextProps>`
   color: ${({ innerTextColor }) => innerTextColor || "black"};
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : "16px")};
-  font-weight: bold;
 `;
 
 interface ButtonContainerProps {

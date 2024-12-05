@@ -3,8 +3,12 @@ import styled from "styled-components/native";
 import { color } from "../enum";
 
 const OuterContainer = styled.View`
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
   align-items: center;
-  margin-top: 100%;
+  z-index: 10;
 `;
 
 const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
@@ -13,7 +17,7 @@ const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
   align-items: center;
   justify-content: center;
   height: 50px;
-  width: ${({ width }) => (width ? width : "100%")};
+  width: ${({ width }) => (width ? width : "90%")};
 `;
 
 const ButtonText = styled.Text<ButtonContainerProps>`
@@ -41,4 +45,5 @@ const ActiveButton: React.FC<ButtonProps> = (props) => {
     </OuterContainer>
   );
 };
+
 export default ActiveButton;
