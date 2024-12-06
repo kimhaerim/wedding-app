@@ -24,6 +24,8 @@ interface InputBoxContainerProps {
   secureTextEntry?: boolean;
   margin?: string;
   width?: string;
+  defaultValue?: string;
+  isNumber?: boolean;
   onChangeText: (text: string) => void;
 }
 
@@ -35,6 +37,8 @@ const CustomInput: React.FC<InputBoxContainerProps> = (props) => (
       margin={props.margin}
       secureTextEntry={props.secureTextEntry}
       width={props.width}
+      defaultValue={props.defaultValue}
+      keyboardType={props.isNumber ? "numeric" : "default"}
     ></InputBoxContainer>
   </OuterContainer>
 );

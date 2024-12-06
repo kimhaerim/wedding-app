@@ -27,7 +27,7 @@ interface TextProps extends TextContainerProps {
 
 const CustomText: React.FC<TextProps> = (props) => {
   const { title, fontSize, margin, centered, bold, padding } = props;
-  console.log(margin);
+
   return (
     <TextWrapper margin={margin}>
       <TextContainer fontSize={fontSize} centered={centered} bold={bold} padding={padding}>
