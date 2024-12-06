@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import CenteredSafeArea from "../components/CenteredSafeArea";
-import BackButton from "../components/BackButton";
-import CustomText from "../components/Text";
+import CenteredSafeArea from "../../components/CenteredSafeArea";
+import BackButton from "../../components/BackButton";
+import CustomText from "../../components/Text";
 import { SegmentedButtons } from "react-native-paper";
-import CustomDateTimePicker from "../components/DateTimePicker";
-import ActiveButton from "../components/ActiveButton";
-import TextInputGroup from "../components/TextInputGroup";
-import InputGroup from "../components/InputGroup";
-import { Gender } from "../enum";
+import CustomDateTimePicker from "../../components/DateTimePicker";
+import ActiveButton from "../../components/ActiveButton";
+import TextInputGroup from "../../components/TextInputGroup";
+import InputGroup from "../../components/InputGroup";
+import { Gender } from "../../enum";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 const SignupProfileScreen = () => {

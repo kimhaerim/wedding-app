@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from "react";
-import styled from "styled-components/native";
-import CenteredSafeArea from "../components/CenteredSafeArea";
-import BackButton from "../components/BackButton";
-import ActiveButton from "../components/ActiveButton";
-import TextInputGroup from "../components/TextInputGroup";
+import CenteredSafeArea from "../../components/CenteredSafeArea";
+import BackButton from "../../components/BackButton";
+import ActiveButton from "../../components/ActiveButton";
+import TextInputGroup from "../../components/TextInputGroup";
 
 const enum SignupField {
   EMAIL = "email",

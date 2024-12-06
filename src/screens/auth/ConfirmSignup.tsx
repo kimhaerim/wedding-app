@@ -1,16 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components/native";
-import CenteredSafeArea from "../components/CenteredSafeArea";
-import CustomText from "../components/Text";
+import React from "react";
+import CenteredSafeArea from "../../components/CenteredSafeArea";
+import CustomText from "../../components/Text";
 
-import HorizontalLine from "../components/HorizontalLine";
-import CustomButton from "../components/Button";
-import { color } from "../enum";
-import ActiveButton from "../components/ActiveButton";
-import BackButton from "../components/BackButton";
-import CheckBox from "../components/CheckBox";
+import CustomButton from "../../components/Button";
+import { color } from "../../enum";
 import { View } from "react-native";
-import CancelButton from "../components/CancelButton";
+import CancelButton from "../../components/CancelButton";
 
 const ConfirmSignupScreen = () => {
   return (

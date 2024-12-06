@@ -4,20 +4,23 @@ import styled from "styled-components/native";
 const RowContainer = styled.View`
   flex-direction: row;
   justify-content: center;
-  margin-top: 20px;
+  align-items: center;
 `;
 
-const SmallRowContainer = styled.View`
-  flex: 1;
-  margin-horizontal: 5px;
+const SmallRowContainer = styled.View<{ flexRatio?: number }>`
+  flex: ${({ flexRatio }) => flexRatio || 1};
 `;
 
 interface RowProps {
   children: React.ReactNode;
+  ratios?: number[];
 }
 
-const CustomRow: React.FC<RowProps> = ({ children }) => {
-  const wrappedChildren = React.Children.map(children, (child) => <SmallRowContainer>{child}</SmallRowContainer>);
+const CustomRow: React.FC<RowProps> = ({ children, ratios }) => {
+  const wrappedChildren = React.Children.map(children, (child, index) => (
+    <SmallRowContainer flexRatio={ratios?.[index]}>{child}</SmallRowContainer>
+  ));
+
   return <RowContainer>{wrappedChildren}</RowContainer>;
 };
 

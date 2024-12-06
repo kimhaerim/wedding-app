@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components/native";
-import CenteredSafeArea from "../components/CenteredSafeArea";
-import CustomButton from "../components/Button";
-import CustomText from "../components/Text";
-import Icon from "react-native-vector-icons/Ionicons";
-import CustomRow from "../components/Row";
-import { Text } from "react-native";
-import BackButton from "../components/BackButton";
-import { color } from "../enum";
-import CustomInput from "../components/InputBox";
+
+import CenteredSafeArea from "../../components/CenteredSafeArea";
+import CustomButton from "../../components/Button";
+import CustomRow from "../../components/Row";
+import BackButton from "../../components/BackButton";
+import { color } from "../../enum";
+import CustomInput from "../../components/InputBox";
 
 const EmailLoginScreen = () => {
   const [email, setEmail] = useState("");

@@ -1,10 +1,10 @@
 import React from "react";
-import styled from "styled-components/native";
-import CenteredSafeArea from "../components/CenteredSafeArea";
-import CustomButton from "../components/Button";
-import CustomText from "../components/Text";
-import CustomRow from "../components/Row";
-import { color } from "../enum";
+
+import CenteredSafeArea from "../../components/CenteredSafeArea";
+import CustomButton from "../../components/Button";
+import CustomText from "../../components/Text";
+import CustomRow from "../../components/Row";
+import { color } from "../../enum";
 
 const LoginScreen = () => {
   return (

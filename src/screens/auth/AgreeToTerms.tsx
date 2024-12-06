@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import styled from "styled-components/native";
-import CenteredSafeArea from "../components/CenteredSafeArea";
-import CustomText from "../components/Text";
-
-import HorizontalLine from "../components/HorizontalLine";
-import CustomButton from "../components/Button";
-import { color } from "../enum";
-import ActiveButton from "../components/ActiveButton";
-import BackButton from "../components/BackButton";
-import CheckBox from "../components/CheckBox";
+import CenteredSafeArea from "../../components/CenteredSafeArea";
+import CustomText from "../../components/Text";
+import HorizontalLine from "../../components/HorizontalLine";
+import BackButton from "../../components/BackButton";
+import CheckBox from "../../components/CheckBox";
+import ActiveButton from "../../components/ActiveButton";
 
 const initialAgreements = {
   isAllAgreed: false,
