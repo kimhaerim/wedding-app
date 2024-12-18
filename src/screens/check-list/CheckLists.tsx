@@ -148,7 +148,11 @@ const CheckListItem = ({ checkList, isLast }: { checkList: ICheckList; isLast: b
 const DetailsSection = ({ checkList }: { checkList: ICheckList }) => (
   <View style={{ marginLeft: 50 }}>
     {checkList.reservedDate && (
-      <CustomText title={`${dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}`} fontSize={10} />
+      <CustomText
+        title={`${dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}`}
+        fontSize={10}
+        style={{ color: Color.DARK_GRAY }}
+      />
     )}
     {checkList.status && (
       <CustomText title={convertCheckListStatus(checkList.status)} fontSize={14} margin="10px 0 0 0" />
@@ -165,7 +169,13 @@ const CostItem = ({ cost }: { cost: ICost }) => (
       <CustomText title={cost.title} fontSize={16} bold />
       <CustomText title={`${cost.amount}`} fontSize={16} textAlign="right" />
     </CustomRow>
-    {cost.paymentDate && <CustomText title={dayjs(cost.paymentDate).format("YYYY-MM-DD HH:mm")} fontSize={10} />}
+
+    <CustomText
+      title={cost.paymentDate ? dayjs(cost.paymentDate).format("YYYY-MM-DD HH:mm") : "결제 전"}
+      fontSize={10}
+      style={{ color: Color.DARK_GRAY }}
+    />
+
     {cost.memo && <CustomText title={cost.memo} fontSize={14} margin="10px 0 0 0" />}
   </CostItemContainer>
 );

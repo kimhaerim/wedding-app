@@ -27,10 +27,11 @@ interface TextContainerProps {
 
 interface TextProps extends TextContainerProps {
   title: string;
+  style?: object;
 }
 
 const CustomText: React.FC<TextProps> = (props) => {
-  const { title, fontSize, margin, centered, bold, padding, backgroundColor, textAlign } = props;
+  const { title, fontSize, margin, centered, bold, padding, backgroundColor, textAlign, style } = props;
 
   return (
     <TextWrapper margin={margin}>
@@ -41,6 +42,7 @@ const CustomText: React.FC<TextProps> = (props) => {
         padding={padding}
         textAlign={textAlign}
         backgroundColor={backgroundColor}
+        style={style}
       >
         {title}
       </TextContainer>

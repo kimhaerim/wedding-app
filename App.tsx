@@ -12,7 +12,7 @@ import AgreeToTermsScreen from "./src/screens/auth/AgreeToTerms";
 export default function App() {
   return (
     <NavigationContainer>
-      <CategoryLists></CategoryLists>
+      <CheckLists></CheckLists>
     </NavigationContainer>
   );
 }
