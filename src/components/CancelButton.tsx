@@ -2,7 +2,7 @@ import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import styled from "styled-components/native";
 
-import { color } from "../enum";
+import { Color } from "../enum";
 
 const HeaderContainer = styled.View`
   flex-direction: row;
@@ -26,7 +26,7 @@ const CancelButton: React.FC<BackButtonProps> = (props) => {
   return (
     <HeaderContainer>
       <BackButtonContainer onPress={props.onPress}>
-        <Icon name="close" size={30} color={color.BLACK} />
+        <Icon name="close" size={30} color={Color.BLACK} />
       </BackButtonContainer>
     </HeaderContainer>
   );

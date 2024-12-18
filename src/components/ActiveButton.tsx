@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { color } from "../enum";
+import { Color } from "../enum";
 
 const OuterContainer = styled.View`
   position: absolute;
@@ -12,7 +12,7 @@ const OuterContainer = styled.View`
 `;
 
 const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
-  background-color: ${({ disabled }) => (disabled ? "#F2F3F2" : color.BLACK)};
+  background-color: ${({ disabled }) => (disabled ? "#F2F3F2" : Color.BLACK)};
   border-radius: 12px;
   align-items: center;
   justify-content: center;
@@ -21,7 +21,7 @@ const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
 `;
 
 const ButtonText = styled.Text<ButtonContainerProps>`
-  color: ${({ disabled }) => (disabled ? "#D2D2D2" : color.WHITE)};
+  color: ${({ disabled }) => (disabled ? "#D2D2D2" : Color.WHITE)};
   font-weight: bold;
 `;
 

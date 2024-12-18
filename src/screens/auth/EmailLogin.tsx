@@ -4,7 +4,7 @@ import CenteredSafeArea from "../../components/CenteredSafeArea";
 import CustomButton from "../../components/Button";
 import CustomRow from "../../components/Row";
 import BackButton from "../../components/BackButton";
-import { color } from "../../enum";
+import { Color } from "../../enum";
 import CustomInput from "../../components/InputBox";
 
 const EmailLoginScreen = () => {
@@ -31,23 +31,23 @@ const EmailLoginScreen = () => {
       <CustomButton
         title="로그인"
         onPress={() => console.log(email, password)}
-        backgroundColor={color.BLACK}
-        innerTextColor={color.WHITE}
+        backgroundColor={Color.BLACK}
+        innerTextColor={Color.WHITE}
         width="80%"
       ></CustomButton>
       <CustomRow>
         <CustomButton
           title="회원가입 >"
           onPress={() => console.log("회원가입")}
-          backgroundColor={color.WHITE}
-          innerTextColor={color.DARK_GRAY}
+          backgroundColor={Color.WHITE}
+          innerTextColor={Color.DARK_GRAY}
           fontSize={14}
         />
         <CustomButton
           title="아이디 / 비밀번호 찾기 >"
           onPress={() => console.log("아이디 / 비밀번호 찾기")}
-          backgroundColor={color.WHITE}
-          innerTextColor={color.DARK_GRAY}
+          backgroundColor={Color.WHITE}
+          innerTextColor={Color.DARK_GRAY}
           fontSize={14}
         />
       </CustomRow>

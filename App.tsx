@@ -6,11 +6,13 @@ import EmailLoginScreen from "./src/screens/auth/EmailLogin";
 import LoginScreen from "./src/screens/auth/Login";
 import CategoryLists from "./src/screens/category/CategoryLists";
 import EditCategory from "./src/screens/category/EditCategory";
+import CategoryWithCheckLists from "./src/screens/category/CategoryWithCheckLists";
+import AgreeToTermsScreen from "./src/screens/auth/AgreeToTerms";
 
 export default function App() {
   return (
     <NavigationContainer>
-      <EditCategory></EditCategory>
+      <CategoryLists></CategoryLists>
     </NavigationContainer>
   );
 }

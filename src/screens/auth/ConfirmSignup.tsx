@@ -3,7 +3,7 @@ import CenteredSafeArea from "../../components/CenteredSafeArea";
 import CustomText from "../../components/Text";
 
 import CustomButton from "../../components/Button";
-import { color } from "../../enum";
+import { Color } from "../../enum";
 import { View } from "react-native";
 import CancelButton from "../../components/CancelButton";
 
@@ -31,7 +31,7 @@ const ConfirmSignupScreen = () => {
         <CustomButton
           title="카카오로 초대하기"
           onPress={() => console.log("카카오로 초대하기")}
-          backgroundColor={color.KAKAO}
+          backgroundColor={Color.KAKAO}
           innerTextColor="#191919"
           width="80%"
           innerTextBold
@@ -39,7 +39,7 @@ const ConfirmSignupScreen = () => {
         <CustomButton
           title="초대 링크 복사"
           onPress={() => console.log("초대 링크 복사")}
-          backgroundColor={color.WHITE}
+          backgroundColor={Color.WHITE}
           width="80%"
           innerTextBold
           outlined

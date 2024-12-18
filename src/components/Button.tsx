@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 
 const OuterContainer = styled.View`
   align-items: center;
-  margin-bottom: 10px;
 `;
 
 const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`

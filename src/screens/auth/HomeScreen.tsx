@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native";
 import Button from "../../components/Button";
-import { color } from "../../enum";
+import { Color } from "../../enum";
 
 const HomeScreen = () => {
   return (
@@ -8,7 +8,7 @@ const HomeScreen = () => {
       <Button
         title="Hello, I am your cat!"
         onPress={() => console.log("ddd")}
-        backgroundColor={color.DARK_GRAY}
+        backgroundColor={Color.DARK_GRAY}
       ></Button>
     </SafeAreaView>
   );

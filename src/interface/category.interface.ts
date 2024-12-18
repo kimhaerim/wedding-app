@@ -1,7 +1,10 @@
+import { ICheckList } from "./check-list.interface";
+
 export interface ICategory {
   id: number;
   title: string;
   budgetAmount: number;
+  checkList: ICheckList[];
 }
 
 export interface IAddCategory {

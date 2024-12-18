@@ -1,40 +1,31 @@
-import React from "react";
 import styled from "styled-components/native";
+import Checkbox from "expo-checkbox";
+import React from "react";
+import CustomText from "./Text";
 
-const StyledCheckBoxContainer = styled.Pressable`
-  flex-direction: row;
-  align-items: center;
-  padding: 10px;
-`;
-
-const CheckBoxContainer = styled.Switch<{ margin: string }>`
-  margin: ${({ margin }) => margin || "0px"};
-`;
-
-const Label = styled.Text<{ margin: string }>`
-  margin-left: 10px;
-  font-size: 16px;
-  margin: ${({ margin }) => margin || "0px"};
-`;
-
-interface CheckBoxProps {
-  title: string;
-  value: boolean;
-  margin: string;
+interface Props {
+  isChecked: boolean;
+  label: string;
   onValueChange: () => void;
+  margin?: string;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = (props) => {
-  return (
-    <StyledCheckBoxContainer>
-      <CheckBoxContainer
-        onValueChange={props.onValueChange}
-        value={props.value}
-        margin={props.margin}
-      ></CheckBoxContainer>
-      <Label margin={props.margin}>{props.title}</Label>
-    </StyledCheckBoxContainer>
-  );
-};
+const CheckBoxContainer = styled.View<{ margin?: string }>`
+  flex-direction: row;
+  align-items: center;
+  margin: ${({ margin }) => margin || "0px"};
+`;
+
+const StyledCheckbox = styled(Checkbox)`
+  margin-right: 8px;
+  margin-left: 10px;
+`;
+
+const CheckBox: React.FC<Props> = ({ isChecked, label, onValueChange, margin }) => (
+  <CheckBoxContainer margin={margin}>
+    <StyledCheckbox value={isChecked} onValueChange={onValueChange} />
+    <CustomText fontSize={15} title={label} bold />
+  </CheckBoxContainer>
+);
 
 export default CheckBox;

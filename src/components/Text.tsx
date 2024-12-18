@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import { Color } from "../enum";
 
 const TextWrapper = styled.View<TextContainerProps>`
   margin: ${({ margin }) => margin || "0px"};
@@ -10,7 +11,8 @@ const TextContainer = styled.Text<TextContainerProps>`
   border-radius: 5px;
   font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : "30px")};
   font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
-  text-align: ${({ centered }) => (centered ? "center" : "left")};
+  text-align: ${({ textAlign }) => (textAlign ? textAlign : "left")};
+  background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : "")};
 `;
 
 interface TextContainerProps {
@@ -18,7 +20,9 @@ interface TextContainerProps {
   margin?: string;
   padding?: string;
   centered?: boolean;
+  textAlign?: string;
   bold?: boolean;
+  backgroundColor?: Color;
 }
 
 interface TextProps extends TextContainerProps {
@@ -26,11 +30,18 @@ interface TextProps extends TextContainerProps {
 }
 
 const CustomText: React.FC<TextProps> = (props) => {
-  const { title, fontSize, margin, centered, bold, padding } = props;
+  const { title, fontSize, margin, centered, bold, padding, backgroundColor, textAlign } = props;
 
   return (
     <TextWrapper margin={margin}>
-      <TextContainer fontSize={fontSize} centered={centered} bold={bold} padding={padding}>
+      <TextContainer
+        fontSize={fontSize}
+        centered={centered}
+        bold={bold}
+        padding={padding}
+        textAlign={textAlign}
+        backgroundColor={backgroundColor}
+      >
         {title}
       </TextContainer>
     </TextWrapper>

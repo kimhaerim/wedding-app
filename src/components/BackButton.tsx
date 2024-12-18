@@ -3,7 +3,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import styled from "styled-components/native";
 
 import CustomText from "./Text";
-import { color } from "../enum";
+import { Color } from "../enum";
 
 const HeaderContainer = styled.View`
   flex-direction: row;
@@ -11,7 +11,7 @@ const HeaderContainer = styled.View`
   align-items: center;
   padding: 10px 20px;
   border-bottom-width: 1px;
-  border-bottom-color: ${color.GRAY};
+  border-bottom-color: ${Color.GRAY};
 `;
 
 const BackButtonContainer = styled.TouchableOpacity`
@@ -29,7 +29,7 @@ const BackButton: React.FC<BackButtonProps> = (props) => {
   return (
     <HeaderContainer>
       <BackButtonContainer onPress={props.onPress}>
-        <Icon name="arrow-back" size={30} color={color.BLACK} />
+        <Icon name="arrow-back" size={30} color={Color.BLACK} />
       </BackButtonContainer>
       <CustomText title={props.title} fontSize={15} margin="0px 0px 10px 0px" />
     </HeaderContainer>

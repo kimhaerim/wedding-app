@@ -3,8 +3,8 @@ import CenteredSafeArea from "../../components/CenteredSafeArea";
 import CustomText from "../../components/Text";
 import HorizontalLine from "../../components/HorizontalLine";
 import BackButton from "../../components/BackButton";
-import CheckBox from "../../components/CheckBox";
 import ActiveButton from "../../components/ActiveButton";
+import CheckBox from "../../components/CheckBox";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -53,22 +53,22 @@ const AgreeToTermsScreen = () => {
       <CheckBox
         onValueChange={handleAllAgreed}
         margin="30px 10px 10px 0px"
-        title="이용약관 전체 동의"
-        value={agreements.isAllAgreed}
+        label="이용약관 전체 동의"
+        isChecked={agreements.isAllAgreed}
       />
       <HorizontalLine />
 
       <CheckBox
         onValueChange={() => toggleAgreement("isOver14Agreed")}
         margin="10px 10px 0px 0px"
-        title="[필수] 만 14세 이상입니다."
-        value={agreements.isOver14Agreed}
+        label="[필수] 만 14세 이상입니다."
+        isChecked={agreements.isOver14Agreed}
       />
       <CheckBox
         onValueChange={() => toggleAgreement("isTermsAgreed")}
-        margin="10px 10px 0px 0px"
-        title="[필수] 이용약관 동의"
-        value={agreements.isTermsAgreed}
+        margin="20px 10px 0px 0px"
+        label="[필수] 이용약관 동의"
+        isChecked={agreements.isTermsAgreed}
       />
       <ActiveButton
         title="다음"
