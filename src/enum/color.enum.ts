@@ -7,4 +7,5 @@ export enum Color {
   KAKAO = "#FEE500",
   TEMP = "#FAFAFA",
   BLUE100 = "#CEECF5",
+  BLUE200 = "#A9E2F3",
 }

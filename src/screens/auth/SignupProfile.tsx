@@ -7,8 +7,10 @@ import CustomDateTimePicker from "../../components/DateTimePicker";
 import ActiveButton from "../../components/ActiveButton";
 import TextInputGroup from "../../components/TextInputGroup";
 import InputGroup from "../../components/InputGroup";
-import { Gender } from "../../enum";
+import { Color, Gender } from "../../enum";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { View } from "react-native";
+import HorizontalLine from "../../components/HorizontalLine";
 
 const SignupProfileScreen = () => {
   const [name, setName] = useState<string>("");
@@ -33,33 +35,51 @@ const SignupProfileScreen = () => {
     </InputGroup>
   );
 
+  const segmentedButtonStyle = {
+    backgroundColor: Color.WHITE,
+  };
+
+  const selectedButtonStyle = {
+    backgroundColor: Color.BLUE100,
+  };
+
   return (
     <CenteredSafeArea>
       <BackButton title="이메일 회원가입" onPress={() => console.log("뒤로 가기")} />
 
-      <TextInputGroup
-        title="이름"
-        value={name}
-        onChangeText={setName}
-        isValid={name === undefined}
-        errorMessage="이름을 입력해주세요"
-      />
-
-      <InputGroup>
-        <CustomText title="성별" fontSize={16} margin="0px 0px 10px 0px" />
-        <SegmentedButtons
-          value={gender}
-          onValueChange={(value) => setGender(value as Gender)}
-          buttons={[
-            { value: Gender.FEMALE, label: "🙍‍♀️ 여성" },
-            { value: Gender.MALE, label: "🙍‍♂️ 남성" },
-          ]}
+      <View style={{ margin: 20 }}>
+        <TextInputGroup
+          title="이름"
+          value={name}
+          onChangeText={setName}
+          isValid={name === undefined}
+          errorMessage="이름을 입력해주세요"
         />
-      </InputGroup>
 
-      {renderDateInput("생일", birthDay, "date", setBirthDay)}
-      {renderDateInput("처음 만난 날", coupleStartDate, "date", setCoupleStartDate)}
-      {renderDateInput("결혼 예정일", weddingDate, "datetime", setWeddingDate)}
+        <InputGroup>
+          <CustomText title="성별" fontSize={16} margin="0px 0px 10px 0px" bold />
+          <SegmentedButtons
+            value={gender}
+            onValueChange={(value) => setGender(value as Gender)}
+            buttons={[
+              {
+                value: Gender.FEMALE,
+                label: "🙍‍♀️ 여성",
+                style: gender === Gender.FEMALE ? selectedButtonStyle : segmentedButtonStyle,
+              },
+              {
+                value: Gender.MALE,
+                label: "🙍‍♂️ 남성",
+                style: gender === Gender.MALE ? selectedButtonStyle : segmentedButtonStyle,
+              },
+            ]}
+          />
+        </InputGroup>
+
+        {renderDateInput("생년월일", birthDay, "date", setBirthDay)}
+        {renderDateInput("처음 만난 날", coupleStartDate, "date", setCoupleStartDate)}
+        {renderDateInput("결혼 예정일", weddingDate, "datetime", setWeddingDate)}
+      </View>
 
       <ActiveButton
         title="다음"

@@ -34,6 +34,8 @@ const covertCostType = (costType: CostType) => {
 };
 
 const CheckLists = () => {
+  const checkListCount = 1;
+
   const [category, setCategory] = useState<ICategory>({
     id: 1,
     title: "본식DVD",
@@ -82,7 +84,7 @@ const CheckLists = () => {
     <CenteredSafeArea>
       <ScrollView>
         <BackButton title={"체크리스트"} onPress={() => console.log("뒤로 가기")} />
-        <HeaderSection title={category.title} />
+        <HeaderSection title={category.title} checkListCount={checkListCount} />
         <BudgetInfo />
         <HorizontalLine backgroundColor={Color.BLUE100} height={8} />
 
@@ -96,7 +98,7 @@ const CheckLists = () => {
 
 export default CheckLists;
 
-const HeaderSection = ({ title }: { title: string }) => (
+const HeaderSection = ({ title, checkListCount }: { title: string; checkListCount: number }) => (
   <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
     <CircleContainer>
       <CustomText title={"📸"} fontSize={18} bold />
@@ -104,6 +106,7 @@ const HeaderSection = ({ title }: { title: string }) => (
     <View style={{ marginLeft: 10 }}>
       <CustomText title={title} fontSize={20} bold />
     </View>
+    <CustomText title={`${checkListCount}개`} fontSize={10} margin="0px 0px 0px 10px" />
   </View>
 );
 
@@ -151,7 +154,7 @@ const DetailsSection = ({ checkList }: { checkList: ICheckList }) => (
       <CustomText
         title={`${dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}`}
         fontSize={10}
-        style={{ color: Color.DARK_GRAY }}
+        style={{ color: `${Color.DARK_GRAY};` }}
       />
     )}
     {checkList.status && (

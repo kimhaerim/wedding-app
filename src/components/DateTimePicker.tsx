@@ -30,7 +30,7 @@ const CustomDateTimePicker: React.FC<DateTimePickerProps> = (props) => {
   const { title, value, mode, onChange } = props;
   return (
     <>
-      <CustomText title={title} fontSize={16} margin="0px 0px 10px 0px" />
+      <CustomText title={title} fontSize={16} margin="0px 0px 10px 0px" bold />
       <DateTimePicker locale="ko-KR" value={value} mode={mode} onChange={onChange} />
     </>
   );

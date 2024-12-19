@@ -8,6 +8,8 @@ import CategoryLists from "./src/screens/category/CategoryLists";
 import EditCategory from "./src/screens/category/EditCategory";
 import CategoryWithCheckLists from "./src/screens/category/CategoryWithCheckLists";
 import AgreeToTermsScreen from "./src/screens/auth/AgreeToTerms";
+import SignupProfileScreen from "./src/screens/auth/SignupProfile";
+import SignupScreen from "./src/screens/auth/Signup";
 
 export default function App() {
   return (

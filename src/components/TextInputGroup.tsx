@@ -7,8 +7,6 @@ import CustomInput from "./InputBox";
 
 const InputGroupContainer = styled.View`
   width: 90%;
-  margin-top: 20px;
-  padding-left: 10%;
 `;
 
 interface InputGroupProps {
@@ -29,7 +27,7 @@ const TextInputGroup: React.FC<InputGroupProps> = (props) => {
   const isError = !isValid && typeof value === "string" && value.length === 0 && errorMessage;
   return (
     <InputGroupContainer>
-      <CustomText title={title} fontSize={16} margin="0px 0px 10px 0px" bold />
+      <CustomText title={title} fontSize={16} margin="10px 0px 10px 0px" bold />
       <CustomInput
         placeholder={placeholder}
         onChangeText={onChangeText}

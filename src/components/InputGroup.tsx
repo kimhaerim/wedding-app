@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 const InputGroupContainer = styled.View`
   width: 90%;
   margin-top: 20px;
-  padding-left: 10%;
 `;
 
 interface InputGroupProps {

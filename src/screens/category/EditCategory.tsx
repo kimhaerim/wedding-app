@@ -5,6 +5,7 @@ import CenteredSafeArea from "../../components/CenteredSafeArea";
 import ActiveButton from "../../components/ActiveButton";
 import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
 import TextInputGroup from "../../components/TextInputGroup";
+import { View } from "react-native";
 
 const EditCategory = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -20,23 +21,25 @@ const EditCategory = () => {
         onPress={() => console.log("뒤로 가기")}
       ></BackButton>
 
-      <TextInputGroup
-        title={"이름"}
-        value={category ? category.title : ""}
-        defaultValue={category ? category.title : undefined}
-        onChangeText={setInputTitle}
-        isValid={inputTitle.length > 0}
-        errorMessage="이름을 입력하세요."
-      />
-      <TextInputGroup
-        title={"예산 설정"}
-        value={category ? category.budgetAmount : 0}
-        onChangeText={(value) => setInputAmountBudget(+value)}
-        defaultValue={category ? `${category.budgetAmount}` : "0"}
-        isValid={typeof inputAmountBudget === "number"}
-        errorMessage="카테고리 예산은 숫자로 입력하세요."
-        isNumber
-      />
+      <View style={{ margin: 20 }}>
+        <TextInputGroup
+          title={"이름"}
+          value={category ? category.title : ""}
+          defaultValue={category ? category.title : undefined}
+          onChangeText={setInputTitle}
+          isValid={inputTitle.length > 0}
+          errorMessage="이름을 입력하세요."
+        />
+        <TextInputGroup
+          title={"예산 설정"}
+          value={category ? category.budgetAmount : 0}
+          onChangeText={(value) => setInputAmountBudget(+value)}
+          defaultValue={category ? `${category.budgetAmount}` : "0"}
+          isValid={typeof inputAmountBudget === "number"}
+          errorMessage="카테고리 예산은 숫자로 입력하세요."
+          isNumber
+        />
+      </View>
 
       <ActiveButton
         title={isEdit ? "수정" : "추가"}

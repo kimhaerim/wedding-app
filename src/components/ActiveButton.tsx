@@ -12,7 +12,7 @@ const OuterContainer = styled.View`
 `;
 
 const ButtonContainer = styled.TouchableOpacity<ButtonContainerProps>`
-  background-color: ${({ disabled }) => (disabled ? "#F2F3F2" : Color.BLACK)};
+  background-color: ${({ disabled }) => (disabled ? "#F2F3F2" : Color.BLUE)};
   border-radius: 12px;
   align-items: center;
   justify-content: center;
