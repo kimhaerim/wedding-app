@@ -6,7 +6,7 @@ import { Color } from "../enum";
 interface props {
   label: string;
   onChangeText: (text: string) => void;
-  value: string;
+  value?: string;
   placeholder?: string;
   error?: boolean;
   errorMessage?: string;
