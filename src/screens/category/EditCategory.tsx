@@ -23,7 +23,8 @@ const EditCategory = () => {
 
       <View style={{ margin: 20 }}>
         <TextInputGroup
-          title={"이름"}
+          title={"카테고리 이름 *"}
+          placeholder="ex. 웨딩홀, 본식DVD 등"
           value={category ? category.title : ""}
           defaultValue={category ? category.title : undefined}
           onChangeText={setInputTitle}
@@ -31,7 +32,7 @@ const EditCategory = () => {
           errorMessage="이름을 입력하세요."
         />
         <TextInputGroup
-          title={"예산 설정"}
+          title={"예산 설정 *"}
           value={category ? category.budgetAmount : 0}
           onChangeText={(value) => setInputAmountBudget(+value)}
           defaultValue={category ? `${category.budgetAmount}` : "0"}
@@ -43,6 +44,7 @@ const EditCategory = () => {
 
       <ActiveButton
         title={isEdit ? "수정" : "추가"}
+        disabled={inputTitle.length === 0}
         onPress={() => console.log(inputTitle, inputAmountBudget)}
       ></ActiveButton>
     </CenteredSafeArea>

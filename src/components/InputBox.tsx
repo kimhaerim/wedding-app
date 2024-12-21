@@ -14,7 +14,7 @@ const InputBoxContainer = styled.TextInput.attrs(({ placeholder, secureTextEntry
   border-color: #ccc;
   border-radius: 8px;
   padding: 10px;
-  font-size: 16px;
+  font-size: 12px;
   width: ${({ width }) => width || "100%"};
   margin: ${({ margin }) => margin || "0px"};
 `;

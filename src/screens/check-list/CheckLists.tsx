@@ -12,6 +12,7 @@ import CustomRow from "../../components/Row";
 import HorizontalLine from "../../components/HorizontalLine";
 import styled from "styled-components/native";
 import { ICheckList, ICost } from "../../interface/check-list.interface";
+import CustomButton from "../../components/Button";
 
 const convertCheckListStatus = (status: CheckListStatus) => {
   switch (status) {
@@ -91,6 +92,14 @@ const CheckLists = () => {
         {category.checkList.map((checkList, index) => (
           <CheckListItem key={checkList.id} checkList={checkList} isLast={index === category.checkList.length - 1} />
         ))}
+        <CustomButton
+          title="체크리스트 추가하기"
+          onPress={() => console.log("추가하기 클릭")}
+          backgroundColor={Color.BLUE200}
+          width="90%"
+          fontSize={14}
+          innerTextBold
+        ></CustomButton>
       </ScrollView>
     </CenteredSafeArea>
   );

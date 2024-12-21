@@ -10,11 +10,14 @@ import CategoryWithCheckLists from "./src/screens/category/CategoryWithCheckList
 import AgreeToTermsScreen from "./src/screens/auth/AgreeToTerms";
 import SignupProfileScreen from "./src/screens/auth/SignupProfile";
 import SignupScreen from "./src/screens/auth/Signup";
+import { PaperProvider } from "react-native-paper";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <CheckLists></CheckLists>
-    </NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        <EditCheckLists></EditCheckLists>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
