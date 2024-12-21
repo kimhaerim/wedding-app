@@ -1,34 +1,16 @@
 import React from "react";
-import Icon from "react-native-vector-icons/Ionicons";
-import styled from "styled-components/native";
 
-import { Color } from "../enum";
-
-const HeaderContainer = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-`;
-
-const BackButtonContainer = styled.TouchableOpacity`
-  position: absolute;
-  left: 20px;
-  padding: 5px;
-`;
+import { Appbar } from "react-native-paper";
 
 interface BackButtonProps {
   onPress: () => void;
-  title: string;
 }
 
 const CancelButton: React.FC<BackButtonProps> = (props) => {
   return (
-    <HeaderContainer>
-      <BackButtonContainer onPress={props.onPress}>
-        <Icon name="close" size={30} color={Color.BLACK} />
-      </BackButtonContainer>
-    </HeaderContainer>
+    <Appbar.Header style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
+      <Appbar.Action onPress={props.onPress} icon="close" />
+    </Appbar.Header>
   );
 };
 

@@ -1,38 +1,16 @@
-import React from "react";
-import Icon from "react-native-vector-icons/Ionicons";
-import styled from "styled-components/native";
-
-import CustomText from "./Text";
-import { Color } from "../enum";
-
-const HeaderContainer = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-  border-bottom-width: 1px;
-  border-bottom-color: ${Color.GRAY};
-`;
-
-const BackButtonContainer = styled.TouchableOpacity`
-  position: absolute;
-  left: 20px;
-  padding: 5px;
-`;
+import { Appbar } from "react-native-paper";
 
 interface BackButtonProps {
   onPress: () => void;
-  title: string;
+  label: string;
 }
 
 const BackButton: React.FC<BackButtonProps> = (props) => {
   return (
-    <HeaderContainer>
-      <BackButtonContainer onPress={props.onPress}>
-        <Icon name="arrow-back" size={30} color={Color.BLACK} />
-      </BackButtonContainer>
-      <CustomText title={props.title} fontSize={15} margin="0px 0px 10px 0px" />
-    </HeaderContainer>
+    <Appbar.Header style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
+      <Appbar.BackAction onPress={props.onPress} />
+      <Appbar.Content title={props.label} titleStyle={{ fontSize: 15 }} />
+    </Appbar.Header>
   );
 };
 

@@ -1,9 +1,13 @@
 import React, { useMemo, useState } from "react";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 import BackButton from "../../components/BackButton";
-import ActiveButton from "../../components/ActiveButton";
-import TextInputGroup from "../../components/TextInputGroup";
+import ActiveButton from "../../components/BottomButton";
+import TextInputGroup from "../../components/InputText";
 import { View } from "react-native";
+import { Appbar, Text, TextInput } from "react-native-paper";
+import BottomButton from "../../components/BottomButton";
+import { Color } from "../../enum";
+import InputText from "../../components/InputText";
 
 const enum SignupField {
   EMAIL = "email",
@@ -20,60 +24,93 @@ const SignupScreen = () => {
 
   const [formValidity, setFormValidity] = useState({
     isEmailValid: false,
+    isPasswordValid: false,
     isPasswordMatching: false,
   });
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email) {
+      setFormValidity((prev) => ({ ...prev, isEmailValid: false }));
+      setEmailErrorMessage("이메일은 필수 항목입니다.");
+    } else if (!emailRegex.test(email)) {
+      setFormValidity((prev) => ({ ...prev, isEmailValid: false }));
+      setEmailErrorMessage("유효한 이메일을 입력하세요.");
+    } else {
+      setFormValidity((prev) => ({ ...prev, isEmailValid: true }));
+    }
+  };
+
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/-]).{8,20}$/;
+
+    if (!password) {
+      setFormValidity((prev) => ({ ...prev, isPasswordValid: false }));
+      setPasswordErrorMessage("비밀번호를 입력해주세요.");
+    } else if (!passwordRegex.test(password)) {
+      setFormValidity((prev) => ({ ...prev, isPasswordValid: false }));
+      setPasswordErrorMessage("비밀번호는 8자 이상 20자 이하이고, 알파벳, 숫자, 특수문자를 포함해야 합니다.");
+    } else {
+      setFormValidity((prev) => ({ ...prev, isPasswordValid: true }));
+    }
+  };
+
+  const handleInputChange = (field: SignupField, value: string) => {
+    setFormData({ ...formData, [field]: value });
 
     if (field === SignupField.EMAIL) {
-      setFormValidity((prev) => ({ ...prev, isEmailValid: value.includes("@") }));
-    } else if (field === SignupField.CONFIRM_PASSWORD || field === SignupField.PASSWORD) {
-      setFormValidity((prev) => ({
-        ...prev,
-        isPasswordMatching: formData.password === value || formData.confirmPassword === value,
-      }));
+      validateEmail(value);
+    }
+
+    if (field === SignupField.PASSWORD) {
+      validatePassword(value);
+    }
+
+    if (field === SignupField.CONFIRM_PASSWORD) {
+      const isPasswordMatching = formData.password === value;
+      setFormValidity((prev) => ({ ...prev, isPasswordMatching }));
     }
   };
 
   const isFormValid = useMemo(() => {
-    return formValidity.isEmailValid && formData.password.length >= 6 && formValidity.isPasswordMatching;
-  }, [formValidity, formData]);
+    return formValidity.isEmailValid && formValidity.isPasswordValid && formValidity.isPasswordMatching;
+  }, [formValidity]);
 
   return (
     <CenteredSafeArea>
-      <BackButton title="이메일 회원가입" onPress={() => console.log("뒤로 가기")} />
+      <BackButton label="이메일 회원가입" onPress={() => {}}></BackButton>
 
       <View style={{ margin: 20 }}>
-        <TextInputGroup
-          title="이메일"
-          placeholder="wedding@email.com"
-          value={formData.email}
+        <InputText
+          label="이메일 *"
+          placeholder="ex. wedding@email.com"
           onChangeText={(value) => handleInputChange(SignupField.EMAIL, value)}
-          isValid={formValidity.isEmailValid}
-          errorMessage="유효한 이메일을 입력하세요."
-        />
-
-        <TextInputGroup
-          title="비밀번호 입력"
-          placeholder="비밀번호"
-          value={formData.password}
+          error={!formValidity.isEmailValid}
+          errorMessage={emailErrorMessage}
+          value={formData.email}
+        ></InputText>
+        <InputText
+          label="비밀번호 *"
           onChangeText={(value) => handleInputChange(SignupField.PASSWORD, value)}
+          error={!formValidity.isPasswordValid}
+          errorMessage={passwordErrorMessage}
+          value={formData.password}
           secureTextEntry
-        />
-
-        <TextInputGroup
-          title="비밀번호 확인"
-          placeholder="비밀번호 확인"
-          value={formData.confirmPassword}
+        ></InputText>
+        <InputText
+          label="비밀번호 확인 *"
           onChangeText={(value) => handleInputChange(SignupField.CONFIRM_PASSWORD, value)}
-          isValid={formValidity.isPasswordMatching}
+          error={!formValidity.isPasswordMatching}
           errorMessage="비밀번호와 동일하게 입력해주세요."
+          value={formData.confirmPassword}
           secureTextEntry
-        />
+        ></InputText>
       </View>
 
-      <ActiveButton title="다음" width="90%" onPress={() => console.log(formData)} disabled={!isFormValid} />
+      <BottomButton label="다음" disabled={!isFormValid} onPress={() => {}}></BottomButton>
     </CenteredSafeArea>
   );
 };

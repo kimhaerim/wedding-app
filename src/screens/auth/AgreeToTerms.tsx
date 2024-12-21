@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import CustomText from "../../components/Text";
-import HorizontalLine from "../../components/HorizontalLine";
 import BackButton from "../../components/BackButton";
-import ActiveButton from "../../components/ActiveButton";
-import CheckBox from "../../components/CheckBox";
+import { Checkbox, Text } from "react-native-paper";
+import { View } from "react-native";
+import { Color } from "../../enum";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import BottomButton from "../../components/BottomButton";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -47,35 +48,47 @@ const AgreeToTermsScreen = () => {
 
   return (
     <CenteredSafeArea>
-      <BackButton title="이메일 회원가입" onPress={() => console.log("뒤로 가기")}></BackButton>
-      <CustomText title="이용약관에 동의해 주세요." fontSize={20} margin="30px 0px 0px 0px" padding="10px 20px" />
+      <BackButton label="이메일 회원가입" onPress={() => {}}></BackButton>
 
-      <CheckBox
-        onValueChange={handleAllAgreed}
-        margin="30px 10px 10px 0px"
-        label="이용약관 전체 동의"
-        isChecked={agreements.isAllAgreed}
-      />
-      <HorizontalLine />
+      <View style={{ margin: 20 }}>
+        <Text style={{ fontWeight: "bold", fontSize: 18, marginBottom: 20 }}>이용약관에 동의해 주세요.</Text>
 
-      <CheckBox
-        onValueChange={() => toggleAgreement("isOver14Agreed")}
-        margin="10px 10px 0px 0px"
-        label="[필수] 만 14세 이상입니다."
-        isChecked={agreements.isOver14Agreed}
-      />
-      <CheckBox
-        onValueChange={() => toggleAgreement("isTermsAgreed")}
-        margin="20px 10px 0px 0px"
-        label="[필수] 이용약관 동의"
-        isChecked={agreements.isTermsAgreed}
-      />
-      <ActiveButton
-        title="다음"
-        width="90%"
-        onPress={() => console.log("다음")}
-        disabled={!agreements.isAllAgreed}
-      ></ActiveButton>
+        <Checkbox.Item
+          label="이용약관 전체 동의"
+          status={agreements.isAllAgreed ? "checked" : "unchecked"}
+          onPress={handleAllAgreed}
+          position="leading"
+          color={Color.BLUE}
+          uncheckedColor={Color.DARK_GRAY}
+          labelStyle={{ textAlign: "left", fontSize: 15 }}
+          style={{
+            borderRadius: 15,
+            backgroundColor: Color.GRAY,
+          }}
+        />
+
+        <Checkbox.Item
+          label="[필수] 만 14세 이상입니다."
+          status={agreements.isOver14Agreed ? "checked" : "unchecked"}
+          onPress={() => toggleAgreement("isOver14Agreed")}
+          position="leading"
+          color={Color.BLUE}
+          uncheckedColor={Color.DARK_GRAY}
+          labelStyle={{ textAlign: "left", fontSize: 13 }}
+        />
+
+        <Checkbox.Item
+          label="[필수] 이용약관 동의"
+          status={agreements.isTermsAgreed ? "checked" : "unchecked"}
+          onPress={() => toggleAgreement("isTermsAgreed")}
+          position="leading"
+          color={Color.BLUE}
+          uncheckedColor={Color.DARK_GRAY}
+          labelStyle={{ textAlign: "left", fontSize: 13 }}
+        />
+      </View>
+
+      <BottomButton label="다음" disabled={!agreements.isAllAgreed} onPress={() => {}}></BottomButton>
     </CenteredSafeArea>
   );
 };
