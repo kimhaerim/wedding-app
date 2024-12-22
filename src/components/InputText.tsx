@@ -6,7 +6,8 @@ import { Color } from "../enum";
 interface props {
   label: string;
   onChangeText: (text: string) => void;
-  value?: string;
+  value?: string | number;
+  defaultValue?: string | number;
   placeholder?: string;
   error?: boolean;
   errorMessage?: string;
@@ -21,9 +22,12 @@ const InputText: React.FC<props> = (props) => {
       <TextInput
         mode="outlined"
         placeholder={props.placeholder}
-        value={props.value}
+        value={`${props.value}`}
+        defaultValue={`${props.defaultValue}`}
+        keyboardType={typeof props.value === "number" ? "numeric" : undefined}
         onChangeText={props.onChangeText}
         error={props.error}
+        multiline
         outlineStyle={{ borderColor: Color.DARK_GRAY, borderRadius: 12 }}
         style={{ height: 50, fontSize: 13, ...props.style }}
         secureTextEntry={props.secureTextEntry}

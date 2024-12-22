@@ -78,14 +78,14 @@ const EmailLoginScreen = () => {
 
       <View style={{ margin: 20, justifyContent: "center" }}>
         <InputText
-          label="이메일"
+          label="이메일 *"
           onChangeText={(value) => handleInputChange(EmailLoginField.EMAIL, value)}
           error={!isEmailValid}
           errorMessage={emailErrorMessage}
           value={email}
         ></InputText>
         <InputText
-          label="비밀번호"
+          label="비밀번호 *"
           onChangeText={(value) => handleInputChange(EmailLoginField.PASSWORD, value)}
           error={!isPasswordValid}
           errorMessage={passwordErrorMessage}

@@ -6,22 +6,24 @@ import { ICategory } from "../../interface/category.interface";
 import { CheckListStatus, Color, CostType } from "../../enum";
 import CheckBox from "../../components/CheckBox";
 import { ScrollView, TouchableOpacity, View } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+
 import dayjs from "dayjs";
 import CustomRow from "../../components/Row";
 import HorizontalLine from "../../components/HorizontalLine";
 import styled from "styled-components/native";
 import { ICheckList, ICost } from "../../interface/check-list.interface";
 import CustomButton from "../../components/Button";
+import { Button, Checkbox, Divider, Icon, Menu, Text } from "react-native-paper";
+import BottomButton from "../../components/BottomButton";
 
 const convertCheckListStatus = (status: CheckListStatus) => {
   switch (status) {
     case CheckListStatus.PENDING:
       return "보류";
     case CheckListStatus.CONFIRMED:
-      return "확정";
+      return "✔️ 확정";
     case CheckListStatus.REJECTED:
-      return "탈락";
+      return "❌ 탈락";
   }
 };
 
@@ -45,7 +47,7 @@ const CheckLists = () => {
       {
         id: 1,
         description: "사진보라",
-        isCompleted: false,
+        isCompleted: true,
         memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
         reservedDate: new Date(),
         status: CheckListStatus.CONFIRMED,
@@ -66,7 +68,7 @@ const CheckLists = () => {
         isCompleted: false,
         memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
         reservedDate: new Date(),
-        status: CheckListStatus.CONFIRMED,
+        status: CheckListStatus.REJECTED,
         costs: [
           {
             title: "계약금 결제",
@@ -81,130 +83,109 @@ const CheckLists = () => {
     ],
   });
 
+  const [openMenuId, setOpenMenuId] = useState<number | undefined>(undefined);
   return (
     <CenteredSafeArea>
       <ScrollView>
-        <BackButton title={"체크리스트"} onPress={() => console.log("뒤로 가기")} />
-        <HeaderSection title={category.title} checkListCount={checkListCount} />
-        <BudgetInfo />
-        <HorizontalLine backgroundColor={Color.BLUE100} height={8} />
+        <BackButton label={"체크리스트"} onPress={() => console.log("뒤로 가기")} />
+
+        <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
+          <View
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: Color.BLUE100,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 20 }}>📸</Text>
+          </View>
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>{category.title}</Text>
+          </View>
+          <Text style={{ marginLeft: 10, fontSize: 10 }}>{`${checkListCount}개`}</Text>
+        </View>
+
+        <View style={{ marginLeft: 20, marginTop: 10 }}>
+          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
+            <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>총예산 </Text>
+            <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
+            <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>- 현재 결제 금액 </Text>
+            <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
+            <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>= 남은 예산 </Text>
+            <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
+          </View>
+        </View>
+
+        <HorizontalLine backgroundColor={Color.BLUE200} height={8} />
 
         {category.checkList.map((checkList, index) => (
-          <CheckListItem key={checkList.id} checkList={checkList} isLast={index === category.checkList.length - 1} />
+          <View style={{ marginLeft: 10, marginRight: 10 }} key={checkList.id}>
+            <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+              <CheckBox
+                label={checkList.description}
+                isChecked={checkList.isCompleted}
+                onPress={() => console.log("클릭")}
+              ></CheckBox>
+              <Menu
+                visible={openMenuId === checkList.id}
+                onDismiss={() => setOpenMenuId(undefined)}
+                anchor={
+                  <Button onPress={() => setOpenMenuId(checkList.id)} textColor={Color.BLACK}>
+                    ...
+                  </Button>
+                }
+                contentStyle={{ backgroundColor: Color.WHITE }}
+              >
+                <Menu.Item leadingIcon="pencil" onPress={() => console.log("수정")} title="수정" />
+                <Menu.Item leadingIcon="delete" onPress={() => {}} title="삭제" />
+              </Menu>
+            </View>
+
+            <View>
+              <Text style={{ color: Color.DARK_GRAY, fontSize: 10 }}>
+                {dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}
+              </Text>
+              {checkList.status && (
+                <Text style={{ fontSize: 14, marginTop: 10 }}>{convertCheckListStatus(checkList.status)}</Text>
+              )}
+              {checkList.memo && <Text style={{ fontSize: 14, marginTop: 10 }}>{checkList.memo}</Text>}
+            </View>
+            {checkList.costs.map((cost, index) => (
+              <View key={`cost-${index}`}>
+                <HorizontalLine height={1} />
+                <Text style={{ fontSize: 10, marginTop: 10 }}>{covertCostType(cost.costType)}</Text>
+
+                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontSize: 16, fontWeight: "bold", flex: 0 }}>{cost.title}</Text>
+                  <Text style={{ fontSize: 16, textAlign: "right", flex: 1 }}>{cost.amount}</Text>
+                </View>
+
+                <Text style={{ fontSize: 10, color: Color.DARK_GRAY }}>
+                  {cost.paymentDate ? dayjs(cost.paymentDate).format("YYYY-MM-DD HH:mm") : "결제 전"}
+                </Text>
+
+                {cost.memo && <Text style={{ marginTop: 10 }}>{cost.memo}</Text>}
+              </View>
+            ))}
+            <HorizontalLine backgroundColor={Color.BLUE100} height={3} />
+          </View>
         ))}
-        <CustomButton
-          title="체크리스트 추가하기"
+
+        <BottomButton
+          label="체크리스트 추가하기"
           onPress={() => console.log("추가하기 클릭")}
-          backgroundColor={Color.BLUE200}
-          width="90%"
-          fontSize={14}
-          innerTextBold
-        ></CustomButton>
+          disabled={false}
+        ></BottomButton>
       </ScrollView>
     </CenteredSafeArea>
   );
 };
 
 export default CheckLists;
-
-const HeaderSection = ({ title, checkListCount }: { title: string; checkListCount: number }) => (
-  <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
-    <CircleContainer>
-      <CustomText title={"📸"} fontSize={18} bold />
-    </CircleContainer>
-    <View style={{ marginLeft: 10 }}>
-      <CustomText title={title} fontSize={20} bold />
-    </View>
-    <CustomText title={`${checkListCount}개`} fontSize={10} margin="0px 0px 0px 10px" />
-  </View>
-);
-
-const BudgetInfo = () => (
-  <View style={{ marginLeft: 20, marginTop: 10 }}>
-    <BudgetRow title="총 예산" amount="200,000" />
-    <BudgetRow title="- 현재 결제 금액" amount="200,000" />
-    <BudgetRow title="= 남은 예산" amount="200,000" />
-  </View>
-);
-
-const BudgetRow = ({ title, amount }: { title: string; amount: string }) => (
-  <CustomRow>
-    <CustomText title={title} fontSize={12} bold />
-    <CustomText title={amount} fontSize={12} textAlign="right" margin="0px 15px 0px 0px" />
-  </CustomRow>
-);
-
-const CheckListItem = ({ checkList, isLast }: { checkList: ICheckList; isLast: boolean }) => (
-  <CheckListContainer>
-    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-      <CheckBox
-        isChecked={checkList.isCompleted}
-        label={checkList.description}
-        onValueChange={() => console.log("agree", checkList.id)}
-      />
-      <TouchableOpacity onPress={() => console.log("수정", checkList.id)} style={{ flexDirection: "row" }}>
-        <Icon name="create" size={20} color={Color.BLUE} />
-        <CustomText title="수정" fontSize={14} margin="0 0 0 5px" />
-      </TouchableOpacity>
-    </View>
-    <DetailsSection checkList={checkList} />
-
-    {checkList.costs.map((cost: any, index: number) => (
-      <CostItem key={index} cost={cost} />
-    ))}
-
-    {!isLast && <HorizontalLine backgroundColor={Color.BLUE100} height={8} />}
-  </CheckListContainer>
-);
-
-const DetailsSection = ({ checkList }: { checkList: ICheckList }) => (
-  <View style={{ marginLeft: 50 }}>
-    {checkList.reservedDate && (
-      <CustomText
-        title={`${dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}`}
-        fontSize={10}
-        style={{ color: `${Color.DARK_GRAY};` }}
-      />
-    )}
-    {checkList.status && (
-      <CustomText title={convertCheckListStatus(checkList.status)} fontSize={14} margin="10px 0 0 0" />
-    )}
-    {checkList.memo && <CustomText title={checkList.memo} fontSize={14} margin="10px 0 0 0" />}
-  </View>
-);
-
-const CostItem = ({ cost }: { cost: ICost }) => (
-  <CostItemContainer>
-    <HorizontalLine height={1} />
-    <CustomText title={covertCostType(cost.costType)} fontSize={10} margin="10px 0 0 0" />
-    <CustomRow>
-      <CustomText title={cost.title} fontSize={16} bold />
-      <CustomText title={`${cost.amount}`} fontSize={16} textAlign="right" />
-    </CustomRow>
-
-    <CustomText
-      title={cost.paymentDate ? dayjs(cost.paymentDate).format("YYYY-MM-DD HH:mm") : "결제 전"}
-      fontSize={10}
-      style={{ color: Color.DARK_GRAY }}
-    />
-
-    {cost.memo && <CustomText title={cost.memo} fontSize={14} margin="10px 0 0 0" />}
-  </CostItemContainer>
-);
-
-export const CircleContainer = styled.View`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: #f0f8ff;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const CostItemContainer = styled.View`
-  margin: 10px 10px 0 10px;
-`;
-
-export const CheckListContainer = styled.View`
-  margin: 0 10px 20px 10px;
-`;

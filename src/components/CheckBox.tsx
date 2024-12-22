@@ -1,31 +1,36 @@
-import styled from "styled-components/native";
-import Checkbox from "expo-checkbox";
-import React from "react";
-import CustomText from "./Text";
+import { TouchableOpacity, View } from "react-native";
+import { Button, Icon, Text } from "react-native-paper";
+import { Color } from "../enum";
 
-interface Props {
+interface CheckBoxProps {
   isChecked: boolean;
+  onPress: () => void;
   label: string;
-  onValueChange: () => void;
-  margin?: string;
 }
 
-const CheckBoxContainer = styled.View<{ margin?: string }>`
-  flex-direction: row;
-  align-items: center;
-  margin: ${({ margin }) => margin || "0px"};
-`;
+const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, label, onPress }) => {
+  const color = isChecked ? Color.BLUE : Color.GRAY;
 
-const StyledCheckbox = styled(Checkbox)`
-  margin-right: 8px;
-  margin-left: 10px;
-`;
-
-const CheckBox: React.FC<Props> = ({ isChecked, label, onValueChange, margin }) => (
-  <CheckBoxContainer margin={margin}>
-    <StyledCheckbox value={isChecked} onValueChange={onValueChange} />
-    <CustomText fontSize={15} title={label} bold />
-  </CheckBoxContainer>
-);
+  return (
+    <>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          // borderColor: Color.GRAY,
+          // borderWidth: 1,
+          width: 25,
+          height: 25,
+          borderRadius: 0,
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 0,
+        }}
+      >
+        <Icon source="check" size={18} color={color} />
+      </TouchableOpacity>
+      <Text style={{ fontSize: 15, fontWeight: "bold", flex: 1, marginLeft: 10 }}>{label}</Text>
+    </>
+  );
+};
 
 export default CheckBox;

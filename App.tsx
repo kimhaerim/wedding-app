@@ -16,7 +16,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <EmailLoginScreen></EmailLoginScreen>
+        <CheckLists></CheckLists>
       </NavigationContainer>
     </PaperProvider>
   );
