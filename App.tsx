@@ -17,7 +17,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <EditCost></EditCost>
+        <CheckLists></CheckLists>
       </NavigationContainer>
     </PaperProvider>
   );
