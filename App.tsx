@@ -13,12 +13,14 @@ import SignupScreen from "./src/screens/auth/Signup";
 import { PaperProvider } from "react-native-paper";
 import EditCost from "./src/screens/cost/EditCost";
 import EditCheckList from "./src/screens/check-list/EditCheckList";
+import React from "react";
+import DefaultCategories from "./src/screens/category/DefaultCategories";
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <EditCategory></EditCategory>
+        <DefaultCategories></DefaultCategories>
       </NavigationContainer>
     </PaperProvider>
   );
