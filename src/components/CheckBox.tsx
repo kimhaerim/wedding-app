@@ -16,8 +16,6 @@ const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, label, onPress }) => {
       <TouchableOpacity
         onPress={onPress}
         style={{
-          // borderColor: Color.GRAY,
-          // borderWidth: 1,
           width: 25,
           height: 25,
           borderRadius: 0,

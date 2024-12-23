@@ -11,12 +11,13 @@ import AgreeToTermsScreen from "./src/screens/auth/AgreeToTerms";
 import SignupProfileScreen from "./src/screens/auth/SignupProfile";
 import SignupScreen from "./src/screens/auth/Signup";
 import { PaperProvider } from "react-native-paper";
+import EditCost from "./src/screens/cost/EditCost";
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <CheckLists></CheckLists>
+        <EditCost></EditCost>
       </NavigationContainer>
     </PaperProvider>
   );

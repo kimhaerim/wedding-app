@@ -4,7 +4,6 @@ import BackButton from "../../components/BackButton";
 import { Checkbox, Text } from "react-native-paper";
 import { View } from "react-native";
 import { Color } from "../../enum";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BottomButton from "../../components/BottomButton";
 
 const initialAgreements = {

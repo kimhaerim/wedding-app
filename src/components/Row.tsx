@@ -1,27 +1,18 @@
 import React from "react";
-import styled from "styled-components/native";
-
-const RowContainer = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SmallRowContainer = styled.View<{ flexRatio?: number }>`
-  flex: ${({ flexRatio }) => flexRatio || 1};
-`;
+import { View } from "react-native";
 
 interface RowProps {
   children: React.ReactNode;
-  ratios?: number[];
+  style?: Object;
 }
 
-const CustomRow: React.FC<RowProps> = ({ children, ratios }) => {
-  const wrappedChildren = React.Children.map(children, (child, index) => (
-    <SmallRowContainer flexRatio={ratios?.[index]}>{child}</SmallRowContainer>
-  ));
-
-  return <RowContainer>{wrappedChildren}</RowContainer>;
+const Row: React.FC<RowProps> = ({ children, style }) => {
+  const wrappedChildren = React.Children.map(children, (child, index) => <View style={{ flex: index }}>{child}</View>);
+  return (
+    <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", ...style }}>
+      {wrappedChildren}
+    </View>
+  );
 };
 
-export default CustomRow;
+export default Row;

@@ -2,11 +2,8 @@ import { useState } from "react";
 import BackButton from "../../components/BackButton";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 import CustomText from "../../components/Text";
-import ActiveButton from "../../components/BottomButton";
 import { View } from "react-native";
-import TextInputGroup from "../../components/InputText";
-import CustomDateTimePicker from "../../components/DateTimePicker";
-import { Button, Divider, Menu, SegmentedButtons, Text } from "react-native-paper";
+import { SegmentedButtons, Text } from "react-native-paper";
 import { CheckListStatus, Color } from "../../enum";
 import InputText from "../../components/InputText";
 import DatePicker from "../../components/DatePicker";
@@ -57,7 +54,7 @@ const EditCheckLists = () => {
 
         <InputText label="메모" value={memo} onChangeText={setMemo} style={{ height: 150 }}></InputText>
 
-        <CustomText title={"상태"} fontSize={16} margin="10px 0px 10px 0px" bold></CustomText>
+        <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 10, fontWeight: "bold" }}>상태</Text>
         <SegmentedButtons
           value={checkListStatus}
           onValueChange={(value) => setCheckListStatus(value as CheckListStatus)}

@@ -1,20 +1,16 @@
 import { useState } from "react";
 import BackButton from "../../components/BackButton";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import CustomText from "../../components/Text";
 import { ICategory } from "../../interface/category.interface";
 import { CheckListStatus, Color, CostType } from "../../enum";
 import CheckBox from "../../components/CheckBox";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import dayjs from "dayjs";
-import CustomRow from "../../components/Row";
 import HorizontalLine from "../../components/HorizontalLine";
-import styled from "styled-components/native";
-import { ICheckList, ICost } from "../../interface/check-list.interface";
-import CustomButton from "../../components/Button";
-import { Button, Checkbox, Divider, Icon, Menu, Text } from "react-native-paper";
+import { Button, Menu, Text } from "react-native-paper";
 import BottomButton from "../../components/BottomButton";
+import Row from "../../components/Row";
 
 const convertCheckListStatus = (status: CheckListStatus) => {
   switch (status) {
@@ -109,18 +105,18 @@ const CheckLists = () => {
         </View>
 
         <View style={{ marginLeft: 20, marginTop: 10 }}>
-          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
+          <Row>
             <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>총예산 </Text>
             <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
+          </Row>
+          <Row>
             <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>- 현재 결제 금액 </Text>
             <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
+          </Row>
+          <Row>
             <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>= 남은 예산 </Text>
             <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
-          </View>
+          </Row>
         </View>
 
         <HorizontalLine backgroundColor={Color.BLUE200} height={8} />
@@ -162,10 +158,10 @@ const CheckLists = () => {
                 <HorizontalLine height={1} />
                 <Text style={{ fontSize: 10, marginTop: 10 }}>{covertCostType(cost.costType)}</Text>
 
-                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                <Row>
                   <Text style={{ fontSize: 16, fontWeight: "bold", flex: 0 }}>{cost.title}</Text>
                   <Text style={{ fontSize: 16, textAlign: "right", flex: 1 }}>{cost.amount}</Text>
-                </View>
+                </Row>
 
                 <Text style={{ fontSize: 10, color: Color.DARK_GRAY }}>
                   {cost.paymentDate ? dayjs(cost.paymentDate).format("YYYY-MM-DD HH:mm") : "결제 전"}
