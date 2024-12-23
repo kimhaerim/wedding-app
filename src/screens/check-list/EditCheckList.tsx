@@ -10,7 +10,7 @@ import DatePicker from "../../components/DatePicker";
 import BottomButton from "../../components/BottomButton";
 import TimePicker from "../../components/TimePicker";
 
-const EditCheckLists = () => {
+const EditCheckList = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>("");
@@ -87,4 +87,4 @@ const EditCheckLists = () => {
   );
 };
 
-export default EditCheckLists;
+export default EditCheckList;

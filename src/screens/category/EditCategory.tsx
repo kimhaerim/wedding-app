@@ -32,7 +32,6 @@ const EditCategory = () => {
           onChangeText={setInputTitle}
           error={inputTitle.length === 0}
           errorMessage="이름을 입력하세요."
-          style={{ marginBottom: 20 }}
         ></InputText>
         <InputText
           label={"예산 설정"}

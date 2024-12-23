@@ -1,34 +1,48 @@
-import { TouchableOpacity, View } from "react-native";
-import { Button, Icon, Text } from "react-native-paper";
+import React from "react";
+import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { Icon, Text } from "react-native-paper";
 import { Color } from "../enum";
 
 interface CheckBoxProps {
   isChecked: boolean;
   onPress: () => void;
   label: string;
+  labelStyle?: Object;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, label, onPress }) => {
+const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, onPress, label, labelStyle }) => {
   const color = isChecked ? Color.BLUE : Color.GRAY;
 
   return (
-    <>
-      <TouchableOpacity
-        onPress={onPress}
-        style={{
-          width: 25,
-          height: 25,
-          borderRadius: 0,
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 0,
-        }}
-      >
-        <Icon source="check" size={18} color={color} />
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={[styles.checkBox, { borderColor: Color.GRAY }]}>
+        {isChecked && <Icon source="check" size={18} color={color} />}
       </TouchableOpacity>
-      <Text style={{ fontSize: 15, fontWeight: "bold", flex: 1, marginLeft: 10 }}>{label}</Text>
-    </>
+
+      <Text style={[styles.label, labelStyle]}>{label}</Text>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  checkBox: {
+    width: 25,
+    height: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  label: {
+    fontSize: 15,
+    marginLeft: 10,
+    color: Color.BLACK,
+  },
+});
 
 export default CheckBox;

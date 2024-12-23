@@ -8,7 +8,7 @@ import { ScrollView, View } from "react-native";
 
 import dayjs from "dayjs";
 import HorizontalLine from "../../components/HorizontalLine";
-import { Button, Divider, Drawer, Menu, Text } from "react-native-paper";
+import { Button, Divider, Drawer, Icon, Menu, Text } from "react-native-paper";
 import BottomButton from "../../components/BottomButton";
 import Row from "../../components/Row";
 import ConfirmModal from "../../modal/ConfirmModal";
@@ -132,18 +132,23 @@ const CheckLists = () => {
 
           {category.checkList.map((checkList, index) => (
             <View style={{ marginLeft: 10, marginRight: 10 }} key={checkList.id}>
-              <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-                <CheckBox
-                  label={checkList.description}
-                  isChecked={checkList.isCompleted}
-                  onPress={() => console.log("클릭")}
-                ></CheckBox>
+              <View
+                style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <CheckBox
+                    label={checkList.description}
+                    isChecked={checkList.isCompleted}
+                    onPress={() => console.log("클릭")}
+                  />
+                </View>
+
                 <Menu
                   visible={checkListId === checkList.id}
                   onDismiss={() => setCheckListId(undefined)}
                   anchor={
                     <Button onPress={() => setCheckListId(checkList.id)} textColor={Color.BLACK}>
-                      ...
+                      <Icon source="menu" size={13} />
                     </Button>
                   }
                   contentStyle={{ backgroundColor: Color.WHITE }}

@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import ConfirmSignupScreen from "./src/screens/auth/ConfirmSignup";
 import CheckLists from "./src/screens/check-list/CheckLists";
-import EditCheckLists from "./src/screens/check-list/EditCheckLists";
+import EditCheckLists from "./src/screens/check-list/EditCheckList";
 import EmailLoginScreen from "./src/screens/auth/EmailLogin";
 import LoginScreen from "./src/screens/auth/Login";
 import CategoryLists from "./src/screens/category/CategoryLists";
@@ -12,12 +12,13 @@ import SignupProfileScreen from "./src/screens/auth/SignupProfile";
 import SignupScreen from "./src/screens/auth/Signup";
 import { PaperProvider } from "react-native-paper";
 import EditCost from "./src/screens/cost/EditCost";
+import EditCheckList from "./src/screens/check-list/EditCheckList";
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <CheckLists></CheckLists>
+        <EditCategory></EditCategory>
       </NavigationContainer>
     </PaperProvider>
   );

@@ -28,7 +28,7 @@ const CategoryLists = () => {
 
   return (
     <CenteredSafeArea>
-      <BackButton label="카테고리 편집" onPress={() => console.log("뒤로 가기")}></BackButton>
+      <BackButton label="카테고리 목록" onPress={() => console.log("뒤로 가기")}></BackButton>
       <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center", marginTop: 10 }}>기본 카테고리 목록</Text>
       <Text style={{ fontSize: 12, textAlign: "center", marginTop: 10 }}>클릭 시 추가 가능합니다.</Text>
 

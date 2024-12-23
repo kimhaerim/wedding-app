@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 import BackButton from "../../components/BackButton";
-import { Checkbox, Text } from "react-native-paper";
+import { Checkbox, Divider, Text } from "react-native-paper";
 import { View } from "react-native";
 import { Color } from "../../enum";
 import BottomButton from "../../components/BottomButton";
+import CheckBox from "../../components/CheckBox";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -52,39 +53,27 @@ const AgreeToTermsScreen = () => {
       <View style={{ margin: 20 }}>
         <Text style={{ fontWeight: "bold", fontSize: 18, marginBottom: 20 }}>이용약관에 동의해 주세요.</Text>
 
-        <Checkbox.Item
+        <CheckBox
           label="이용약관 전체 동의"
-          status={agreements.isAllAgreed ? "checked" : "unchecked"}
           onPress={handleAllAgreed}
-          position="leading"
-          color={Color.BLUE}
-          uncheckedColor={Color.DARK_GRAY}
-          labelStyle={{ textAlign: "left", fontSize: 15 }}
-          style={{
-            borderRadius: 15,
-            backgroundColor: Color.GRAY,
-          }}
-        />
+          isChecked={agreements.isAllAgreed}
+          labelStyle={{ fontWeight: "bold" }}
+        ></CheckBox>
 
-        <Checkbox.Item
-          label="[필수] 만 14세 이상입니다."
-          status={agreements.isOver14Agreed ? "checked" : "unchecked"}
-          onPress={() => toggleAgreement("isOver14Agreed")}
-          position="leading"
-          color={Color.BLUE}
-          uncheckedColor={Color.DARK_GRAY}
-          labelStyle={{ textAlign: "left", fontSize: 13 }}
-        />
+        <Divider style={{ margin: 10 }} />
+        <View style={{ marginLeft: 10 }}>
+          <CheckBox
+            label="[필수] 만 14세 이상입니다."
+            onPress={() => toggleAgreement("isOver14Agreed")}
+            isChecked={agreements.isOver14Agreed}
+          ></CheckBox>
 
-        <Checkbox.Item
-          label="[필수] 이용약관 동의"
-          status={agreements.isTermsAgreed ? "checked" : "unchecked"}
-          onPress={() => toggleAgreement("isTermsAgreed")}
-          position="leading"
-          color={Color.BLUE}
-          uncheckedColor={Color.DARK_GRAY}
-          labelStyle={{ textAlign: "left", fontSize: 13 }}
-        />
+          <CheckBox
+            label="[필수] 이용약관 동의"
+            onPress={() => toggleAgreement("isTermsAgreed")}
+            isChecked={agreements.isTermsAgreed}
+          ></CheckBox>
+        </View>
       </View>
 
       <BottomButton label="다음" disabled={!agreements.isAllAgreed} onPress={() => {}}></BottomButton>

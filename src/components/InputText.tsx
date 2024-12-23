@@ -28,7 +28,7 @@ const InputText: React.FC<props> = (props) => {
         onChangeText={props.onChangeText}
         error={props.error}
         multiline
-        outlineStyle={{ borderColor: Color.DARK_GRAY, borderRadius: 12 }}
+        outlineStyle={{ borderColor: Color.DARK_GRAY, borderRadius: 12, borderWidth: 1 }}
         style={{ height: 50, fontSize: 13, ...props.style }}
         secureTextEntry={props.secureTextEntry}
       />
