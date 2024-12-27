@@ -42,6 +42,7 @@ const ConfirmModal: React.FC<modalProps> = ({ title, description, visible, hideM
             flex: 0,
             marginRight: 10,
           }}
+          onPress={hideModal}
         >
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>아니오</Text>
         </TouchableOpacity>
@@ -57,6 +58,7 @@ const ConfirmModal: React.FC<modalProps> = ({ title, description, visible, hideM
             borderColor: Color.WHITE,
             backgroundColor: Color.BLUE,
           }}
+          onPress={() => console.log("삭제")}
         >
           <Text style={{ fontSize: 16, color: Color.WHITE, fontWeight: "bold" }}>네</Text>
         </TouchableOpacity>

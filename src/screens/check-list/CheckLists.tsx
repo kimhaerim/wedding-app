@@ -50,13 +50,14 @@ const CheckLists = () => {
         status: CheckListStatus.CONFIRMED,
         costs: [
           {
+            id: 1,
             title: "계약금 결제",
             amount: 100000,
             costType: CostType.BASE,
             memo: "어쩌구 저쩌구 몰래몰래",
             paymentDate: new Date(),
           },
-          { title: "2부 연회장 결제", amount: 100000, costType: CostType.ADDITIONAL },
+          { id: 2, title: "2부 연회장 결제", amount: 100000, costType: CostType.ADDITIONAL },
         ],
       },
       {
@@ -68,13 +69,14 @@ const CheckLists = () => {
         status: CheckListStatus.REJECTED,
         costs: [
           {
+            id: 1,
             title: "계약금 결제",
             amount: 100000,
             costType: CostType.BASE,
             memo: "어쩌구 저쩌구 몰래몰래",
             paymentDate: new Date(),
           },
-          { title: "2부 연회장 결제", amount: 100000, costType: CostType.ADDITIONAL },
+          { id: 2, title: "2부 연회장 결제", amount: 100000, costType: CostType.ADDITIONAL },
         ],
       },
     ],

@@ -15,13 +15,13 @@ import EditCost from "./src/screens/cost/EditCost";
 import EditCheckList from "./src/screens/check-list/EditCheckList";
 import React from "react";
 import DefaultCategories from "./src/screens/category/DefaultCategories";
-import CheckListCalendar from "./src/screens/check-list/CheckListCalendar";
+import Calendar from "./src/screens/calendar/Calendar";
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <CheckListCalendar></CheckListCalendar>
+        <Calendar></Calendar>
       </NavigationContainer>
     </PaperProvider>
   );

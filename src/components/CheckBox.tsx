@@ -7,14 +7,15 @@ interface CheckBoxProps {
   isChecked: boolean;
   onPress: () => void;
   label: string;
+  style?: Object;
   labelStyle?: Object;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, onPress, label, labelStyle }) => {
+const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, onPress, label, style, labelStyle }) => {
   const color = isChecked ? Color.BLUE : Color.GRAY;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <TouchableOpacity onPress={onPress} style={[styles.checkBox, { borderColor: Color.GRAY }]}>
         {isChecked && <Icon source="check" size={18} color={color} />}
       </TouchableOpacity>
