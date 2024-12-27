@@ -4,11 +4,21 @@ import CenteredSafeArea from "../../components/CenteredSafeArea";
 import { Color } from "../../enum";
 import { ICategory } from "../../interface/category.interface";
 import { Button, Divider, Icon, Menu, Text } from "react-native-paper";
-import { TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import ConfirmModal from "../../modal/ConfirmModal";
 
+const defaultCategories = [
+  "🏩 웨딩홀",
+  "📸 스튜디오",
+  "👗 드레스",
+  "💍 예물",
+  "🕴 신랑 예복",
+  "✈️ 신혼 여행",
+  "💄 메이크업",
+  "🌅 스냅 촬영",
+];
+
 const CategoryLists = () => {
-  const defaultCategories = ["웨딩홀", "스튜디오", "드레스", "메이크업"];
   const [userCategories, setUserCategories] = useState<ICategory[]>([
     { id: 1, title: "본식DVD", budgetAmount: 100000, checkList: [] },
     { id: 2, title: "본식DVD1", budgetAmount: 0, checkList: [] },
@@ -32,20 +42,22 @@ const CategoryLists = () => {
       <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center", marginTop: 10 }}>기본 카테고리 목록</Text>
       <Text style={{ fontSize: 12, textAlign: "center", marginTop: 10 }}>클릭 시 추가 가능합니다.</Text>
 
-      <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+      <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
         {defaultCategories.map((category) => (
           <TouchableOpacity
             key={category}
-            style={{
-              backgroundColor: Color.BLUE100,
-              width: 70,
-              height: 30,
-              borderRadius: 10,
-              justifyContent: "center",
-              alignItems: "center",
-              margin: 10,
+            style={[
+              styles.categoryButton,
+              {
+                backgroundColor: userCategories.map((category) => category.title).includes(category)
+                  ? Color.BLUE
+                  : Color.BLUE100,
+                paddingHorizontal: category.length > 3 ? 15 : 10,
+              },
+            ]}
+            onPress={() => {
+              console.log("추가");
             }}
-            onPress={() => console.log(category)}
           >
             <Text style={{ color: Color.BLACK }}>{category}</Text>
           </TouchableOpacity>
@@ -73,7 +85,7 @@ const CategoryLists = () => {
             >
               <Text style={{ fontSize: 13, fontWeight: "bold" }}>{category.title}</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={{ marginRight: 8, color: Color.RED }}>{formatCurrency(category.budgetAmount)}</Text>
+                <Text style={{ marginRight: 8 }}>{formatCurrency(category.budgetAmount)}</Text>
                 <Menu
                   visible={categoryId === category.id}
                   onDismiss={() => setCategoryId(undefined)}
@@ -105,5 +117,15 @@ const CategoryLists = () => {
     </CenteredSafeArea>
   );
 };
+
+const styles = StyleSheet.create({
+  categoryButton: {
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 6,
+  },
+});
 
 export default CategoryLists;

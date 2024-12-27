@@ -21,7 +21,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Calendar></Calendar>
+        <CategoryLists></CategoryLists>
       </NavigationContainer>
     </PaperProvider>
   );
