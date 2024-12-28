@@ -1,199 +1,140 @@
-import { useState } from "react";
-import BackButton from "../../components/BackButton";
+import { DataTable, Divider, Drawer, Icon, Text } from "react-native-paper";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import { ICategory } from "../../interface/category.interface";
-import { CheckListStatus, Color, CostType } from "../../enum";
-import CheckBox from "../../components/CheckBox";
-import { ScrollView, View } from "react-native";
-
-import dayjs from "dayjs";
-import HorizontalLine from "../../components/HorizontalLine";
-import { Button, Divider, Drawer, Icon, Menu, Text } from "react-native-paper";
-import BottomButton from "../../components/BottomButton";
+import { ICheckListTemp } from "../../interface/check-list.interface";
+import { CheckListStatus, Color } from "../../enum";
+import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Row from "../../components/Row";
+import { ICouple } from "../../interface/couple.interface";
+import dayjs from "dayjs";
+import React, { useState } from "react";
+import CheckBox from "../../components/CheckBox";
+import { blue100 } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
+import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
+import CustomMenu from "../../components/common/Menu";
 import ConfirmModal from "../../modal/ConfirmModal";
-
-const convertCheckListStatus = (status: CheckListStatus) => {
-  switch (status) {
-    case CheckListStatus.PENDING:
-      return "보류";
-    case CheckListStatus.CONFIRMED:
-      return "✔️ 확정";
-    case CheckListStatus.REJECTED:
-      return "❌ 탈락";
-  }
-};
-
-const covertCostType = (costType: CostType) => {
-  switch (costType) {
-    case CostType.BASE:
-      return "기본금";
-    case CostType.ADDITIONAL:
-      return "✚ 추가금";
-  }
-};
+import FloatingButton from "../../components/FloatingButton";
+import CheckListItem from "../../components/FlatList";
 
 const CheckLists = () => {
-  const checkListCount = 1;
-
-  const [category, setCategory] = useState<ICategory>({
-    id: 1,
-    title: "본식DVD",
-    budgetAmount: 0,
-    checkList: [
-      {
-        id: 1,
-        description: "사진보라",
-        isCompleted: true,
-        memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
-        reservedDate: new Date(),
-        status: CheckListStatus.CONFIRMED,
-        costs: [
-          {
-            id: 1,
-            title: "계약금 결제",
-            amount: 100000,
-            costType: CostType.BASE,
-            memo: "어쩌구 저쩌구 몰래몰래",
-            paymentDate: new Date(),
-          },
-          { id: 2, title: "2부 연회장 결제", amount: 100000, costType: CostType.ADDITIONAL },
-        ],
-      },
-      {
-        id: 2,
-        description: "사진보라",
-        isCompleted: false,
-        memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
-        reservedDate: new Date(),
-        status: CheckListStatus.REJECTED,
-        costs: [
-          {
-            id: 1,
-            title: "계약금 결제",
-            amount: 100000,
-            costType: CostType.BASE,
-            memo: "어쩌구 저쩌구 몰래몰래",
-            paymentDate: new Date(),
-          },
-          { id: 2, title: "2부 연회장 결제", amount: 100000, costType: CostType.ADDITIONAL },
-        ],
-      },
-    ],
-  });
+  const today = dayjs();
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
+  const [page, setPage] = useState<number>(0);
+  const [numberOfItemsPerPageList] = useState([2, 3, 4]);
+  const [checkLists, setCheckLists] = useState<ICheckListTemp[]>(checkListMockData);
+  const [couple, setCouple] = useState<ICouple>(coupleMockData);
+  const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
-  const handleRemoveModal = () => {
-    setRemoveModalVisible(true);
-    setCheckListId(undefined);
+  const convertDateToString = (inputDate: Date) => {
+    const year = inputDate.getFullYear();
+    const month = inputDate.getMonth() + 1;
+    const date = inputDate.getDate();
+    return `${year}년 ${month}월 ${date}일`;
+  };
+
+  const calculateDday = (date: Date) => {
+    const targetDate = dayjs(date);
+    const daysFromStart = today.diff(targetDate, "day");
+    return daysFromStart;
+  };
+
+  const handleMenuButtonPress = (id: number | undefined) => {
+    setCheckListId(id);
+  };
+
+  const handleMenuItemPress = (action: string, id: number) => {
+    switch (action) {
+      case "view":
+        console.log("상세 보기", id);
+        break;
+      case "edit":
+        console.log("수정", id);
+        break;
+      case "delete":
+        console.log("삭제", id);
+        setRemoveModalVisible(true);
+        setCheckListId(undefined);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const loadMoreData = () => {
+    setPage((prevPage) => prevPage + 1);
+
+    // 추가 호출 API
+    const newCheckLists: ICheckListTemp[] = [];
+
+    if (newCheckLists.length > 0) {
+      setCheckLists((prevLists) => [...prevLists, ...newCheckLists]);
+    }
+
+    if (newCheckLists.length <= 10) {
+      setPage(-1);
+    }
   };
 
   return (
-    <>
-      <CenteredSafeArea>
-        <ScrollView>
-          <BackButton label={"체크리스트"} onPress={() => console.log("뒤로 가기")} />
+    <CenteredSafeArea>
+      <View style={{ margin: 20, marginBottom: 0 }}>
+        <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center", marginBottom: 20 }}>체크리스트</Text>
 
-          <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: Color.BLUE100,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          {couple.weddingDate ? (
+            <>
+              <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 5 }}>
+                <Text style={{ marginRight: 10 }}>결혼식까지</Text>
+                <Text>D{calculateDday(couple.weddingDate)}</Text>
+              </View>
+              <Text>{convertDateToString(couple.weddingDate)} </Text>
+            </>
+          ) : (
+            <TouchableOpacity style={{ backgroundColor: Color.BLUE200, padding: 15, borderRadius: 20 }}>
+              <Text style={{ fontSize: 12, fontWeight: "bold" }}>결혼 예정일 등록하기</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <ScrollView horizontal={true} style={styles.scrollView}>
+          {userCategories.map((category) => (
+            <TouchableOpacity
+              key={category.id}
+              style={[
+                styles.categoryButton,
+                {
+                  backgroundColor: category.id === selectedCategory ? Color.BLUE : Color.BLUE100,
+                  paddingHorizontal: category.category.length > 3 ? 15 : 10,
+                },
+              ]}
+              onPress={() => setSelectedCategory(category.id)}
             >
-              <Text style={{ fontSize: 20 }}>📸</Text>
-            </View>
-            <View style={{ marginLeft: 10 }}>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>{category.title}</Text>
-            </View>
-            <Text style={{ marginLeft: 10, fontSize: 10 }}>{`${checkListCount}개`}</Text>
-          </View>
-
-          <View style={{ marginLeft: 20, marginTop: 10 }}>
-            <Row>
-              <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>총예산 </Text>
-              <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
-            </Row>
-            <Row>
-              <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>- 현재 결제 금액 </Text>
-              <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
-            </Row>
-            <Row>
-              <Text style={{ fontSize: 12, flex: 0, fontWeight: "bold" }}>= 남은 예산 </Text>
-              <Text style={{ fontSize: 12, flex: 1, textAlign: "right", marginRight: 15 }}>200,000</Text>
-            </Row>
-          </View>
-
-          <Divider style={{ backgroundColor: Color.BLUE200, height: 8, marginTop: 20 }} />
-
-          {category.checkList.map((checkList, index) => (
-            <View style={{ marginLeft: 10, marginRight: 10 }} key={checkList.id}>
-              <View
-                style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}
-              >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <CheckBox
-                    label={checkList.description}
-                    isChecked={checkList.isCompleted}
-                    onPress={() => console.log("클릭")}
-                  />
-                </View>
-
-                <Menu
-                  visible={checkListId === checkList.id}
-                  onDismiss={() => setCheckListId(undefined)}
-                  anchor={
-                    <Button onPress={() => setCheckListId(checkList.id)} textColor={Color.BLACK}>
-                      <Icon source="menu" size={13} />
-                    </Button>
-                  }
-                  contentStyle={{ backgroundColor: Color.WHITE }}
-                >
-                  <Menu.Item leadingIcon="pencil" onPress={() => console.log("수정")} title="수정" />
-                  <Menu.Item leadingIcon="delete" onPress={handleRemoveModal} title="삭제" />
-                </Menu>
-              </View>
-
-              <View>
-                <Text style={{ color: Color.DARK_GRAY, fontSize: 10 }}>
-                  {dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}
-                </Text>
-                {checkList.status && (
-                  <Text style={{ fontSize: 14, marginTop: 10 }}>{convertCheckListStatus(checkList.status)}</Text>
-                )}
-                {checkList.memo && <Text style={{ fontSize: 14, marginTop: 10 }}>{checkList.memo}</Text>}
-              </View>
-              {checkList.costs.map((cost, index) => (
-                <View key={`cost-${index}`}>
-                  <Divider style={{ marginTop: 20 }} />
-                  <Text style={{ fontSize: 10, marginTop: 10 }}>{covertCostType(cost.costType)}</Text>
-                  <Row>
-                    <Text style={{ fontSize: 16, fontWeight: "bold", flex: 0 }}>{cost.title}</Text>
-                    <Text style={{ fontSize: 16, textAlign: "right", flex: 1 }}>{cost.amount}</Text>
-                  </Row>
-                  <Text style={{ fontSize: 10, color: Color.DARK_GRAY }}>
-                    {cost.paymentDate ? dayjs(cost.paymentDate).format("YYYY-MM-DD HH:mm") : "결제 전"}
-                  </Text>
-                  {cost.memo && <Text style={{ marginTop: 10 }}>{cost.memo}</Text>}
-                </View>
-              ))}
-              <Divider style={{ backgroundColor: Color.BLUE100, height: 3, marginTop: 20 }} />
-            </View>
+              <Text style={{ color: category.id === selectedCategory ? Color.WHITE : Color.BLACK }}>
+                {category.category}
+              </Text>
+            </TouchableOpacity>
           ))}
-
-          <BottomButton
-            label="체크리스트 추가하기"
-            onPress={() => console.log("추가하기 클릭")}
-            disabled={false}
-          ></BottomButton>
         </ScrollView>
-      </CenteredSafeArea>
+        <Divider />
+      </View>
+
+      <View style={{ backgroundColor: "#EFF8FB", height: "100%" }}>
+        <FlatList
+          data={checkLists}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={({ item }) => (
+            <CheckListItem
+              item={item}
+              checkListId={checkListId}
+              onMenuButtonPress={handleMenuButtonPress}
+              onMenuItemPress={handleMenuItemPress}
+            />
+          )}
+          onEndReached={loadMoreData}
+          onEndReachedThreshold={0.5}
+        />
+      </View>
 
       <ConfirmModal
         title="체크리스트를 정말 삭제하시겠습니까?"
@@ -201,8 +142,49 @@ const CheckLists = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </>
+
+      <FloatingButton onPress={() => console.log()}></FloatingButton>
+    </CenteredSafeArea>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+
+  title: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  scrollView: {
+    width: "100%",
+  },
+  categoryButton: {
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 6,
+  },
+  label: {
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    marginHorizontal: 5,
+    width: "50%",
+  },
+  borderBottom: {
+    width: "50%",
+    borderBottomWidth: 2,
+  },
+});
 
 export default CheckLists;
