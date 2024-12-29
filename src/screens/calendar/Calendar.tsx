@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Button, Divider, Icon, Menu, Text } from "react-native-paper";
+import { ScrollView, View } from "react-native";
+import { Divider, Text } from "react-native-paper";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 
 import { CheckListStatus, Color, CostType } from "../../enum";
-import { ICheckList, ICheckListTemp, ICost } from "../../interface/check-list.interface";
+import { ICheckListTemp, ICost } from "../../interface/check-list.interface";
 import Row from "../../components/Row";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CheckBox from "../../components/CheckBox";
 import ConfirmModal from "../../modal/ConfirmModal";
-import SummaryCard from "../../components/SummaryCard";
 import CommonCalendar from "../../components/calendar/Calendar";
 import CalendarHeader from "../../components/calendar/CalendarHeader";
 import { CalendarType } from "../../enum/calendar.enum";

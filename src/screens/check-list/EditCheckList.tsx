@@ -1,7 +1,6 @@
 import { useState } from "react";
 import BackButton from "../../components/BackButton";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import CustomText from "../../components/Text";
 import { View } from "react-native";
 import { SegmentedButtons, Text } from "react-native-paper";
 import { CheckListStatus, Color } from "../../enum";

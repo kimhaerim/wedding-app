@@ -1,8 +1,6 @@
 import React from "react";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import CustomText from "../../components/Text";
 
-import CustomButton from "../../components/Button";
 import { Color } from "../../enum";
 import { View } from "react-native";
 import CancelButton from "../../components/CancelButton";

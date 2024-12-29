@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 import BackButton from "../../components/BackButton";
-import { Checkbox, Divider, Text } from "react-native-paper";
+import { Divider, Text } from "react-native-paper";
 import { View } from "react-native";
-import { Color } from "../../enum";
 import BottomButton from "../../components/BottomButton";
 import CheckBox from "../../components/CheckBox";
 

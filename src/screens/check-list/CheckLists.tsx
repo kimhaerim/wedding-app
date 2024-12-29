@@ -1,19 +1,17 @@
-import { DataTable, Divider, Drawer, Icon, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 import { ICheckListTemp } from "../../interface/check-list.interface";
-import { CheckListStatus, Color } from "../../enum";
+import { Color } from "../../enum";
 import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import Row from "../../components/Row";
 import { ICouple } from "../../interface/couple.interface";
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import CheckBox from "../../components/CheckBox";
-import { blue100 } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
-import CustomMenu from "../../components/common/Menu";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/FloatingButton";
-import CheckListItem from "../../components/FlatList";
+
+import CategoryButton from "../../components/category/CategoryButton";
+import CheckListItem from "../../components/check-list/CheckListItem";
 
 const CheckLists = () => {
   const today = dayjs();
@@ -21,7 +19,6 @@ const CheckLists = () => {
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
-  const [numberOfItemsPerPageList] = useState([2, 3, 4]);
   const [checkLists, setCheckLists] = useState<ICheckListTemp[]>(checkListMockData);
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
@@ -79,7 +76,7 @@ const CheckLists = () => {
 
   return (
     <CenteredSafeArea>
-      <View style={{ margin: 20, marginBottom: 0 }}>
+      <View style={{ margin: 10, marginBottom: 0 }}>
         <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center", marginBottom: 20 }}>체크리스트</Text>
 
         <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -99,27 +96,17 @@ const CheckLists = () => {
         </View>
         <ScrollView horizontal={true} style={styles.scrollView}>
           {userCategories.map((category) => (
-            <TouchableOpacity
+            <CategoryButton
               key={category.id}
-              style={[
-                styles.categoryButton,
-                {
-                  backgroundColor: category.id === selectedCategory ? Color.BLUE : Color.BLUE100,
-                  paddingHorizontal: category.category.length > 3 ? 15 : 10,
-                },
-              ]}
+              label={category.category}
+              isPressed={category.id === selectedCategory}
               onPress={() => setSelectedCategory(category.id)}
-            >
-              <Text style={{ color: category.id === selectedCategory ? Color.WHITE : Color.BLACK }}>
-                {category.category}
-              </Text>
-            </TouchableOpacity>
+            ></CategoryButton>
           ))}
         </ScrollView>
-        <Divider />
       </View>
 
-      <View style={{ backgroundColor: "#EFF8FB", height: "100%" }}>
+      <View style={{ backgroundColor: "#EFF8FB", height: "100%", marginTop: 10 }}>
         <FlatList
           data={checkLists}
           keyExtractor={(item) => `${item.id}`}
@@ -149,41 +136,8 @@ const CheckLists = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-
-  title: {
-    fontSize: 20,
-    marginBottom: 10,
-  },
   scrollView: {
     width: "100%",
-  },
-  categoryButton: {
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 6,
-  },
-  label: {
-    fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 15,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    marginHorizontal: 5,
-    width: "50%",
-  },
-  borderBottom: {
-    width: "50%",
-    borderBottomWidth: 2,
   },
 });
 

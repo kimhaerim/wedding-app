@@ -1,4 +1,5 @@
 import { CheckListStatus, CostType } from "../enum";
+import { ICategory } from "./category.interface";
 
 export interface ICheckList {
   id: number;
@@ -18,6 +19,7 @@ export interface ICheckListTemp {
   isCompleted: boolean;
   memo?: string;
   status?: CheckListStatus;
+  category?: ICategory;
 }
 
 export interface ICost {

@@ -1,6 +1,4 @@
 import { Button, Divider, Icon, Menu } from "react-native-paper";
-import ConfirmModal from "../../modal/ConfirmModal";
-import { useState } from "react";
 import { Color } from "../../enum";
 
 interface MenuProps {

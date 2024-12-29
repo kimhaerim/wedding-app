@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { ICheckListTemp } from "../interface/check-list.interface";
-import CheckBox from "./CheckBox";
-import CustomMenu from "./common/Menu";
-import { Color } from "../enum";
+import { ICheckListTemp } from "../../interface/check-list.interface";
+import CheckBox from "../CheckBox";
+import CustomMenu from "../common/Menu";
+import { Color } from "../../enum";
 
 interface CheckListItemProps {
   item: ICheckListTemp;
@@ -17,12 +17,17 @@ const CheckListItem = ({ item, checkListId, onMenuButtonPress, onMenuItemPress }
     <View style={styles.checkListContainer}>
       <View style={styles.checkListRow}>
         <CheckBox label={item.description} isChecked={item.isCompleted} onPress={() => console.log("클릭")} />
-        <CustomMenu
-          visible={checkListId === item.id}
-          onButtonPress={() => onMenuButtonPress(item.id)}
-          onDismiss={() => onMenuButtonPress(undefined)}
-          onMenuItemPress={(action: string) => onMenuItemPress(action, item.id)}
-        />
+
+        <View style={styles.menuContainer}>
+          {item.category && <Text style={styles.categoryText}>{item.category?.title}</Text>}
+
+          <CustomMenu
+            visible={checkListId === item.id}
+            onButtonPress={() => onMenuButtonPress(item.id)}
+            onDismiss={() => onMenuButtonPress(undefined)}
+            onMenuItemPress={(action: string) => onMenuItemPress(action, item.id)}
+          />
+        </View>
       </View>
 
       <Text style={styles.dateText}>
@@ -46,6 +51,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
+  },
+  menuContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  categoryText: {
+    color: Color.BLUE,
   },
   dateText: {
     color: Color.DARK_GRAY,

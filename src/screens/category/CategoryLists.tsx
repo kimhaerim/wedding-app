@@ -4,8 +4,9 @@ import CenteredSafeArea from "../../components/CenteredSafeArea";
 import { Color } from "../../enum";
 import { ICategory } from "../../interface/category.interface";
 import { Button, Divider, Icon, Menu, Text } from "react-native-paper";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import ConfirmModal from "../../modal/ConfirmModal";
+import CategoryButton from "../../components/category/CategoryButton";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -44,23 +45,12 @@ const CategoryLists = () => {
 
       <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
         {defaultCategories.map((category) => (
-          <TouchableOpacity
+          <CategoryButton
             key={category}
-            style={[
-              styles.categoryButton,
-              {
-                backgroundColor: userCategories.map((category) => category.title).includes(category)
-                  ? Color.BLUE
-                  : Color.BLUE100,
-                paddingHorizontal: category.length > 3 ? 15 : 10,
-              },
-            ]}
-            onPress={() => {
-              console.log("추가");
-            }}
-          >
-            <Text style={{ color: Color.BLACK }}>{category}</Text>
-          </TouchableOpacity>
+            isPressed={true}
+            onPress={() => console.log(category)}
+            label={category}
+          ></CategoryButton>
         ))}
       </View>
 
@@ -72,7 +62,7 @@ const CategoryLists = () => {
 
       <View style={{ marginLeft: 20, marginRight: 20 }}>
         {userCategories.map((category) => (
-          <>
+          <View key={category.id}>
             <View
               key={category.id}
               style={{
@@ -104,7 +94,7 @@ const CategoryLists = () => {
               </View>
             </View>
             <Divider />
-          </>
+          </View>
         ))}
       </View>
 

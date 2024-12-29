@@ -1,12 +1,8 @@
 import React, { useMemo, useState } from "react";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
 import BackButton from "../../components/BackButton";
-import ActiveButton from "../../components/BottomButton";
-import TextInputGroup from "../../components/InputText";
 import { View } from "react-native";
-import { Appbar, Text, TextInput } from "react-native-paper";
 import BottomButton from "../../components/BottomButton";
-import { Color } from "../../enum";
 import InputText from "../../components/InputText";
 
 const enum SignupField {

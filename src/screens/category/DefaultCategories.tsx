@@ -1,10 +1,10 @@
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import { Color } from "../../enum";
 import { Text } from "react-native-paper";
 import BottomButton from "../../components/BottomButton";
 import BackButton from "../../components/BackButton";
 import { useCallback, useState } from "react";
+import CategoryButton from "../../components/category/CategoryButton";
 
 const DefaultCategories = () => {
   const defaultCategories = [
@@ -39,19 +39,12 @@ const DefaultCategories = () => {
 
         <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
           {defaultCategories.map((category) => (
-            <TouchableOpacity
+            <CategoryButton
               key={category}
-              style={[
-                styles.categoryButton,
-                {
-                  backgroundColor: userCategories.includes(category) ? Color.BLUE : Color.BLUE100,
-                  paddingHorizontal: category.length > 3 ? 15 : 10,
-                },
-              ]}
+              label={category}
+              isPressed={userCategories.includes(category)}
               onPress={() => handleUserCategories(category)}
-            >
-              <Text style={{ color: userCategories.includes(category) ? Color.WHITE : Color.BLACK }}>{category}</Text>
-            </TouchableOpacity>
+            ></CategoryButton>
           ))}
         </View>
       </View>
@@ -67,7 +60,7 @@ const DefaultCategories = () => {
 const styles = StyleSheet.create({
   categoryButton: {
     height: 40,
-    borderRadius: 20,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     margin: 6,

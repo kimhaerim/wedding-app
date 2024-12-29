@@ -1,12 +1,8 @@
 import React from "react";
 
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import CustomButton from "../../components/Button";
-import CustomText from "../../components/Text";
-import CustomRow from "../../components/Row";
 import { Color } from "../../enum";
 import { Button, Text } from "react-native-paper";
-import { View } from "react-native";
 
 const LoginScreen = () => {
   return (

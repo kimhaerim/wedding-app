@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Modal, Portal, Text, Button, PaperProvider } from "react-native-paper";
+import { Modal, Text } from "react-native-paper";
 import { Color } from "../enum";
-import Row from "../components/Row";
 import { TouchableOpacity, View } from "react-native";
 
 interface modalProps {

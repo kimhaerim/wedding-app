@@ -2,9 +2,7 @@ import { useState } from "react";
 
 import BackButton from "../../components/BackButton";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import ActiveButton from "../../components/BottomButton";
 import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
-import TextInputGroup from "../../components/InputText";
 import { View } from "react-native";
 import InputText from "../../components/InputText";
 import BottomButton from "../../components/BottomButton";

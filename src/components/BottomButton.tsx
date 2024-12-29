@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components/native";
 import { Color } from "../enum";
 import { StyleSheet } from "react-native";
 import { Appbar, Button } from "react-native-paper";

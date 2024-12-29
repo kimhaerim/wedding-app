@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import CustomButton from "../../components/Button";
-import CustomRow from "../../components/Row";
 import BackButton from "../../components/BackButton";
 import { Color } from "../../enum";
-import CustomInput from "../../components/InputBox";
 import { View } from "react-native";
 import InputText from "../../components/InputText";
 import { Button } from "react-native-paper";

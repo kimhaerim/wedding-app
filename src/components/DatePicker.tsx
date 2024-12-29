@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { DatePickerInput } from "react-native-paper-dates";
 import { Color } from "../enum";
 import { ko, registerTranslation } from "react-native-paper-dates";
