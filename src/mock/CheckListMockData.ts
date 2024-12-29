@@ -1,4 +1,5 @@
 import { CheckListStatus, CostType } from "../enum";
+import { ICategory } from "../interface/category.interface";
 import { ICheckList, ICheckListTemp, ICost } from "../interface/check-list.interface";
 import { ICouple } from "../interface/couple.interface";
 
@@ -53,6 +54,11 @@ export const costsMockData: ICost[] = [
   },
 ];
 
+export const categoryMockData: ICategory[] = [
+  { id: 1, title: "본식DVD", budgetAmount: 100000, checkList: [] },
+  { id: 2, title: "본식DVD1", budgetAmount: 0, checkList: [] },
+];
+
 export const checkListMockData1: ICheckList[] = [
   {
     id: 1,
@@ -62,6 +68,7 @@ export const checkListMockData1: ICheckList[] = [
     reservedDate: new Date("2024-12-01"),
     status: CheckListStatus.CONFIRMED,
     costs: costsMockData,
+    category: categoryMockData[0],
   },
   {
     id: 2,

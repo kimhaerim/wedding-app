@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { TouchableOpacity, View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import { Color } from "../enum";
 
@@ -7,7 +7,7 @@ interface CheckBoxProps {
   isChecked: boolean;
   onPress: () => void;
   label: string;
-  style?: Object;
+  style?: StyleProp<ViewStyle>;
   labelStyle?: Object;
 }
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 10,
   },
   label: {
     fontSize: 15,

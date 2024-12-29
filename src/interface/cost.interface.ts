@@ -7,3 +7,9 @@ export interface IAddCost {
   memo?: string;
   costType: CostType;
 }
+
+export interface ICostByCheckList {
+  totalAmount: number;
+  paidAmount: number;
+  unpaidAmount: number;
+}

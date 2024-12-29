@@ -1,36 +1,35 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { ICheckListTemp } from "../../interface/check-list.interface";
+import { ICheckListTemp, ICost } from "../../interface/check-list.interface";
 import CheckBox from "../CheckBox";
 import CustomMenu from "../common/Menu";
 import { Color } from "../../enum";
 import { Divider } from "react-native-paper";
 import { Badge } from "../common/Badge";
+import { convertDateTimeToString, convertDateToString, formatCurrency } from "../../common/util";
 
-interface CheckListItemProps {
-  item: ICheckListTemp;
-  checkListId: number | undefined;
+interface CostItemProps {
+  item: ICost;
+  costId: number | undefined;
   onMenuButtonPress: (id: number | undefined) => void;
   onMenuItemPress: (action: string, id: number) => void;
 }
 
-const CheckListItem: React.FC<CheckListItemProps> = ({ item, checkListId, onMenuButtonPress, onMenuItemPress }) => {
+const CostItem: React.FC<CostItemProps> = ({ item, costId, onMenuButtonPress, onMenuItemPress }) => {
   return (
-    <View style={styles.checkListContainer}>
+    <View style={styles.shadowView}>
+      <Badge
+        backgroundColor={item.paymentDate ? Color.BLUE : Color.DARK_GRAY}
+        label={item.paymentDate ? "결제 완료" : "결제 전"}
+        labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
+      ></Badge>
+
       <View style={styles.checkListRow}>
-        <CheckBox label={item.description} isChecked={item.isCompleted} onPress={() => console.log("클릭")} />
-
+        {item.title && <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>}
         <View style={styles.menuContainer}>
-          {item.category && (
-            <Badge
-              label={item.category.title}
-              backgroundColor={Color.BLUE200}
-              labelStyle={{ color: Color.BLACK }}
-            ></Badge>
-          )}
-
+          <Text>{formatCurrency(item.amount)}</Text>
           <CustomMenu
-            visible={checkListId === item.id}
+            visible={costId === item.id}
             onButtonPress={() => onMenuButtonPress(item.id)}
             onDismiss={() => onMenuButtonPress(undefined)}
             onMenuItemPress={(action: string) => onMenuItemPress(action, item.id)}
@@ -38,21 +37,16 @@ const CheckListItem: React.FC<CheckListItemProps> = ({ item, checkListId, onMenu
         </View>
       </View>
 
-      <Text style={styles.dateText}>
-        {item.reservedDate} {item.reservedTime}
-      </Text>
-      {item.memo && (
-        <>
-          <Divider />
-          <Text style={styles.memoText}>{item.memo}</Text>
-        </>
-      )}
+      {(item.paymentDate || item.memo) && <Divider style={{ marginBottom: 10 }} />}
+      {item.paymentDate && <Text style={styles.dateText}> {convertDateToString(item.paymentDate)}</Text>}
+
+      {item.memo && <Text style={styles.memoText}>{item.memo}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  checkListContainer: {
+  shadowView: {
     padding: 10,
     margin: 5,
     backgroundColor: Color.WHITE,
@@ -67,7 +61,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
   },
   menuContainer: {
     flexDirection: "row",
@@ -81,9 +74,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   memoText: {
-    marginTop: 10,
     fontSize: 12,
   },
 });
 
-export default CheckListItem;
+export default CostItem;

@@ -12,26 +12,7 @@ import BottomButton from "../../components/BottomButton";
 import Row from "../../components/Row";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/FloatingButton";
-
-const convertCheckListStatus = (status: CheckListStatus) => {
-  switch (status) {
-    case CheckListStatus.PENDING:
-      return "보류";
-    case CheckListStatus.CONFIRMED:
-      return "✔️ 확정";
-    case CheckListStatus.REJECTED:
-      return "❌ 탈락";
-  }
-};
-
-const covertCostType = (costType: CostType) => {
-  switch (costType) {
-    case CostType.BASE:
-      return "기본금";
-    case CostType.ADDITIONAL:
-      return "✚ 추가금";
-  }
-};
+import { convertCheckListStatus, convertDateTimeToString, covertCostType } from "../../common/util";
 
 const CategoryWithCheckLists = () => {
   const checkListCount = 1;
@@ -131,7 +112,7 @@ const CategoryWithCheckLists = () => {
 
         <Divider style={{ backgroundColor: Color.BLUE200, height: 8, marginTop: 20 }} />
 
-        {category.checkList.map((checkList, index) => (
+        {category.checkList.map((checkList) => (
           <View style={{ marginLeft: 10, marginRight: 10 }} key={checkList.id}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}
@@ -160,9 +141,11 @@ const CategoryWithCheckLists = () => {
             </View>
 
             <View>
-              <Text style={{ color: Color.DARK_GRAY, fontSize: 10 }}>
-                {dayjs(checkList.reservedDate).format("YYYY-MM-DD HH:mm")}
-              </Text>
+              {checkList.reservedDate && (
+                <Text style={{ color: Color.DARK_GRAY, fontSize: 10 }}>
+                  {convertDateTimeToString(checkList.reservedDate)}
+                </Text>
+              )}
               {checkList.status && (
                 <Text style={{ fontSize: 14, marginTop: 10 }}>{convertCheckListStatus(checkList.status)}</Text>
               )}

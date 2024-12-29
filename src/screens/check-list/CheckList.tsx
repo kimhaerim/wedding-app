@@ -1,47 +1,32 @@
-import { Divider, Text } from "react-native-paper";
+import { Divider, Icon, Text } from "react-native-paper";
 import CenteredSafeArea from "../../components/CenteredSafeArea";
-import { ICheckList, ICheckListTemp, ICost } from "../../interface/check-list.interface";
+import { ICheckList, ICost } from "../../interface/check-list.interface";
 import { Color } from "../../enum";
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ICouple } from "../../interface/couple.interface";
-import dayjs from "dayjs";
-import React, { useState } from "react";
-import { checkListMockData1, coupleMockData } from "../../mock/CheckListMockData";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { checkListMockData1 } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/FloatingButton";
 
 import BackButton from "../../components/BackButton";
 import CheckBox from "../../components/CheckBox";
-import CustomMenu from "../../components/common/Menu";
+import { Badge } from "../../components/common/Badge";
+import { convertDateTimeToString, formatCurrency } from "../../common/util";
+import CostItem from "../../components/cost/CostItem";
+import { ICostByCheckList } from "../../interface/cost.interface";
 import Row from "../../components/Row";
 
 const CheckList = () => {
-  const today = dayjs();
-  // const [selectedCategory, setSelectedCategory] = useState<number>(0);s
-
   const [costId, setCostId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
   const [checkList, setCheckList] = useState<ICheckList>(checkListMockData1[0]);
-  const [couple, setCouple] = useState<ICouple>(coupleMockData);
-  // const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
-
-  const convertDateToString = (inputDate: Date) => {
-    const year = inputDate.getFullYear();
-    const month = inputDate.getMonth() + 1;
-    const date = inputDate.getDate();
-    return `${year}년 ${month}월 ${date}일`;
-  };
-
-  const calculateDday = (date: Date) => {
-    const targetDate = dayjs(date);
-    const daysFromStart = today.diff(targetDate, "day");
-    return daysFromStart;
-  };
-
-  const handleMenuButtonPress = (id: number | undefined) => {
-    setCostId(id);
-  };
+  const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
+    totalAmount: 200000,
+    paidAmount: 100000,
+    unpaidAmount: 100000,
+  });
+  const [isExpanded, setIsExpanded] = useState(false); // 열림/닫힘 상태 관리
 
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
@@ -80,69 +65,121 @@ const CheckList = () => {
     <CenteredSafeArea>
       <BackButton onPress={() => console.log("뒤로 가기")} label="체크리스트"></BackButton>
       <View style={{ margin: 20 }}>
+        {checkList.category && <Badge label={checkList.category.title} backgroundColor={Color.BLUE200}></Badge>}
+
         <CheckBox
+          style={{ marginTop: 10 }}
           label={checkList.description}
           isChecked={checkList.isCompleted}
           onPress={() => "클릭"}
           labelStyle={{ fontWeight: "bold", fontSize: 18 }}
         ></CheckBox>
+
         <View style={styles.menuContainer}></View>
         {checkList.reservedDate && (
-          <Text style={{ color: Color.DARK_GRAY, marginBottom: 5 }}>{convertDateToString(checkList.reservedDate)}</Text>
+          <Text style={{ color: Color.DARK_GRAY, marginBottom: 5 }}>
+            {convertDateTimeToString(checkList.reservedDate)}
+          </Text>
         )}
-        {checkList.memo && <Text style={{ fontSize: 12 }}>{checkList.memo}</Text>}
-        {checkList.status && <Text>{checkList.status}</Text>}
+        {checkList.memo && <Text style={{ fontSize: 12, marginBottom: 10 }}>{checkList.memo}</Text>}
+      </View>
 
-        <View style={{ height: "100%", marginTop: 10 }}>
-          <FlatList
-            data={checkList.costs}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={({ item }) => (
-              <View style={styles.shadowView}>
-                <View
-                  style={{
-                    backgroundColor: item.paymentDate ? Color.BLUE : Color.DARK_GRAY,
-                    padding: 5,
-                    borderRadius: 5,
-                    width: 60,
-                  }}
-                >
-                  <Text style={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}>
-                    {item.paymentDate ? "결제 완료" : "결제 전"}
-                  </Text>
-                </View>
-                <View style={styles.checkListRow}>
-                  {item.title && <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>}
+      <Divider />
+      <View
+        style={{
+          backgroundColor: Color.WHITE,
+          margin: 10,
+          borderWidth: 1,
+          borderRadius: 10,
+          padding: 10,
+          borderColor: Color.BLUE200,
+        }}
+      >
+        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
+          <Text style={{ fontSize: 14, fontWeight: "bold", color: Color.BLUE }}>
+            예산 / 지출 내역 {isExpanded ? "닫기" : "보기"}
+          </Text>
+        </TouchableOpacity>
 
-                  <View style={styles.menuContainer}>
-                    <CustomMenu
-                      visible={costId === item.id}
-                      onButtonPress={() => setCostId(item.id)}
-                      onDismiss={() => setCostId(undefined)}
-                      onMenuItemPress={(action: string) => handleMenuItemPress(action, item.id)}
-                    />
-                  </View>
-                </View>
-
-                {item.paymentDate && <Text style={styles.dateText}> {convertDateToString(item.paymentDate)}</Text>}
-
-                {item.memo && (
-                  <>
-                    <Divider />
-                    <Text style={styles.memoText}>{item.memo}</Text>
-                  </>
-                )}
-              </View>
+        {isExpanded && (
+          <View style={{ margin: 5 }}>
+            {checkList.category && (
+              <Row style={{ marginBottom: 5 }}>
+                <Icon color={Color.DARK_GRAY} source="cash" size={15} />
+                <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 예산</Text>
+                <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
+                  {formatCurrency(checkList.category.budgetAmount)}
+                </Text>
+              </Row>
             )}
-            onEndReached={loadMoreData}
-            onEndReachedThreshold={0.5}
-          />
-        </View>
+            <Row style={{ marginBottom: 5 }}>
+              <Icon color={Color.DARK_GRAY} source="currency-usd" size={15} />
+              <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 비용</Text>
+              <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
+                {formatCurrency(combinedCost.totalAmount)}
+              </Text>
+            </Row>
+
+            <Divider style={{ margin: 5 }} />
+            <Row style={{ marginBottom: 5 }}>
+              <Icon color={Color.DARK_GRAY} source="check-circle" size={15} />
+              <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 금액</Text>
+              <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
+                {formatCurrency(combinedCost.paidAmount)}
+              </Text>
+            </Row>
+
+            <Row style={{ marginBottom: 5 }}>
+              <Icon color={Color.DARK_GRAY} source="clock-outline" size={15} />
+              <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 예정 금액</Text>
+              <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
+                {formatCurrency(combinedCost.unpaidAmount)}
+              </Text>
+            </Row>
+
+            {checkList.category && (
+              <>
+                <Divider />
+                <Row style={{ marginTop: 5 }}>
+                  <Icon color={Color.DARK_GRAY} source="wallet-outline" size={15} />
+                  <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>남은 예산</Text>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      flex: 1,
+                      textAlign: "right",
+                      marginRight: 15,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {formatCurrency(checkList.category.budgetAmount - combinedCost.totalAmount)}
+                  </Text>
+                </Row>
+              </>
+            )}
+          </View>
+        )}
+      </View>
+
+      <View style={{ margin: 10, marginTop: 0 }}>
+        <FlatList
+          data={checkList.costs}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={({ item }) => (
+            <CostItem
+              item={item}
+              costId={costId}
+              onMenuButtonPress={() => setCostId(item.id)}
+              onMenuItemPress={handleMenuItemPress}
+            />
+          )}
+          onEndReached={loadMoreData}
+          onEndReachedThreshold={0.5}
+        />
       </View>
 
       <ConfirmModal
-        title="체크리스트를 정말 삭제하시겠습니까?"
-        description="비용 정보도 모두 삭제됩니다."
+        title="비용 정보를 정말 삭제하시겠습니까?"
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
@@ -189,7 +226,6 @@ const styles = StyleSheet.create({
   },
   memoText: {
     marginTop: 10,
-
     fontSize: 12,
   },
 });

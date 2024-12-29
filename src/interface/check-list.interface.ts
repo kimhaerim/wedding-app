@@ -9,6 +9,7 @@ export interface ICheckList {
   memo?: string;
   status?: CheckListStatus;
   costs: ICost[];
+  category?: ICategory;
 }
 
 export interface ICheckListTemp {

@@ -5,7 +5,7 @@ import { TouchableOpacity, View } from "react-native";
 
 interface modalProps {
   title: string;
-  description: string;
+  description?: string;
   visible: boolean;
   hideModal: () => void;
 }
@@ -26,7 +26,7 @@ const ConfirmModal: React.FC<modalProps> = ({ title, description, visible, hideM
       }}
     >
       <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{title}</Text>
-      <Text style={{ marginTop: 10, fontSize: 16, textAlign: "center" }}>{description}</Text>
+      {description && <Text style={{ marginTop: 10, fontSize: 16, textAlign: "center" }}>{description}</Text>}
 
       <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
         <TouchableOpacity

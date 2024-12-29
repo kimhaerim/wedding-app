@@ -22,7 +22,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <CheckList></CheckList>
+        <CategoryWithCheckLists></CategoryWithCheckLists>
       </NavigationContainer>
     </PaperProvider>
   );

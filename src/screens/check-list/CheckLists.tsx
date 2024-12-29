@@ -12,6 +12,7 @@ import FloatingButton from "../../components/FloatingButton";
 
 import CategoryButton from "../../components/category/CategoryButton";
 import CheckListItem from "../../components/check-list/CheckListItem";
+import { convertDateToString } from "../../common/util";
 
 const CheckLists = () => {
   const today = dayjs();
@@ -23,13 +24,6 @@ const CheckLists = () => {
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
-
-  const convertDateToString = (inputDate: Date) => {
-    const year = inputDate.getFullYear();
-    const month = inputDate.getMonth() + 1;
-    const date = inputDate.getDate();
-    return `${year}년 ${month}월 ${date}일`;
-  };
 
   const calculateDday = (date: Date) => {
     const targetDate = dayjs(date);
@@ -106,7 +100,7 @@ const CheckLists = () => {
         </ScrollView>
       </View>
 
-      <View style={{ backgroundColor: "#EFF8FB", height: "100%", marginTop: 10 }}>
+      <View style={{ height: "100%", margin: 10 }}>
         <FlatList
           data={checkLists}
           keyExtractor={(item) => `${item.id}`}
