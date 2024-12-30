@@ -2,6 +2,7 @@ import * as React from "react";
 import { Modal, Text } from "react-native-paper";
 import { Color } from "../enum";
 import { TouchableOpacity, View } from "react-native";
+import Button from "../components/Button";
 
 interface modalProps {
   title: string;
@@ -29,38 +30,30 @@ const ConfirmModal: React.FC<modalProps> = ({ title, description, visible, hideM
       {description && <Text style={{ marginTop: 10, fontSize: 16, textAlign: "center" }}>{description}</Text>}
 
       <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-        <TouchableOpacity
+        <Button
           style={{
             width: 100,
-            height: 40,
-            borderRadius: 10,
             borderWidth: 1,
-            borderColor: Color.GRAY,
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 0,
             marginRight: 10,
+            borderColor: Color.GRAY,
+            backgroundColor: Color.GRAY,
           }}
           onPress={hideModal}
         >
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>아니오</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Button>
+
+        <Button
           style={{
             width: 100,
-            height: 40,
-            borderRadius: 10,
             borderWidth: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 0,
             borderColor: Color.WHITE,
             backgroundColor: Color.BLUE,
           }}
-          onPress={() => console.log("삭제")}
+          onPress={hideModal}
         >
           <Text style={{ fontSize: 16, color: Color.WHITE, fontWeight: "bold" }}>네</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </Modal>
   );

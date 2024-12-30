@@ -16,6 +16,7 @@ import CostItem from "../../components/cost/CostItem";
 import { ICostByCheckList } from "../../interface/cost.interface";
 import Row from "../../components/Row";
 import ShadowView from "../../components/common/ShadowView";
+import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
 
 const CheckList = () => {
   const [costId, setCostId] = useState<number | undefined>(undefined);
@@ -23,9 +24,9 @@ const CheckList = () => {
   const [checkList, setCheckList] = useState<ICheckList>(checkListMockData1[0]);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
-    totalAmount: 200000,
-    paidAmount: 100000,
-    unpaidAmount: 100000,
+    totalCost: 200000,
+    paidCost: 100000,
+    unpaidCost: 100000,
   });
   const [isExpanded, setIsExpanded] = useState(false); // 열림/닫힘 상태 관리
 
@@ -105,57 +106,44 @@ const CheckList = () => {
         {isExpanded && (
           <View style={{ margin: 5 }}>
             {checkList.category && (
-              <Row style={{ marginBottom: 5 }}>
-                <Icon color={Color.DARK_GRAY} source="cash" size={15} />
-                <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 예산</Text>
-                <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-                  {formatCurrency(checkList.category.budgetAmount)}
-                </Text>
-              </Row>
+              <BudgetSummaryRow
+                iconSource="cash"
+                label="총 예산"
+                value={checkList.category.budgetAmount}
+              ></BudgetSummaryRow>
             )}
-            <Row style={{ marginBottom: 5 }}>
-              <Icon color={Color.DARK_GRAY} source="currency-usd" size={15} />
-              <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 비용</Text>
-              <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-                {formatCurrency(combinedCost.totalAmount)}
-              </Text>
-            </Row>
+
+            <BudgetSummaryRow
+              iconSource="currency-usd"
+              label="총 비용"
+              value={combinedCost.totalCost}
+            ></BudgetSummaryRow>
 
             <Divider style={{ margin: 5 }} />
-            <Row style={{ marginBottom: 5 }}>
-              <Icon color={Color.DARK_GRAY} source="check-circle" size={15} />
-              <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 금액</Text>
-              <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-                {formatCurrency(combinedCost.paidAmount)}
-              </Text>
-            </Row>
 
-            <Row style={{ marginBottom: 5 }}>
-              <Icon color={Color.DARK_GRAY} source="clock-outline" size={15} />
-              <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 예정 금액</Text>
-              <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-                {formatCurrency(combinedCost.unpaidAmount)}
-              </Text>
-            </Row>
+            <BudgetSummaryRow
+              iconSource="check-circle"
+              label="결제 금액"
+              value={combinedCost.paidCost}
+            ></BudgetSummaryRow>
+            <BudgetSummaryRow
+              iconSource="clock-outline"
+              label="결제 예정 금액"
+              value={combinedCost.unpaidCost}
+            ></BudgetSummaryRow>
 
             {checkList.category && (
               <>
-                <Divider />
-                <Row style={{ marginTop: 5 }}>
-                  <Icon color={Color.DARK_GRAY} source="wallet-outline" size={15} />
-                  <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>남은 예산</Text>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      flex: 1,
-                      textAlign: "right",
-                      marginRight: 15,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {formatCurrency(checkList.category.budgetAmount - combinedCost.totalAmount)}
-                  </Text>
-                </Row>
+                <Divider style={{ margin: 5 }} />
+                <BudgetSummaryRow
+                  iconSource="wallet-outline"
+                  label="남은 예산"
+                  value={checkList.category.budgetAmount - combinedCost.totalCost}
+                  valueStyle={{
+                    color: checkList.category.budgetAmount - combinedCost.totalCost < 0 ? Color.RED : Color.BLACK,
+                    fontWeight: "bold",
+                  }}
+                ></BudgetSummaryRow>
               </>
             )}
           </View>

@@ -30,9 +30,9 @@ const Category = () => {
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState(false); // 열림/닫힘 상태 관리
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
-    totalAmount: 200000,
-    paidAmount: 100000,
-    unpaidAmount: 100000,
+    totalCost: 200000,
+    paidCost: 100000,
+    unpaidCost: 100000,
   });
 
   const handleRemoveModal = () => {
@@ -106,7 +106,7 @@ const Category = () => {
           <Icon color={Color.DARK_GRAY} source="currency-usd" size={15} />
           <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 비용</Text>
           <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(combinedCost.totalAmount)}
+            {formatCurrency(combinedCost.totalCost)}
           </Text>
         </Row>
 
@@ -115,7 +115,7 @@ const Category = () => {
           <Icon color={Color.DARK_GRAY} source="check-circle" size={15} />
           <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 금액</Text>
           <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(combinedCost.paidAmount)}
+            {formatCurrency(combinedCost.paidCost)}
           </Text>
         </Row>
 
@@ -123,7 +123,7 @@ const Category = () => {
           <Icon color={Color.DARK_GRAY} source="clock-outline" size={15} />
           <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 예정 금액</Text>
           <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(combinedCost.unpaidAmount)}
+            {formatCurrency(combinedCost.unpaidCost)}
           </Text>
         </Row>
 
@@ -141,7 +141,7 @@ const Category = () => {
               fontWeight: "bold",
             }}
           >
-            {formatCurrency(category.budgetAmount - combinedCost.totalAmount)}
+            {formatCurrency(category.budgetAmount - combinedCost.totalCost)}
           </Text>
         </Row>
       </View>

@@ -18,12 +18,13 @@ import CategoryWithCheckLists from "./src/screens/category/Category";
 import CheckLists from "./src/screens/check-list/CheckLists";
 import CheckList from "./src/screens/check-list/CheckList";
 import Category from "./src/screens/category/Category";
+import Budget from "./src/screens/cost/Budget";
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <CategoryLists></CategoryLists>
+        <CheckList></CheckList>
       </NavigationContainer>
     </PaperProvider>
   );

@@ -17,3 +17,9 @@ export interface IUpdateCategory {
   title: string;
   budgetAmount: number;
 }
+
+export interface ICategoryBudgetAmount {
+  totalBudgetAmount: number;
+  paidBudgetAmount: number;
+  unpaidBudgetAmount: number;
+}

@@ -3,6 +3,7 @@ import { CalendarType } from "../../enum/calendar.enum";
 import { Color } from "../../enum";
 import { Text } from "react-native-paper";
 import SummaryCard from "../SummaryCard";
+import Button from "../Button";
 
 interface CalendarHeaderProps {
   calendarType: CalendarType;
@@ -19,13 +20,15 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 }) => (
   <View style={{ marginBottom: 20 }}>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
-      <TouchableOpacity style={[styles.button]} onPress={() => setCalendarType(CalendarType.CHECK_LIST)}>
+      <Button style={[styles.button]} onPress={() => setCalendarType(CalendarType.CHECK_LIST)}>
         <Text style={[styles.label]}>일정</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button]} onPress={() => setCalendarType(CalendarType.COST)}>
+      </Button>
+
+      <Button style={[styles.button]} onPress={() => setCalendarType(CalendarType.COST)}>
         <Text style={[styles.label]}>지출</Text>
-      </TouchableOpacity>
+      </Button>
     </View>
+
     <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 5 }}>
       <View
         style={[
@@ -52,10 +55,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
     marginHorizontal: 5,
     width: "50%",
+    backgroundColor: Color.WHITE,
   },
   borderBottom: {
     width: "50%",

@@ -14,6 +14,7 @@ import CategoryButton from "../../components/category/CategoryButton";
 import CheckListItem from "../../components/check-list/CheckListItem";
 import { convertDateToString } from "../../common/util";
 import ShadowView from "../../components/common/ShadowView";
+import Button from "../../components/Button";
 
 const CheckLists = () => {
   const today = dayjs();
@@ -84,9 +85,9 @@ const CheckLists = () => {
               <Text>{convertDateToString(couple.weddingDate)} </Text>
             </>
           ) : (
-            <TouchableOpacity style={{ backgroundColor: Color.BLUE200, padding: 15, borderRadius: 20 }}>
+            <Button style={{ marginBottom: 20 }} onPress={() => console.log("")}>
               <Text style={{ fontSize: 12, fontWeight: "bold" }}>결혼 예정일 등록하기</Text>
-            </TouchableOpacity>
+            </Button>
           )}
         </View>
         <ScrollView horizontal={true} style={styles.scrollView}>

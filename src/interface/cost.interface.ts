@@ -9,7 +9,12 @@ export interface IAddCost {
 }
 
 export interface ICostByCheckList {
-  totalAmount: number;
-  paidAmount: number;
-  unpaidAmount: number;
+  totalCost: number;
+  paidCost: number;
+  unpaidCost: number;
+}
+
+export interface ICostsByCategoryId {
+  categoryId: number;
+  costs: ICostByCheckList;
 }
