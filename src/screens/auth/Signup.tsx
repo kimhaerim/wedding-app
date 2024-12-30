@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from "react";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import BackButton from "../../components/BackButton";
-import { View } from "react-native";
-import BottomButton from "../../components/BottomButton";
-import InputText from "../../components/InputText";
+import BackButton from "../../components/common/BackButton";
+import { SafeAreaView, View } from "react-native";
+import BottomButton from "../../components/common/BottomButton";
+import InputText from "../../components/common/InputText";
 
 const enum SignupField {
   EMAIL = "email",
@@ -11,11 +10,17 @@ const enum SignupField {
   CONFIRM_PASSWORD = "confirmPassword",
 }
 
+interface SignupData {
+  email: string | undefined;
+  password: string | undefined;
+  confirmPassword: string | undefined;
+}
+
 const SignupScreen = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const [formData, setFormData] = useState<SignupData>({
+    email: undefined,
+    password: undefined,
+    confirmPassword: undefined,
   });
 
   const [formValidity, setFormValidity] = useState({
@@ -76,24 +81,24 @@ const SignupScreen = () => {
   }, [formValidity]);
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <BackButton label="이메일 회원가입" onPress={() => {}}></BackButton>
 
-      <View style={{ margin: 20 }}>
+      <View style={{ margin: 20, flex: 1 }}>
         <InputText
           label="이메일 *"
           placeholder="ex. wedding@email.com"
           onChangeText={(value) => handleInputChange(SignupField.EMAIL, value)}
           error={!formValidity.isEmailValid}
           errorMessage={emailErrorMessage}
-          value={formData.email}
+          value={formData.email || ""}
         ></InputText>
         <InputText
           label="비밀번호 *"
           onChangeText={(value) => handleInputChange(SignupField.PASSWORD, value)}
           error={!formValidity.isPasswordValid}
           errorMessage={passwordErrorMessage}
-          value={formData.password}
+          value={formData.password || ""}
           secureTextEntry
         ></InputText>
         <InputText
@@ -101,13 +106,13 @@ const SignupScreen = () => {
           onChangeText={(value) => handleInputChange(SignupField.CONFIRM_PASSWORD, value)}
           error={!formValidity.isPasswordMatching}
           errorMessage="비밀번호와 동일하게 입력해주세요."
-          value={formData.confirmPassword}
+          value={formData.confirmPassword || ""}
           secureTextEntry
         ></InputText>
       </View>
 
       <BottomButton label="다음" disabled={!isFormValid} onPress={() => {}}></BottomButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

@@ -1,4 +1,4 @@
-import { StyleProp, TextStyle, View } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import { Color } from "../../enum";
 import React from "react";
 import { Text } from "react-native-paper";
@@ -9,20 +9,23 @@ interface BadgeProps {
   labelStyle?: StyleProp<TextStyle>;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ backgroundColor, label, labelStyle }) => {
+const Badge: React.FC<BadgeProps> = ({ backgroundColor, label, labelStyle }) => {
   return (
-    <View
-      style={{
-        backgroundColor,
-        padding: 5,
-        borderRadius: 5,
-        alignSelf: "flex-start",
-        maxWidth: 100,
-      }}
-    >
+    <View style={[styles.container, { backgroundColor }]}>
       <Text style={[labelStyle, { textAlign: "center" }]} numberOfLines={1} ellipsizeMode="tail">
         {label}
       </Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+    borderRadius: 5,
+    alignSelf: "flex-start",
+    maxWidth: 100,
+  },
+});
+
+export default Badge;

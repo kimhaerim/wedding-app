@@ -4,7 +4,7 @@ import { TimePickerModal } from "react-native-paper-dates";
 import { View } from "react-native";
 
 import { ko, registerTranslation } from "react-native-paper-dates";
-import { Color } from "../enum";
+import { Color } from "../../enum";
 import dayjs from "dayjs";
 registerTranslation("ko", ko);
 
@@ -33,7 +33,7 @@ const TimeInput: React.FC<TimeInputProps> = ({ value, onChange }) => {
         onFocus={() => setVisible(true)}
         editable={false}
         outlineStyle={{ borderColor: Color.DARK_GRAY, borderRadius: 12 }}
-        style={{ height: 50, fontSize: 13 }}
+        style={{ height: 50, fontSize: 13, backgroundColor: Color.WHITE }}
         right={<TextInput.Icon icon="clock-time-five" onPress={() => setVisible(true)} />}
       />
 

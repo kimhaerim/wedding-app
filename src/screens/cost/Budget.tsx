@@ -1,11 +1,11 @@
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Divider, Icon, Text } from "react-native-paper";
+import { Divider, Text } from "react-native-paper";
 import Title from "../../components/common/Title";
-import Row from "../../components/Row";
+
 import { Color } from "../../enum";
-import { formatCurrency } from "../../common/util";
+
 import { useState } from "react";
-import { ICostByCheckList, ICostsByCategoryId } from "../../interface/cost.interface";
+import { ICostsByCategoryId } from "../../interface/cost.interface";
 import { ICategory, ICategoryBudgetAmount } from "../../interface/category.interface";
 import { categoryMockData, costsByCategoryIdsMockData } from "../../mock/CheckListMockData";
 import ShadowView from "../../components/common/ShadowView";
@@ -13,7 +13,7 @@ import CustomMenu from "../../components/common/Menu";
 import ConfirmModal from "../../modal/ConfirmModal";
 import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
 import CategoryButton from "../../components/category/CategoryButton";
-import Button from "../../components/Button";
+import Button from "../../components/common/Button";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -37,7 +37,7 @@ const Budget = () => {
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
 
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>(categoryMockData);
 
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
@@ -276,55 +276,5 @@ const Budget = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  checkListContainer: {
-    padding: 10,
-    margin: 5,
-    backgroundColor: Color.WHITE,
-    borderRadius: 10,
-    shadowColor: Color.DARK_GRAY,
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  costItemContainer: {
-    width: 280,
-    marginRight: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: Color.BLUE100,
-    borderRadius: 10,
-    backgroundColor: Color.WHITE,
-    shadowColor: Color.DARK_GRAY,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  checkListRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  menuContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  categoryText: {
-    color: Color.BLUE,
-  },
-  dateText: {
-    color: Color.DARK_GRAY,
-    marginBottom: 5,
-  },
-  memoText: {
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 12,
-  },
-});
 
 export default Budget;

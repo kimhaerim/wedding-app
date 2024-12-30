@@ -1,5 +1,5 @@
 import React from "react";
-import Row from "../Row";
+import Row from "../common/Row";
 import { Icon, Text } from "react-native-paper";
 import { formatCurrency } from "../../common/util";
 import { Color } from "../../enum";

@@ -1,12 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { ICheckList, ICheckListTemp } from "../../interface/check-list.interface";
-import CheckBox from "../CheckBox";
+import { ICheckListTemp } from "../../interface/check-list.interface";
+import CheckBox from "../common/CheckBox";
 import CustomMenu from "../common/Menu";
 import { Color } from "../../enum";
 import { Divider } from "react-native-paper";
-import { Badge } from "../common/Badge";
-import ShadowView from "../common/ShadowView";
+import Badge from "../common/Badge";
 
 interface CheckListItemProps {
   item: ICheckListTemp;
@@ -53,17 +52,6 @@ const CheckListItem: React.FC<CheckListItemProps> = ({ item, checkListId, onMenu
 };
 
 const styles = StyleSheet.create({
-  checkListContainer: {
-    padding: 10,
-    margin: 5,
-    backgroundColor: Color.WHITE,
-    borderRadius: 10,
-    shadowColor: Color.DARK_GRAY,
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   checkListRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -73,9 +61,6 @@ const styles = StyleSheet.create({
   menuContainer: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  categoryText: {
-    color: Color.BLUE,
   },
   dateText: {
     color: Color.DARK_GRAY,

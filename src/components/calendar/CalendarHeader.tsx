@@ -2,8 +2,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { CalendarType } from "../../enum/calendar.enum";
 import { Color } from "../../enum";
 import { Text } from "react-native-paper";
-import SummaryCard from "../SummaryCard";
-import Button from "../Button";
+
+import Button from "../common/Button";
+import SummaryCard from "../common/SummaryCard";
 
 interface CalendarHeaderProps {
   calendarType: CalendarType;

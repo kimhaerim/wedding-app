@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Color, CostType } from "../../enum";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import BackButton from "../../components/BackButton";
-import { View } from "react-native";
-import InputText from "../../components/InputText";
-import DatePicker from "../../components/DatePicker";
-import BottomButton from "../../components/BottomButton";
+import BackButton from "../../components/common/BackButton";
+import { SafeAreaView, View } from "react-native";
+import InputText from "../../components/common/InputText";
+import DatePicker from "../../components/common/DatePicker";
+import BottomButton from "../../components/common/BottomButton";
 import { SegmentedButtons, Text } from "react-native-paper";
 
 const EditCost = () => {
@@ -26,7 +25,7 @@ const EditCost = () => {
   };
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <BackButton label={isEdit ? "비용 수정" : "비용 추가"} onPress={() => console.log("뒤로 가기")}></BackButton>
 
       <View style={{ margin: 20 }}>
@@ -78,7 +77,7 @@ const EditCost = () => {
         disabled={title.length === 0}
         onPress={() => console.log("0")}
       ></BottomButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

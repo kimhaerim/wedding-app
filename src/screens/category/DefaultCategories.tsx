@@ -1,8 +1,7 @@
-import { View, StyleSheet } from "react-native";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
+import { View, StyleSheet, SafeAreaView } from "react-native";
 import { Text } from "react-native-paper";
-import BottomButton from "../../components/BottomButton";
-import BackButton from "../../components/BackButton";
+import BottomButton from "../../components/common/BottomButton";
+import BackButton from "../../components/common/BackButton";
 import { useCallback, useState } from "react";
 import CategoryButton from "../../components/category/CategoryButton";
 
@@ -30,7 +29,7 @@ const DefaultCategories = () => {
   }, []);
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <BackButton label="카테고리 설정" onPress={() => {}}></BackButton>
       <View style={{ margin: 20 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>관심있는</Text>
@@ -53,7 +52,7 @@ const DefaultCategories = () => {
         disabled={false}
         onPress={() => console.log(userCategories)}
       ></BottomButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

@@ -15,16 +15,17 @@ import React from "react";
 import DefaultCategories from "./src/screens/category/DefaultCategories";
 import Calendar from "./src/screens/calendar/Calendar";
 import CategoryWithCheckLists from "./src/screens/category/Category";
-import CheckLists from "./src/screens/check-list/CheckLists";
+
 import CheckList from "./src/screens/check-list/CheckList";
 import Category from "./src/screens/category/Category";
 import Budget from "./src/screens/cost/Budget";
+import CheckLists from "./src/screens/check-list/CheckLists";
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <CheckList></CheckList>
+        <CheckLists></CheckLists>
       </NavigationContainer>
     </PaperProvider>
   );

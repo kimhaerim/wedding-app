@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
-import { Color } from "../enum";
+import { Color } from "../../enum";
 
 interface ButtonProps {
   children: React.ReactNode;

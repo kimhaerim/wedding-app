@@ -1,10 +1,8 @@
 import { useState } from "react";
-import BackButton from "../../components/BackButton";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import { Color } from "../../enum";
+
 import { ICategory } from "../../interface/category.interface";
-import { Button, Divider, Icon, Menu, Text } from "react-native-paper";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Divider, Text } from "react-native-paper";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import ConfirmModal from "../../modal/ConfirmModal";
 import CategoryButton from "../../components/category/CategoryButton";
 import { categoryMockData } from "../../mock/CheckListMockData";
@@ -48,7 +46,7 @@ const CategoryLists = () => {
   };
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
       <View style={{ margin: 10 }}>
         <Text style={{ fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 20 }}>카테고리</Text>
         <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 10 }}>기본 카테고리 목록</Text>
@@ -104,7 +102,7 @@ const CategoryLists = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

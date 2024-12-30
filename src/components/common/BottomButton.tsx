@@ -1,5 +1,5 @@
 import React from "react";
-import { Color } from "../enum";
+import { Color } from "../../enum";
 import { StyleSheet } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -31,10 +31,7 @@ const BottomButton: React.FC<ButtonProps> = (props) => {
         onPress={props.onPress}
         buttonColor={Color.BLUE}
         disabled={props.disabled}
-        style={{
-          width: "90%",
-          borderRadius: 12,
-        }}
+        style={[styles.buttonStyle]}
       >
         {props.label}
       </Button>
@@ -52,9 +49,9 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  fab: {
-    position: "absolute",
-    right: 16,
+  buttonStyle: {
+    width: "90%",
+    borderRadius: 12,
   },
 });
 

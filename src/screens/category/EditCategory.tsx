@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-import BackButton from "../../components/BackButton";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
+import BackButton from "../../components/common/BackButton";
 import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
-import { View } from "react-native";
-import InputText from "../../components/InputText";
-import BottomButton from "../../components/BottomButton";
+import { SafeAreaView, View } from "react-native";
+import InputText from "../../components/common/InputText";
+import BottomButton from "../../components/common/BottomButton";
 
 const EditCategory = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -15,7 +14,7 @@ const EditCategory = () => {
   const [inputAmountBudget, setInputAmountBudget] = useState<number>(category ? category.budgetAmount : 0);
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <BackButton
         label={isEdit ? "카테고리 수정" : "카테고리 추가"}
         onPress={() => console.log("뒤로 가기")}
@@ -47,7 +46,7 @@ const EditCategory = () => {
         disabled={inputTitle.length === 0}
         onPress={() => console.log(inputTitle, inputAmountBudget)}
       ></BottomButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

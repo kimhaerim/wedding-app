@@ -1,5 +1,4 @@
-import { SafeAreaView } from "react-native";
-import Button from "../../components/Button";
+import { Button, SafeAreaView } from "react-native";
 import { Color } from "../../enum";
 
 const HomeScreen = () => {

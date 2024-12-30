@@ -1,22 +1,18 @@
-import { Divider, Icon, Text } from "react-native-paper";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import { ICheckList, ICost } from "../../interface/check-list.interface";
-import { Color } from "../../enum";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { ICheckList, ICost, ICostByCheckList } from "../../interface";
 import { checkListMockData1 } from "../../mock/CheckListMockData";
-import ConfirmModal from "../../modal/ConfirmModal";
-import FloatingButton from "../../components/FloatingButton";
-
-import BackButton from "../../components/BackButton";
-import CheckBox from "../../components/CheckBox";
-import { Badge } from "../../components/common/Badge";
-import { convertDateTimeToString, formatCurrency } from "../../common/util";
-import CostItem from "../../components/cost/CostItem";
-import { ICostByCheckList } from "../../interface/cost.interface";
-import Row from "../../components/Row";
-import ShadowView from "../../components/common/ShadowView";
+import { FlatList, SafeAreaView, TouchableOpacity, View } from "react-native";
+import BackButton from "../../components/common/BackButton";
+import Badge from "../../components/common/Badge";
+import CheckBox from "../../components/common/CheckBox";
+import { Divider, Text } from "react-native-paper";
+import { convertDateTimeToString } from "../../common/util";
+import { Color } from "../../enum";
 import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
+import ShadowView from "../../components/common/ShadowView";
+import CostItem from "../../components/cost/CostItem";
+import ConfirmModal from "../../modal/ConfirmModal";
+import FloatingButton from "../../components/common/FloatingButton";
 
 const CheckList = () => {
   const [costId, setCostId] = useState<number | undefined>(undefined);
@@ -64,7 +60,7 @@ const CheckList = () => {
   };
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView>
       <BackButton onPress={() => console.log("뒤로 가기")} label="체크리스트"></BackButton>
       <View style={{ margin: 20 }}>
         {checkList.category && <Badge label={checkList.category.title} backgroundColor={Color.BLUE200}></Badge>}
@@ -77,7 +73,7 @@ const CheckList = () => {
           labelStyle={{ fontWeight: "bold", fontSize: 18 }}
         ></CheckBox>
 
-        <View style={styles.menuContainer}></View>
+        <View style={{ flexDirection: "row", alignItems: "center" }}></View>
         {checkList.reservedDate && (
           <Text style={{ color: Color.DARK_GRAY, marginBottom: 5 }}>
             {convertDateTimeToString(checkList.reservedDate)}
@@ -176,49 +172,8 @@ const CheckList = () => {
       ></ConfirmModal>
 
       <FloatingButton onPress={() => console.log()}></FloatingButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  checkListContainer: {
-    padding: 10,
-    margin: 5,
-    borderRadius: 20,
-    backgroundColor: Color.WHITE,
-  },
-  shadowView: {
-    padding: 10,
-    margin: 5,
-    backgroundColor: Color.WHITE,
-    borderRadius: 10,
-    shadowColor: Color.DARK_GRAY,
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  checkListRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  menuContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  categoryText: {
-    color: Color.BLUE,
-  },
-  dateText: {
-    color: Color.DARK_GRAY,
-    marginBottom: 5,
-  },
-  memoText: {
-    marginTop: 10,
-    fontSize: 12,
-  },
-});
 
 export default CheckList;

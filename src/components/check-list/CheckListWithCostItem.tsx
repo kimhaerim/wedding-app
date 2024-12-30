@@ -3,11 +3,11 @@ import ShadowView from "../common/ShadowView";
 import React, { useState } from "react";
 import { ICheckList } from "../../interface/check-list.interface";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import CheckBox from "../CheckBox";
+import CheckBox from "../common/CheckBox";
 import CustomMenu from "../common/Menu";
 import { Color, CostType } from "../../enum";
 import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../../common/util";
-import { Badge } from "../common/Badge";
+import Badge from "../common/Badge";
 
 interface CheckListWithCostItemProps {
   checkList: ICheckList;
@@ -75,16 +75,24 @@ const CheckListWithCostItem: React.FC<CheckListWithCostItemProps> = ({
 };
 
 const styles = StyleSheet.create({
-  checkListContainer: {
-    padding: 10,
-    margin: 5,
-    backgroundColor: Color.WHITE,
-    borderRadius: 10,
-    shadowColor: Color.DARK_GRAY,
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
+  checkListRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  menuContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dateText: {
+    color: Color.DARK_GRAY,
+    marginBottom: 5,
+  },
+  memoText: {
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 12,
   },
   costItemContainer: {
     width: 250,
@@ -99,28 +107,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3.84,
     elevation: 5,
-  },
-  checkListRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  menuContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  categoryText: {
-    color: Color.BLUE,
-  },
-  dateText: {
-    color: Color.DARK_GRAY,
-    marginBottom: 5,
-  },
-  memoText: {
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 12,
   },
 });
 

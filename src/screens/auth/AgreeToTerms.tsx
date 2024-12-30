@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import BackButton from "../../components/BackButton";
+import BackButton from "../../components/common/BackButton";
 import { Divider, Text } from "react-native-paper";
-import { View } from "react-native";
-import BottomButton from "../../components/BottomButton";
-import CheckBox from "../../components/CheckBox";
+import { SafeAreaView, View } from "react-native";
+import BottomButton from "../../components/common/BottomButton";
+import CheckBox from "../../components/common/CheckBox";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -46,10 +45,10 @@ const AgreeToTermsScreen = () => {
   };
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <BackButton label="이메일 회원가입" onPress={() => {}}></BackButton>
 
-      <View style={{ margin: 20 }}>
+      <View style={{ margin: 20, flex: 1 }}>
         <Text style={{ fontWeight: "bold", fontSize: 18, marginBottom: 20 }}>이용약관에 동의해 주세요.</Text>
 
         <CheckBox
@@ -74,9 +73,8 @@ const AgreeToTermsScreen = () => {
           ></CheckBox>
         </View>
       </View>
-
       <BottomButton label="다음" disabled={!agreements.isAllAgreed} onPress={() => {}}></BottomButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

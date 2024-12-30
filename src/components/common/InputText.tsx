@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Text, TextInput } from "react-native-paper";
-import { Color } from "../enum";
+import { Color } from "../../enum";
+import { StyleSheet } from "react-native";
 
 interface props {
   label: string;
@@ -18,7 +19,7 @@ interface props {
 const InputText: React.FC<props> = (props) => {
   return (
     <>
-      <Text style={{ fontWeight: "bold", fontSize: 16, marginBottom: 10 }}>{props.label}</Text>
+      <Text style={[styles.textStyle]}>{props.label}</Text>
       <TextInput
         mode="outlined"
         placeholder={props.placeholder}
@@ -28,13 +29,37 @@ const InputText: React.FC<props> = (props) => {
         onChangeText={props.onChangeText}
         error={props.error}
         multiline
-        outlineStyle={{ borderColor: Color.DARK_GRAY, borderRadius: 12, borderWidth: 1 }}
-        style={{ height: 50, fontSize: 13, ...props.style }}
         secureTextEntry={props.secureTextEntry}
+        placeholderTextColor={Color.DARK_GRAY}
+        outlineStyle={[styles.outlineStyle]}
+        style={[styles.inputStyle, props.style]}
       />
-      {props.error && <Text style={{ color: "red", marginTop: 5, fontSize: 10 }}>{props.errorMessage}</Text>}
+      {props.error && <Text style={[styles.errorTextStyle]}>{props.errorMessage}</Text>}
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  textStyle: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  inputStyle: {
+    height: 50,
+    fontSize: 13,
+    backgroundColor: Color.WHITE,
+  },
+  outlineStyle: {
+    borderColor: Color.DARK_GRAY,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  errorTextStyle: {
+    color: "red",
+    marginTop: 5,
+    fontSize: 10,
+  },
+});
 
 export default InputText;

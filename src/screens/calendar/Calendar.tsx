@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
 
 import { CheckListStatus, Color, CostType } from "../../enum";
 import { ICheckListTemp, ICost } from "../../interface/check-list.interface";
-import Row from "../../components/Row";
+import Row from "../../components/common/Row";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
-import CheckBox from "../../components/CheckBox";
+import CheckBox from "../../components/common/CheckBox";
 import ConfirmModal from "../../modal/ConfirmModal";
 import CommonCalendar from "../../components/calendar/Calendar";
 import CalendarHeader from "../../components/calendar/CalendarHeader";
@@ -230,7 +229,7 @@ const Calendar = () => {
   }, [calendarType, selected]);
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
       <ScrollView>
         <View style={{ margin: 20 }}>
           <View>
@@ -321,7 +320,7 @@ const Calendar = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

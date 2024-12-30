@@ -1,21 +1,18 @@
 import React from "react";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
 
 import { Color } from "../../enum";
-import { View } from "react-native";
-import CancelButton from "../../components/CancelButton";
+import { SafeAreaView, View } from "react-native";
+import CancelButton from "../../components/common/CancelButton";
 import { Button, Text } from "react-native-paper";
 
 const ConfirmSignupScreen = () => {
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <CancelButton onPress={() => console.log("나가기")}></CancelButton>
 
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
         <Text style={{ fontSize: 24, fontWeight: "bold", textAlign: "center" }}>회원가입을 축하합니다 🎉</Text>
-        <Text style={{ fontSize: 16, textAlign: "center", marginTop: 20 }}>
-          지금 바로 예신 / 예랑을 초대해서 OOOO을 함께 해보세요!
-        </Text>
+        <Text style={{ fontSize: 16, textAlign: "center", marginTop: 20 }}>지금 바로 예신 / 예랑을 초대해보세요!</Text>
 
         <Button
           mode="contained"
@@ -51,7 +48,7 @@ const ConfirmSignupScreen = () => {
           초대 링크 복사
         </Button>
       </View>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

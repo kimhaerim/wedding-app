@@ -1,20 +1,19 @@
 import { useState } from "react";
-import BackButton from "../../components/BackButton";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
+import BackButton from "../../components/common/BackButton";
 import { ICategory } from "../../interface/category.interface";
 import { Color } from "../../enum";
 
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
 
 import { Divider, Icon, Text } from "react-native-paper";
 
-import Row from "../../components/Row";
+import Row from "../../components/common/Row";
 import ConfirmModal from "../../modal/ConfirmModal";
-import FloatingButton from "../../components/FloatingButton";
 import CheckListWithCostItem from "../../components/check-list/CheckListWithCostItem";
 import { checkListMockData1 } from "../../mock/CheckListMockData";
 import { formatCurrency } from "../../common/util";
 import { ICostByCheckList } from "../../interface/cost.interface";
+import FloatingButton from "../../components/common/FloatingButton";
 
 const Category = () => {
   const checkListCount = 1;
@@ -28,17 +27,11 @@ const Category = () => {
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
-  const [isExpanded, setIsExpanded] = useState(false); // 열림/닫힘 상태 관리
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
     totalCost: 200000,
     paidCost: 100000,
     unpaidCost: 100000,
   });
-
-  const handleRemoveModal = () => {
-    setRemoveModalVisible(true);
-    setCheckListId(undefined);
-  };
 
   const handleMenuButtonPress = (id: number | undefined) => {
     setCheckListId(id);
@@ -63,8 +56,8 @@ const Category = () => {
   };
 
   return (
-    <CenteredSafeArea>
-      <BackButton label={"체크리스트"} onPress={() => console.log("뒤로 가기")} />
+    <SafeAreaView style={{ flex: 1 }}>
+      <BackButton label={"카테고리"} onPress={() => console.log("뒤로 가기")} />
 
       <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
         <View
@@ -169,7 +162,7 @@ const Category = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 

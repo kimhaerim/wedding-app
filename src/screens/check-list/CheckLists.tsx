@@ -1,20 +1,16 @@
-import { Text } from "react-native-paper";
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import { ICheckListTemp } from "../../interface/check-list.interface";
-import { Color } from "../../enum";
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ICouple } from "../../interface/couple.interface";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import { useState } from "react";
+import { ICheckListTemp, ICouple } from "../../interface";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
-import ConfirmModal from "../../modal/ConfirmModal";
-import FloatingButton from "../../components/FloatingButton";
-
-import CategoryButton from "../../components/category/CategoryButton";
-import CheckListItem from "../../components/check-list/CheckListItem";
+import { FlatList, SafeAreaView, ScrollView, View } from "react-native";
+import { Text } from "react-native-paper";
 import { convertDateToString } from "../../common/util";
+import Button from "../../components/common/Button";
+import { CategoryButton } from "../../components/category";
 import ShadowView from "../../components/common/ShadowView";
-import Button from "../../components/Button";
+import CheckListItem from "../../components/check-list/CheckListItem";
+import ConfirmModal from "../../modal/ConfirmModal";
+import FloatingButton from "../../components/common/FloatingButton";
 
 const CheckLists = () => {
   const today = dayjs();
@@ -71,7 +67,7 @@ const CheckLists = () => {
   };
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView>
       <View style={{ margin: 10, marginBottom: 0 }}>
         <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center", marginBottom: 20 }}>체크리스트</Text>
 
@@ -90,7 +86,8 @@ const CheckLists = () => {
             </Button>
           )}
         </View>
-        <ScrollView horizontal={true} style={styles.scrollView}>
+
+        <ScrollView horizontal={true} style={{ width: "100%" }}>
           {userCategories.map((category) => (
             <CategoryButton
               key={category.id}
@@ -129,14 +126,8 @@ const CheckLists = () => {
       ></ConfirmModal>
 
       <FloatingButton onPress={() => console.log()}></FloatingButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    width: "100%",
-  },
-});
 
 export default CheckLists;

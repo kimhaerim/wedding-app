@@ -1,13 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { ICheckListTemp, ICost } from "../../interface/check-list.interface";
-import CheckBox from "../CheckBox";
+import { ICost } from "../../interface/check-list.interface";
+
 import CustomMenu from "../common/Menu";
 import { Color } from "../../enum";
 import { Divider } from "react-native-paper";
-import { Badge } from "../common/Badge";
-import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../../common/util";
-import ShadowView from "../common/ShadowView";
+import { convertDateToString, covertCostType, formatCurrency } from "../../common/util";
+import Badge from "../common/Badge";
 
 interface CostItemProps {
   item: ICost;
@@ -25,7 +24,7 @@ const CostItem: React.FC<CostItemProps> = ({ item, costId, onMenuButtonPress, on
         labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
       ></Badge>
 
-      <View style={styles.checkListRow}>
+      <View style={styles.costListRow}>
         {item.title && <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>}
         <View style={styles.menuContainer}>
           <Text>{formatCurrency(item.amount)}</Text>
@@ -50,7 +49,7 @@ const CostItem: React.FC<CostItemProps> = ({ item, costId, onMenuButtonPress, on
 };
 
 const styles = StyleSheet.create({
-  checkListRow: {
+  costListRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -58,9 +57,6 @@ const styles = StyleSheet.create({
   menuContainer: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  categoryText: {
-    color: Color.BLUE,
   },
   dateText: {
     fontSize: 12,

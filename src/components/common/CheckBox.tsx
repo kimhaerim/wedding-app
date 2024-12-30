@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import { Color } from "../enum";
+import { Color } from "../../enum";
 
 interface CheckBoxProps {
   isChecked: boolean;

@@ -11,4 +11,5 @@ const Title: React.FC<TitleProps> = ({ label }) => <Text style={[styles.labelSty
 const styles = StyleSheet.create({
   labelStyle: { fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
 });
+
 export default Title;

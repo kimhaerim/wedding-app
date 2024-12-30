@@ -1,7 +1,8 @@
 import React from "react";
 import { DatePickerInput } from "react-native-paper-dates";
-import { Color } from "../enum";
+import { Color } from "../../enum";
 import { ko, registerTranslation } from "react-native-paper-dates";
+import { StyleSheet } from "react-native";
 
 registerTranslation("ko", ko);
 
@@ -24,12 +25,17 @@ const DatePicker: React.FC<DatePickerProps> = (props) => {
         inputMode="start"
         withDateFormatInLabel={false}
         editable={false}
-        style={{ fontSize: 13 }}
-        outlineStyle={{ borderColor: Color.DARK_GRAY, borderRadius: 12 }}
+        style={[styles.style]}
+        outlineStyle={[styles.outlineStyle]}
         withModal
       />
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  style: { fontSize: 13, backgroundColor: Color.WHITE },
+  outlineStyle: { borderColor: Color.DARK_GRAY, borderRadius: 12 },
+});
 
 export default DatePicker;

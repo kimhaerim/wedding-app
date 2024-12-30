@@ -1,7 +1,8 @@
 import { View } from "react-native";
-import Row from "./Row";
+
 import { Text } from "react-native-paper";
-import { Color } from "../enum";
+import { Color } from "../../enum";
+import Row from "./Row";
 
 interface SummaryCardProps {
   title: string;

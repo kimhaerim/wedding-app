@@ -150,7 +150,7 @@ export const checkListMockData1: ICheckList[] = [
 
 export const coupleMockData: ICouple = {
   id: 1,
-  // weddingDate: new Date("2025-10-26 15:30"),
+  weddingDate: new Date("2025-10-26 15:30"),
   coupleStartDate: new Date("2019-01-18 00:00"),
 };
 

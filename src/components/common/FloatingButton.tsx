@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import { Color } from "../enum";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
 import { Icon } from "react-native-paper";
+import { Color } from "../../enum";
 
 interface FloatingButtonProps {
   onPress: () => void;

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
-import CenteredSafeArea from "../../components/CenteredSafeArea";
-import BackButton from "../../components/BackButton";
+import BackButton from "../../components/common/BackButton";
 import { Color } from "../../enum";
-import { View } from "react-native";
-import InputText from "../../components/InputText";
+import { SafeAreaView, View } from "react-native";
+import InputText from "../../components/common/InputText";
 import { Button } from "react-native-paper";
-import BottomButton from "../../components/BottomButton";
+import BottomButton from "../../components/common/BottomButton";
 
 const enum EmailLoginField {
   EMAIL = "email",
@@ -70,9 +69,8 @@ const EmailLoginScreen = () => {
   };
 
   return (
-    <CenteredSafeArea>
+    <SafeAreaView style={{ flex: 1 }}>
       <BackButton onPress={() => console.log("Back pressed")} label="이메일 로그인" />
-
       <View style={{ margin: 20, justifyContent: "center" }}>
         <InputText
           label="이메일 *"
@@ -98,13 +96,12 @@ const EmailLoginScreen = () => {
           {"아이디 / 비밀번호 찾기 >"}
         </Button>
       </View>
-
       <BottomButton
         label="로그인"
         onPress={() => console.log(email, password)}
         disabled={!email || !password}
       ></BottomButton>
-    </CenteredSafeArea>
+    </SafeAreaView>
   );
 };
 
