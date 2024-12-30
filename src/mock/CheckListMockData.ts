@@ -43,7 +43,7 @@ export const costsMockData: ICost[] = [
     title: "예약금1",
     amount: 100000,
     paymentDate: new Date("2024-12-10"),
-    costType: CostType.BASE,
+    costType: CostType.ADDITIONAL,
   },
   {
     id: 3,

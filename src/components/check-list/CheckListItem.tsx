@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { ICheckListTemp } from "../../interface/check-list.interface";
+import { ICheckList, ICheckListTemp } from "../../interface/check-list.interface";
 import CheckBox from "../CheckBox";
 import CustomMenu from "../common/Menu";
 import { Color } from "../../enum";
 import { Divider } from "react-native-paper";
 import { Badge } from "../common/Badge";
+import ShadowView from "../common/ShadowView";
 
 interface CheckListItemProps {
   item: ICheckListTemp;
@@ -16,7 +17,7 @@ interface CheckListItemProps {
 
 const CheckListItem: React.FC<CheckListItemProps> = ({ item, checkListId, onMenuButtonPress, onMenuItemPress }) => {
   return (
-    <View style={styles.checkListContainer}>
+    <View>
       <View style={styles.checkListRow}>
         <CheckBox label={item.description} isChecked={item.isCompleted} onPress={() => console.log("클릭")} />
 

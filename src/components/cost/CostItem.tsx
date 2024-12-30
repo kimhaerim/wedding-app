@@ -6,7 +6,8 @@ import CustomMenu from "../common/Menu";
 import { Color } from "../../enum";
 import { Divider } from "react-native-paper";
 import { Badge } from "../common/Badge";
-import { convertDateTimeToString, convertDateToString, formatCurrency } from "../../common/util";
+import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../../common/util";
+import ShadowView from "../common/ShadowView";
 
 interface CostItemProps {
   item: ICost;
@@ -17,10 +18,10 @@ interface CostItemProps {
 
 const CostItem: React.FC<CostItemProps> = ({ item, costId, onMenuButtonPress, onMenuItemPress }) => {
   return (
-    <View style={styles.shadowView}>
+    <View style={{ marginTop: 10 }}>
       <Badge
         backgroundColor={item.paymentDate ? Color.BLUE : Color.DARK_GRAY}
-        label={item.paymentDate ? "결제 완료" : "결제 전"}
+        label={covertCostType(item.costType)}
         labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
       ></Badge>
 
@@ -37,26 +38,18 @@ const CostItem: React.FC<CostItemProps> = ({ item, costId, onMenuButtonPress, on
         </View>
       </View>
 
-      {(item.paymentDate || item.memo) && <Divider style={{ marginBottom: 10 }} />}
-      {item.paymentDate && <Text style={styles.dateText}> {convertDateToString(item.paymentDate)}</Text>}
-
-      {item.memo && <Text style={styles.memoText}>{item.memo}</Text>}
+      <Text style={styles.dateText}> {item.paymentDate ? convertDateToString(item.paymentDate) : "지불 예정"}</Text>
+      {item.memo && (
+        <>
+          <Divider style={{ marginBottom: 10 }} />
+          <Text style={styles.memoText}>{item.memo}</Text>
+        </>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  shadowView: {
-    padding: 10,
-    margin: 5,
-    backgroundColor: Color.WHITE,
-    borderRadius: 10,
-    shadowColor: Color.DARK_GRAY,
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   checkListRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -70,6 +63,7 @@ const styles = StyleSheet.create({
     color: Color.BLUE,
   },
   dateText: {
+    fontSize: 12,
     color: Color.DARK_GRAY,
     marginBottom: 5,
   },

@@ -13,6 +13,7 @@ import FloatingButton from "../../components/FloatingButton";
 import CategoryButton from "../../components/category/CategoryButton";
 import CheckListItem from "../../components/check-list/CheckListItem";
 import { convertDateToString } from "../../common/util";
+import ShadowView from "../../components/common/ShadowView";
 
 const CheckLists = () => {
   const today = dayjs();
@@ -105,12 +106,14 @@ const CheckLists = () => {
           data={checkLists}
           keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => (
-            <CheckListItem
-              item={item}
-              checkListId={checkListId}
-              onMenuButtonPress={handleMenuButtonPress}
-              onMenuItemPress={handleMenuItemPress}
-            />
+            <ShadowView>
+              <CheckListItem
+                item={item}
+                checkListId={checkListId}
+                onMenuButtonPress={handleMenuButtonPress}
+                onMenuItemPress={handleMenuItemPress}
+              />
+            </ShadowView>
           )}
           onEndReached={loadMoreData}
           onEndReachedThreshold={0.5}

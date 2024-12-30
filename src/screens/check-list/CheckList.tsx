@@ -15,6 +15,7 @@ import { convertDateTimeToString, formatCurrency } from "../../common/util";
 import CostItem from "../../components/cost/CostItem";
 import { ICostByCheckList } from "../../interface/cost.interface";
 import Row from "../../components/Row";
+import ShadowView from "../../components/common/ShadowView";
 
 const CheckList = () => {
   const [costId, setCostId] = useState<number | undefined>(undefined);
@@ -166,12 +167,14 @@ const CheckList = () => {
           data={checkList.costs}
           keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => (
-            <CostItem
-              item={item}
-              costId={costId}
-              onMenuButtonPress={() => setCostId(item.id)}
-              onMenuItemPress={handleMenuItemPress}
-            />
+            <ShadowView>
+              <CostItem
+                item={item}
+                costId={costId}
+                onMenuButtonPress={() => setCostId(item.id)}
+                onMenuItemPress={handleMenuItemPress}
+              />
+            </ShadowView>
           )}
           onEndReached={loadMoreData}
           onEndReachedThreshold={0.5}
