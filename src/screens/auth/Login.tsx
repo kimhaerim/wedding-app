@@ -2,7 +2,7 @@ import React from "react";
 
 import { Color } from "../../enum";
 import { Button, Text } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native";
 
 const LoginScreen = () => {
   return (
