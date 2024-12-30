@@ -16,7 +16,7 @@ import { checkListMockData1 } from "../../mock/CheckListMockData";
 import { formatCurrency } from "../../common/util";
 import { ICostByCheckList } from "../../interface/cost.interface";
 
-const CategoryWithCheckLists = () => {
+const Category = () => {
   const checkListCount = 1;
 
   const [category, setCategory] = useState<ICategory>({
@@ -173,4 +173,4 @@ const CategoryWithCheckLists = () => {
   );
 };
 
-export default CategoryWithCheckLists;
+export default Category;
