@@ -12,7 +12,7 @@ import CheckListItem from "../../components/check-list/CheckListItem";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/common/FloatingButton";
 
-const CheckLists = () => {
+const CheckListsScreen = () => {
   const today = dayjs();
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
@@ -130,4 +130,4 @@ const CheckLists = () => {
   );
 };
 
-export default CheckLists;
+export default CheckListsScreen;

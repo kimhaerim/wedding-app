@@ -12,7 +12,7 @@ import { categoryMockData } from "../../mock/CheckListMockData";
 import DropDownPicker from "react-native-dropdown-picker";
 
 // Route 설정
-const EditCheckList = () => {
+const EditCheckListScreen = () => {
   const isFromCategory = false;
   const [checkListId, setCheckListId] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>(categoryMockData);
@@ -117,4 +117,4 @@ const EditCheckList = () => {
   );
 };
 
-export default EditCheckList;
+export default EditCheckListScreen;

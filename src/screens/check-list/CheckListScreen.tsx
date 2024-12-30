@@ -14,7 +14,7 @@ import CostItem from "../../components/cost/CostItem";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/common/FloatingButton";
 
-const CheckList = () => {
+const CheckListScreen = () => {
   const [costId, setCostId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
   const [checkList, setCheckList] = useState<ICheckList>(checkListMockData1[0]);
@@ -176,4 +176,4 @@ const CheckList = () => {
   );
 };
 
-export default CheckList;
+export default CheckListScreen;

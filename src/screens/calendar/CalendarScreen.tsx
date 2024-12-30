@@ -32,7 +32,7 @@ const covertCostType = (costType: CostType) => {
   }
 };
 
-const Calendar = () => {
+const CalendarScreen = () => {
   const today = new Date();
   const [selected, setSelected] = useState(today.toISOString().split("T")[0]);
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
@@ -324,4 +324,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export default CalendarScreen;

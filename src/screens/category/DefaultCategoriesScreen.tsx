@@ -5,7 +5,7 @@ import BackButton from "../../components/common/BackButton";
 import { useCallback, useState } from "react";
 import CategoryButton from "../../components/category/CategoryButton";
 
-const DefaultCategories = () => {
+const DefaultCategoriesScreen = () => {
   const defaultCategories = [
     "🏩 웨딩홀",
     "📸 스튜디오",
@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DefaultCategories;
+export default DefaultCategoriesScreen;

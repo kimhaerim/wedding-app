@@ -15,7 +15,7 @@ import { formatCurrency } from "../../common/util";
 import { ICostByCheckList } from "../../interface/cost.interface";
 import FloatingButton from "../../components/common/FloatingButton";
 
-const Category = () => {
+const CategoryScreen = () => {
   const checkListCount = 1;
 
   const [category, setCategory] = useState<ICategory>({
@@ -166,4 +166,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryScreen;

@@ -6,7 +6,7 @@ import { SafeAreaView, View } from "react-native";
 import InputText from "../../components/common/InputText";
 import BottomButton from "../../components/common/BottomButton";
 
-const EditCategory = () => {
+const EditCategoryScreen = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [category, setCategory] = useState<IAddCategory | IUpdateCategory | undefined>(undefined);
 
@@ -50,4 +50,4 @@ const EditCategory = () => {
   );
 };
 
-export default EditCategory;
+export default EditCategoryScreen;

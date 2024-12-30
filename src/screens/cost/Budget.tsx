@@ -26,7 +26,7 @@ const defaultCategories = [
   "🌅 스냅 촬영",
 ];
 
-const Budget = () => {
+const BudgetScreen = () => {
   const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
   const [combinedBudget, setCombinedBudget] = useState<ICategoryBudgetAmount>({
     totalBudgetAmount: 200000,
@@ -277,4 +277,4 @@ const Budget = () => {
   );
 };
 
-export default Budget;
+export default BudgetScreen;

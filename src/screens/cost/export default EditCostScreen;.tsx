@@ -7,7 +7,7 @@ import DatePicker from "../../components/common/DatePicker";
 import BottomButton from "../../components/common/BottomButton";
 import { SegmentedButtons, Text } from "react-native-paper";
 
-const EditCost = () => {
+const EditCostScreen = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>("");
@@ -81,4 +81,4 @@ const EditCost = () => {
   );
 };
 
-export default EditCost;
+export default EditCostScreen;
