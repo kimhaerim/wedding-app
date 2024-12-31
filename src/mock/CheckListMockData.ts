@@ -1,4 +1,4 @@
-import { CheckListStatus, CostType } from "../enum";
+import { CheckListStatus, CostType, Gender } from "../enum";
 import { ICategory } from "../interface/category.interface";
 import { ICheckList, ICheckListTemp, ICost } from "../interface/check-list.interface";
 import { ICostsByCategoryId } from "../interface/cost.interface";
@@ -192,3 +192,11 @@ export const userCategoriesMockData: { id: number; category: string }[] = [
     category: "💍 예물",
   },
 ];
+
+export const userMockData = {
+  id: 1,
+  email: "wedding@gamil.com",
+  name: "김해림",
+  birthday: "1998-01-23",
+  gender: Gender.FEMALE,
+};

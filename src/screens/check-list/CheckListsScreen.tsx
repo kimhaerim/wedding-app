@@ -4,7 +4,7 @@ import { ICheckListTemp, ICouple } from "../../interface";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
 import { FlatList, SafeAreaView, ScrollView, View } from "react-native";
 import { Text } from "react-native-paper";
-import { convertDateToString } from "../../common/util";
+import { calculateDday, convertDateToString } from "../../common/util";
 import Button from "../../components/common/Button";
 import { CategoryButton } from "../../components/category";
 import ShadowView from "../../components/common/ShadowView";
@@ -22,12 +22,6 @@ const CheckListsScreen = () => {
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
-
-  const calculateDday = (date: Date) => {
-    const targetDate = dayjs(date);
-    const daysFromStart = today.diff(targetDate, "day");
-    return daysFromStart;
-  };
 
   const handleMenuButtonPress = (id: number | undefined) => {
     setCheckListId(id);
@@ -76,7 +70,7 @@ const CheckListsScreen = () => {
             <>
               <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 5 }}>
                 <Text style={{ marginRight: 10 }}>결혼식까지</Text>
-                <Text>D{calculateDday(couple.weddingDate)}</Text>
+                <Text>D{calculateDday(couple.weddingDate, today)}</Text>
               </View>
               <Text>{convertDateToString(couple.weddingDate)} </Text>
             </>

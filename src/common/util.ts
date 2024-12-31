@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { CheckListStatus, CostType } from "../enum";
 
 export const convertDateToString = (inputDate: Date) => {
@@ -38,4 +39,10 @@ export const covertCostType = (costType: CostType) => {
 
 export const formatCurrency = (amount: number) => {
   return `${new Intl.NumberFormat("ko-KR").format(amount)}원`;
+};
+
+export const calculateDday = (date: Date, today: dayjs.Dayjs) => {
+  const targetDate = dayjs(date);
+  const daysFromStart = today.diff(targetDate, "day");
+  return daysFromStart;
 };
