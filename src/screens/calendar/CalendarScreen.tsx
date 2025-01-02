@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
 
 import { CheckListStatus, Color, CostType } from "../../enum";
@@ -12,6 +12,11 @@ import CommonCalendar from "../../components/calendar/Calendar";
 import CalendarHeader from "../../components/calendar/CalendarHeader";
 import { CalendarType } from "../../enum/calendar.enum";
 import CustomMenu from "../../components/common/Menu";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import ShadowView from "../../components/common/ShadowView";
+import CheckListItem from "../../components/check-list/CheckListItem";
+import Badge from "../../components/common/Badge";
+import CostItem from "../../components/cost/CostItem";
 
 interface MarkedDate {
   selected: boolean;
@@ -44,6 +49,8 @@ const CalendarScreen = () => {
 
   const [checkListAgendaList, setCheckListAgendaList] = useState<ICheckListTemp[]>([]);
   const [costAgendaLists, setCostAgendaLists] = useState<ICost[]>([]);
+
+  const [isSummaryVisible, setIsSummaryVisible] = useState(true); // New state for controlling the summary visibility
 
   const [markedDates, setMarkedDates] = useState<MarkedDates>({
     [selected]: { selected: true, disableTouchEvent: true },
@@ -201,6 +208,10 @@ const CalendarScreen = () => {
     }
   };
 
+  const handleSummaryToggle = () => {
+    setIsSummaryVisible((prev) => !prev); // Toggle summary visibility
+  };
+
   useEffect(() => {
     console.log("useEffect", currentYear);
     console.log("useEffect", currentMonth);
@@ -229,90 +240,102 @@ const CalendarScreen = () => {
   }, [calendarType, selected]);
 
   return (
-    <SafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
-      <ScrollView>
-        <View style={{ margin: 20 }}>
-          <View>
-            <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center", marginBottom: 20 }}>캘린더</Text>
-            <CalendarHeader
-              calendarType={calendarType}
-              setCalendarType={setCalendarType}
-              currentMonth={currentMonth}
-              summaryData={summaryData()}
-            />
-          </View>
-
-          <CommonCalendar
-            markedDates={markedDates}
-            onMonthChange={onMonthChange}
-            onDayPress={(date: DateData) => setSelected(date.dateString)}
-          ></CommonCalendar>
-
-          {calendarType === CalendarType.CHECK_LIST &&
-            checkListAgendaList.map((checkList) => (
-              <View key={`checkList-${checkList.id}`}>
-                <Row>
-                  <Text style={{ fontSize: 10 }}>{checkList.reservedTime}</Text>
-                  <Text style={{ fontSize: 10, marginLeft: 10, color: checkList.isCompleted ? Color.BLUE : Color.RED }}>
-                    {checkList.isCompleted ? "완료" : "미완료"}
-                  </Text>
-                </Row>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 10,
-                  }}
-                >
-                  <CheckBox
-                    label={checkList.description}
-                    isChecked={checkList.isCompleted}
-                    onPress={() => console.log("클릭")}
-                  />
-                  <CustomMenu
-                    visible={checkListId === checkList.id}
-                    onButtonPress={() => setCheckListId(checkList.id)}
-                    onDismiss={() => setCheckListId(undefined)}
-                    onMenuItemPress={(action) => handleMenuItemPress("checkList", action, checkList.id)}
-                  ></CustomMenu>
-                </View>
-                <Divider style={{ marginBottom: 20 }} />
-              </View>
-            ))}
-
-          {calendarType === CalendarType.COST &&
-            costAgendaLists.map((cost) => (
-              <View key={`cost-${cost.id}`}>
-                <Row>
-                  <Text style={{ fontSize: 10 }}>{covertCostType(cost.costType)}</Text>
-                  <Text style={{ fontSize: 10, marginLeft: 10, color: cost.paymentDate ? Color.BLUE : Color.RED }}>
-                    {cost.paymentDate ? "결제 완료" : "결제 전"}
-                  </Text>
-                </Row>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 10,
-                  }}
-                >
-                  <Text>{cost.title}</Text>
-                  <Text style={{ textAlign: "right" }}>{formatCurrency(cost.amount)}</Text>
-                  <CustomMenu
-                    visible={costId === cost.id}
-                    onButtonPress={() => setCostId(cost.id)}
-                    onDismiss={() => setCostId(undefined)}
-                    onMenuItemPress={(action) => handleMenuItemPress("cost", action, cost.id)}
-                  ></CustomMenu>
-                </View>
-
-                <Divider />
-              </View>
-            ))}
+    <WhiteSafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
+      <View style={{ marginHorizontal: 20 }}>
+        <View>
+          <CalendarHeader
+            calendarType={calendarType}
+            setCalendarType={setCalendarType}
+            currentMonth={currentMonth}
+            summaryData={summaryData()}
+          />
         </View>
-      </ScrollView>
+
+        <CommonCalendar
+          markedDates={markedDates}
+          onMonthChange={onMonthChange}
+          onDayPress={(date: DateData) => setSelected(date.dateString)}
+        ></CommonCalendar>
+
+        {calendarType === CalendarType.CHECK_LIST && (
+          <FlatList
+            data={checkListAgendaList}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => (
+              <ShadowView>
+                <View>
+                  <View style={styles.checkListRow}>
+                    <CheckBox
+                      label={item.description}
+                      isChecked={item.isCompleted}
+                      onPress={() => console.log("클릭")}
+                    />
+
+                    <View style={styles.menuContainer}>
+                      {item.category && (
+                        <Badge
+                          label={item.category.title}
+                          backgroundColor={Color.BLUE200}
+                          labelStyle={{ color: Color.BLACK }}
+                        ></Badge>
+                      )}
+
+                      <CustomMenu
+                        visible={checkListId === item.id}
+                        onButtonPress={() => setCheckListId(item.id)}
+                        onDismiss={() => setCheckListId(undefined)}
+                        onMenuItemPress={(action: string) =>
+                          handleMenuItemPress(CalendarType.CHECK_LIST, action, item.id)
+                        }
+                      />
+                    </View>
+                  </View>
+
+                  <Text style={styles.dateText}>
+                    {item.reservedDate} {item.reservedTime}
+                  </Text>
+                </View>
+              </ShadowView>
+            )}
+          />
+        )}
+
+        {calendarType === CalendarType.COST && (
+          <FlatList
+            data={costAgendaLists}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => (
+              <ShadowView>
+                <View key={`cost-${item.id}`}>
+                  <Row>
+                    <Text style={{ fontSize: 10 }}>{covertCostType(item.costType)}</Text>
+                    <Text style={{ fontSize: 10, marginLeft: 10, color: item.paymentDate ? Color.BLUE : Color.RED }}>
+                      {item.paymentDate ? "결제 완료" : "결제 전"}
+                    </Text>
+                  </Row>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <Text>{item.title}</Text>
+                    <Text style={{ textAlign: "right" }}>{formatCurrency(item.amount)}</Text>
+                    <CustomMenu
+                      visible={costId === item.id}
+                      onButtonPress={() => setCostId(item.id)}
+                      onDismiss={() => setCostId(undefined)}
+                      onMenuItemPress={(action) => handleMenuItemPress("cost", action, item.id)}
+                    ></CustomMenu>
+                  </View>
+                </View>
+              </ShadowView>
+            )}
+          />
+        )}
+      </View>
 
       <ConfirmModal
         title="체크리스트를 정말 삭제하시겠습니까?"
@@ -320,8 +343,30 @@ const CalendarScreen = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  checkListRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  menuContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dateText: {
+    color: Color.DARK_GRAY,
+    fontSize: 11,
+    marginBottom: 5,
+  },
+  memoText: {
+    marginTop: 10,
+    fontSize: 12,
+  },
+});
 
 export default CalendarScreen;

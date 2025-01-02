@@ -13,3 +13,4 @@ export * from "./ShadowView";
 export * from "./SummaryCard";
 export * from "./TimePicker";
 export * from "./Title";
+export * from "./WhiteSafeAreaView";

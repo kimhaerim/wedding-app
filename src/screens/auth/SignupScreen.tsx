@@ -3,6 +3,10 @@ import BackButton from "../../components/common/BackButton";
 import { SafeAreaView, View } from "react-native";
 import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
+import { useNavigation } from "@react-navigation/native";
 
 const enum SignupField {
   EMAIL = "email",
@@ -16,7 +20,9 @@ interface SignupData {
   confirmPassword: string | undefined;
 }
 
-const SignupScreen = () => {
+type SignupNavigationProp = StackNavigationProp<RootStackParamList, "Signup">;
+
+const SignupScreen = ({ navigation }: { navigation: SignupNavigationProp }) => {
   const [formData, setFormData] = useState<SignupData>({
     email: undefined,
     password: undefined,
@@ -81,9 +87,7 @@ const SignupScreen = () => {
   }, [formValidity]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton label="이메일 회원가입" onPress={() => {}}></BackButton>
-
+    <WhiteSafeAreaView>
       <View style={{ margin: 20, flex: 1 }}>
         <InputText
           label="이메일 *"
@@ -111,8 +115,8 @@ const SignupScreen = () => {
         ></InputText>
       </View>
 
-      <BottomButton label="다음" disabled={!isFormValid} onPress={() => {}}></BottomButton>
-    </SafeAreaView>
+      <BottomButton label="다음" disabled={!isFormValid} onPress={() => navigation.navigate("Profile")}></BottomButton>
+    </WhiteSafeAreaView>
   );
 };
 

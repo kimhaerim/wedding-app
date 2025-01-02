@@ -4,6 +4,10 @@ import { Divider, Text } from "react-native-paper";
 import { SafeAreaView, View } from "react-native";
 import BottomButton from "../../components/common/BottomButton";
 import CheckBox from "../../components/common/CheckBox";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
+import { useNavigation } from "@react-navigation/native";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -11,7 +15,9 @@ const initialAgreements = {
   isTermsAgreed: false,
 };
 
-const AgreeToTermsScreen = () => {
+type AgreeToTermsNavigationProp = StackNavigationProp<RootStackParamList, "AgreeToTerms">;
+
+const AgreeToTermsScreen = ({ navigation }: { navigation: AgreeToTermsNavigationProp }) => {
   const [agreements, setAgreements] = useState(initialAgreements);
 
   const toggleAgreement = (agreement: keyof typeof initialAgreements) => {
@@ -45,9 +51,7 @@ const AgreeToTermsScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton label="이메일 회원가입" onPress={() => {}}></BackButton>
-
+    <WhiteSafeAreaView>
       <View style={{ margin: 20, flex: 1 }}>
         <Text style={{ fontWeight: "bold", fontSize: 18, marginBottom: 20 }}>이용약관에 동의해 주세요.</Text>
 
@@ -73,8 +77,12 @@ const AgreeToTermsScreen = () => {
           ></CheckBox>
         </View>
       </View>
-      <BottomButton label="다음" disabled={!agreements.isAllAgreed} onPress={() => {}}></BottomButton>
-    </SafeAreaView>
+      <BottomButton
+        label="다음"
+        disabled={!agreements.isAllAgreed}
+        onPress={() => navigation.navigate("Signup")}
+      ></BottomButton>
+    </WhiteSafeAreaView>
   );
 };
 

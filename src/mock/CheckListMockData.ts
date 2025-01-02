@@ -30,6 +30,15 @@ export const checkListMockData: ICheckListTemp[] = [
     reservedTime: "12:00",
     status: CheckListStatus.REJECTED,
   },
+  {
+    id: 3,
+    description: "사진보라",
+    isCompleted: true,
+    memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
+    reservedDate: "2024-12-10",
+    reservedTime: "12:00",
+    status: CheckListStatus.REJECTED,
+  },
 ];
 
 export const costsMockData: ICost[] = [
@@ -199,4 +208,19 @@ export const userMockData = {
   name: "김해림",
   birthday: "1998-01-23",
   gender: Gender.FEMALE,
+};
+
+export const userWithPartnerMockData = {
+  id: 1,
+  email: "wedding@gamil.com",
+  name: "김해림",
+  birthday: "1998-01-23",
+  gender: Gender.FEMALE,
+  partner: {
+    id: 2,
+    email: "wedding1@gamil.com",
+    name: "김해림1",
+    birthday: "1998-01-23",
+    gender: Gender.MALE,
+  },
 };

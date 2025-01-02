@@ -8,10 +8,15 @@ import BottomButton from "../../components/common/BottomButton";
 
 import TimePicker from "../../components/common/TimePicker";
 import DatePicker from "../../components/common/DatePicker";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
+import { useNavigation } from "@react-navigation/native";
 
 const baseDate = new Date(new Date().getFullYear() - 30, 0, 1);
+type ProfileNavigationProp = StackNavigationProp<RootStackParamList, "Profile">;
 
-const SignupProfileScreen = () => {
+const ProfileScreen = ({ navigation }: { navigation: ProfileNavigationProp }) => {
   const [name, setName] = useState<string | undefined>(undefined);
   const [gender, setGender] = useState<Gender>(Gender.FEMALE);
   const [birthDay, setBirthDay] = useState<Date>(baseDate);
@@ -36,9 +41,7 @@ const SignupProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton label="프로필 입력" onPress={() => {}}></BackButton>
-
+    <WhiteSafeAreaView>
       <View style={{ margin: 20, flex: 1 }}>
         <InputText
           label="이름 *"
@@ -85,9 +88,13 @@ const SignupProfileScreen = () => {
         </View>
       </View>
 
-      <BottomButton label="다음" disabled={!name || !birthDay} onPress={() => {}}></BottomButton>
-    </SafeAreaView>
+      <BottomButton
+        label="다음"
+        disabled={!name || !birthDay}
+        onPress={() => navigation.navigate("DefaultCategories")}
+      ></BottomButton>
+    </WhiteSafeAreaView>
   );
 };
 
-export default SignupProfileScreen;
+export default ProfileScreen;

@@ -19,7 +19,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   currentMonth,
   summaryData,
 }) => (
-  <View style={{ marginBottom: 20 }}>
+  <View>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <Button style={[styles.button]} onPress={() => setCalendarType(CalendarType.CHECK_LIST)}>
         <Text style={[styles.label]}>일정</Text>

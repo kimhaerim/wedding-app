@@ -11,6 +11,7 @@ import ShadowView from "../../components/common/ShadowView";
 import CheckListItem from "../../components/check-list/CheckListItem";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/common/FloatingButton";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
 const CheckListsScreen = () => {
   const today = dayjs();
@@ -61,10 +62,8 @@ const CheckListsScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <WhiteSafeAreaView>
       <View style={{ margin: 10, marginBottom: 0 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18, textAlign: "center", marginBottom: 20 }}>체크리스트</Text>
-
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           {couple.weddingDate ? (
             <>
@@ -120,7 +119,7 @@ const CheckListsScreen = () => {
       ></ConfirmModal>
 
       <FloatingButton onPress={() => console.log()}></FloatingButton>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

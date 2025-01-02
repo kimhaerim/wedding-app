@@ -20,7 +20,7 @@ interface CommonCalendarProps {
 const CommonCalendar: React.FC<CommonCalendarProps> = ({ markedDates, onMonthChange, onDayPress }) => {
   return (
     <Calendar
-      style={{ height: 350 }}
+      style={{ height: 300 }}
       theme={{
         backgroundColor: Color.WHITE,
         calendarBackground: Color.WHITE,

@@ -14,6 +14,7 @@ import ConfirmModal from "../../modal/ConfirmModal";
 import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
 import CategoryButton from "../../components/category/CategoryButton";
 import Button from "../../components/common/Button";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -75,9 +76,8 @@ const BudgetScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <WhiteSafeAreaView>
       <View style={{ margin: 10 }}>
-        <Title label="예산 / 지출"></Title>
         {categories.length === 0 ? (
           <>
             <View style={{ margin: 10 }}>
@@ -273,7 +273,7 @@ const BudgetScreen = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

@@ -6,13 +6,23 @@ import { SafeAreaView, View } from "react-native";
 import InputText from "../../components/common/InputText";
 import { Button } from "react-native-paper";
 import BottomButton from "../../components/common/BottomButton";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
+import { RouteProp } from "@react-navigation/native";
 
 const enum EmailLoginField {
   EMAIL = "email",
   PASSWORD = "password",
 }
 
-const EmailLoginScreen = () => {
+type EmailLoginScreenProps = {
+  setIsLoggedIn: (loggedIn: boolean) => void;
+  route: RouteProp<RootStackParamList, "EmailLogin">; // 'EmailLogin'의 route 정보
+  navigation: StackNavigationProp<RootStackParamList, "EmailLogin">; // 'EmailLogin'을 위한 navigation 정보
+};
+
+const EmailLoginScreen = ({ route, setIsLoggedIn, navigation }: EmailLoginScreenProps) => {
   const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
@@ -20,6 +30,12 @@ const EmailLoginScreen = () => {
   const [password, setPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
+
+  const handleLogin = () => {
+    if (email && password) {
+      setIsLoggedIn(true);
+    }
+  };
 
   const validateEmail = (email: string) => {
     setEmail(email);
@@ -69,8 +85,7 @@ const EmailLoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton onPress={() => console.log("Back pressed")} label="이메일 로그인" />
+    <WhiteSafeAreaView>
       <View style={{ margin: 20, justifyContent: "center" }}>
         <InputText
           label="이메일 *"
@@ -96,12 +111,8 @@ const EmailLoginScreen = () => {
           {"아이디 / 비밀번호 찾기 >"}
         </Button>
       </View>
-      <BottomButton
-        label="로그인"
-        onPress={() => console.log(email, password)}
-        disabled={!email || !password}
-      ></BottomButton>
-    </SafeAreaView>
+      <BottomButton label="로그인" onPress={handleLogin} disabled={!email || !password}></BottomButton>
+    </WhiteSafeAreaView>
   );
 };
 

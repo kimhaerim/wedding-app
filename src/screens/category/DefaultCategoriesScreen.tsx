@@ -4,8 +4,13 @@ import BottomButton from "../../components/common/BottomButton";
 import BackButton from "../../components/common/BackButton";
 import { useCallback, useState } from "react";
 import CategoryButton from "../../components/category/CategoryButton";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
 
-const DefaultCategoriesScreen = () => {
+type DefaultCategoriesNavigationProp = StackNavigationProp<RootStackParamList, "DefaultCategories">;
+
+const DefaultCategoriesScreen = ({ navigation }: { navigation: DefaultCategoriesNavigationProp }) => {
   const defaultCategories = [
     "🏩 웨딩홀",
     "📸 스튜디오",
@@ -29,8 +34,7 @@ const DefaultCategoriesScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton label="카테고리 설정" onPress={() => {}}></BackButton>
+    <WhiteSafeAreaView>
       <View style={{ margin: 20 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>관심있는</Text>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>기본 카테고리를 설정해보세요.</Text>
@@ -47,12 +51,13 @@ const DefaultCategoriesScreen = () => {
           ))}
         </View>
       </View>
+
       <BottomButton
         label={userCategories.length > 0 ? "다음" : "다음에 설정하기"}
         disabled={false}
-        onPress={() => console.log(userCategories)}
+        onPress={() => navigation.navigate("ConfirmSignup")}
       ></BottomButton>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

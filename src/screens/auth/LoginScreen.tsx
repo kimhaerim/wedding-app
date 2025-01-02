@@ -3,10 +3,18 @@ import React from "react";
 import { Color } from "../../enum";
 import { Button, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+
+type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
 
 const LoginScreen = () => {
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+
   return (
-    <SafeAreaView style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+    <WhiteSafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
       <Text variant="titleSmall" style={{ textAlign: "center", marginBottom: 10 }}>
         웨딩의 시작과 끝을 함께하는 나만의 웨딩 플래너
       </Text>
@@ -31,7 +39,7 @@ const LoginScreen = () => {
       </Button>
       <Button
         mode="contained"
-        onPress={() => console.log("@ 이메일로 시작하기")}
+        onPress={() => navigation.navigate("EmailLogin")}
         buttonColor={Color.WHITE}
         textColor="#191919"
         style={{
@@ -44,13 +52,13 @@ const LoginScreen = () => {
       >
         @ 이메일로 시작하기
       </Button>
-      <Button mode="text" textColor={Color.DARK_GRAY} onPress={() => console.log("회원가입")}>
+      <Button mode="text" textColor={Color.DARK_GRAY} onPress={() => navigation.navigate("AgreeToTerms")}>
         {"회원가입 >"}
       </Button>
       <Button mode="text" textColor={Color.DARK_GRAY} onPress={() => console.log("아이디 / 비밀번호 찾기")}>
         {"아이디 / 비밀번호 찾기 >"}
       </Button>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

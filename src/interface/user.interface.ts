@@ -6,4 +6,5 @@ export interface IUser {
   name: string;
   birthday?: string;
   gender: Gender;
+  partner?: IUser;
 }
