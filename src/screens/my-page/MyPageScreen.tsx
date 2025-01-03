@@ -1,19 +1,28 @@
-import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Divider, Icon, IconButton, Text } from "react-native-paper";
-import Title from "../../components/common/Title";
-import { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Divider, Icon, Text } from "react-native-paper";
+import React, { useState } from "react";
 import { ICouple, IUser } from "../../interface";
-import { coupleMockData, userMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
+import { coupleMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
 import { calculateDday, convertDateToString } from "../../common/util";
 import dayjs from "dayjs";
 import Button from "../../components/common/Button";
 import Row from "../../components/common/Row";
 import { Color, Gender } from "../../enum";
-// import SelectDateModal from "../../modal/SelectDateModal";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import SelectDateModal from "../../modal/SelectDateModal";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import { MyPageStackParamList } from "../../navigation/types";
 
-const MyPageScreen = () => {
+type MyPageNavigationProp = StackNavigationProp<MyPageStackParamList, "MyPageHome">;
+type MyPageRouteProp = RouteProp<MyPageStackParamList, "MyPageHome">;
+
+interface MyPageScreenProps {
+  navigation: MyPageNavigationProp;
+  route: MyPageRouteProp;
+}
+
+const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const today = dayjs();
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [user, setUser] = useState<IUser>(userWithPartnerMockData);
@@ -78,7 +87,7 @@ const MyPageScreen = () => {
         <Divider />
 
         <View style={{ marginTop: 20 }}>
-          <TouchableOpacity style={[styles.menuButton]}>
+          <TouchableOpacity style={[styles.menuButton]} onPress={() => navigation.navigate("Invite")}>
             <Row>
               <View style={[styles.menuContainer]}>
                 <Icon color={Color.WHITE} source="account-plus" size={20} />
@@ -87,7 +96,7 @@ const MyPageScreen = () => {
             </Row>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.menuButton]}>
+          <TouchableOpacity style={[styles.menuButton]} onPress={() => navigation.navigate("EditProfile")}>
             <Row>
               <View style={[styles.menuContainer]}>
                 <Icon color={Color.WHITE} source="account-edit" size={20} />

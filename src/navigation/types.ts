@@ -20,3 +20,9 @@ export type CheckListStackParamList = {
   CheckLists: undefined;
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
 };
+
+export type MyPageStackParamList = {
+  MyPageHome: undefined;
+  Invite: undefined;
+  EditProfile: undefined;
+};

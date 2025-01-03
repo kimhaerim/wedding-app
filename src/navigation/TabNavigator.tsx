@@ -1,17 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CheckListsScreen from "../screens/check-list/CheckListsScreen";
+
 import CalendarScreen from "../screens/calendar/CalendarScreen";
-import CategoryListsScreen from "../screens/category/CategoryListsScreen";
+
 import BudgetScreen from "../screens/cost/Budget";
-import MyPageScreen from "../screens/my-page/MyPageScreen";
+
 import { Icon, Text } from "react-native-paper";
 import { Color } from "../enum";
 import CategoryNavigator from "./CategoryNavigator";
 import CheckListNavigator from "./CheckListNavigator";
+import MyPageNavigator from "./MyPageNavigation";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator() {
+const TabNavigator = () => {
   const getTabBarStyle = (focused: boolean) => {
     return focused ? Color.BLUE : Color.DARK_GRAY;
   };
@@ -42,7 +43,6 @@ export default function TabNavigator() {
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
-
             navigation.reset({
               index: 0,
               routes: [{ name: "checkLists" }],
@@ -99,15 +99,17 @@ export default function TabNavigator() {
 
       <Tab.Screen
         name="마이페이지"
-        component={MyPageScreen}
+        component={MyPageNavigator}
         options={{
           tabBarIcon: ({ size, focused }) => <Icon source="account" size={size} color={getTabBarStyle(focused)} />,
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: getTabBarStyle(focused), fontSize: 10, marginTop: 2 }}>마이페이지</Text>
           ),
-          headerTitle: "마이페이지",
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
   );
-}
+};
+
+export default TabNavigator;

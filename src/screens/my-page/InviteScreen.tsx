@@ -1,25 +1,39 @@
-import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
-import BackButton from "../../components/common/BackButton";
-import { Icon, Text } from "react-native-paper";
-import { useState } from "react";
+import { StyleSheet, View } from "react-native";
+
+import { Text } from "react-native-paper";
+import { useLayoutEffect, useState } from "react";
 import { ICouple, IUser } from "../../interface";
-import { coupleMockData, userMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
+import { coupleMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
 import { Color, Gender } from "../../enum";
 import Button from "../../components/common/Button";
-import { calculateDday, convertDateToString } from "../../common/util";
+import { calculateDday } from "../../common/util";
 import dayjs from "dayjs";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import { MyPageStackParamList } from "../../navigation/types";
 
-const InviteScreen = () => {
+type InviteNavigationProp = StackNavigationProp<MyPageStackParamList, "Invite">;
+type InviteRouteProp = RouteProp<MyPageStackParamList, "Invite">;
+
+interface InviteScreenProps {
+  navigation: InviteNavigationProp;
+  route: InviteRouteProp;
+}
+
+const InviteScreen: React.FC<InviteScreenProps> = ({ navigation }) => {
   const today = dayjs();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerTitle: user.partner ? "커플 정보" : "연동하기" });
+  }, [navigation]);
 
   const [user, setUser] = useState<IUser>(userWithPartnerMockData);
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [unLinkConfirmModalVisible, setUnLinkConfirmModalVisible] = useState<boolean>(false);
 
   return (
-    <SafeAreaView>
-      <BackButton label="마이페이지" onPress={() => console.log("뒤로 가기")}></BackButton>
-
+    <WhiteSafeAreaView>
       <View style={styles.row}>
         <View style={styles.userContainer}>
           <View style={styles.genderContainer}>
@@ -87,7 +101,7 @@ const InviteScreen = () => {
           </>
         )}
       </View>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

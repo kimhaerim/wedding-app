@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import BackButton from "../../components/common/BackButton";
 import { SegmentedButtons, Text } from "react-native-paper";
 import { Color, Gender } from "../../enum";
-import { SafeAreaView, View } from "react-native";
 import InputText from "../../components/common/InputText";
 import BottomButton from "../../components/common/BottomButton";
 
@@ -11,7 +9,7 @@ import DatePicker from "../../components/common/DatePicker";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/types";
-import { useNavigation } from "@react-navigation/native";
+import { View } from "react-native";
 
 const baseDate = new Date(new Date().getFullYear() - 30, 0, 1);
 type ProfileNavigationProp = StackNavigationProp<RootStackParamList, "Profile">;
