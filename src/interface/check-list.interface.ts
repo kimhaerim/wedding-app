@@ -12,17 +12,6 @@ export interface ICheckList {
   category?: ICategory;
 }
 
-export interface ICheckListTemp {
-  id: number;
-  description: string;
-  reservedDate?: string;
-  reservedTime?: string;
-  isCompleted: boolean;
-  memo?: string;
-  status?: CheckListStatus;
-  category?: ICategory;
-}
-
 export interface ICost {
   id: number;
   title: string;

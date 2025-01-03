@@ -9,6 +9,7 @@ import { Color } from "../enum";
 import CategoryNavigator from "./CategoryNavigator";
 import CheckListNavigator from "./CheckListNavigator";
 import MyPageNavigator from "./MyPageNavigation";
+import CalendarNavigator from "./CalendarNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +34,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="checkLists"
         component={CheckListNavigator}
+        initialParams={{ initialRouteName: "CheckListHome" }}
         options={{
           tabBarIcon: ({ size, focused }) => <Icon source="check-circle" size={size} color={getTabBarStyle(focused)} />,
           tabBarLabel: ({ focused }) => (
@@ -53,13 +55,14 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="Calendar"
-        component={CalendarScreen}
+        component={CalendarNavigator}
+        initialParams={{ initialRouteName: "CheckListHome" }}
         options={{
           tabBarIcon: ({ size, focused }) => <Icon source="calendar" size={size} color={getTabBarStyle(focused)} />,
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: getTabBarStyle(focused), fontSize: 10, marginTop: 2 }}>캘린더</Text>
           ),
-          headerTitle: "캘린더",
+          headerShown: false,
         }}
       />
 

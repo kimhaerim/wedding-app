@@ -3,7 +3,7 @@ import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View 
 import { Divider, Text } from "react-native-paper";
 
 import { CheckListStatus, Color, CostType } from "../../enum";
-import { ICheckListTemp, ICost } from "../../interface/check-list.interface";
+import { ICheckList, ICost } from "../../interface/check-list.interface";
 import Row from "../../components/common/Row";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CheckBox from "../../components/common/CheckBox";
@@ -17,6 +17,11 @@ import ShadowView from "../../components/common/ShadowView";
 import CheckListItem from "../../components/check-list/CheckListItem";
 import Badge from "../../components/common/Badge";
 import CostItem from "../../components/cost/CostItem";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import { CalendarStackParamList } from "../../navigation/types";
+import { checkListMockData } from "../../mock/CheckListMockData";
+import { convertDateTimeToString } from "../../common/util";
 
 interface MarkedDate {
   selected: boolean;
@@ -37,7 +42,15 @@ const covertCostType = (costType: CostType) => {
   }
 };
 
-const CalendarScreen = () => {
+type CalendarNavigationProp = StackNavigationProp<CalendarStackParamList, "CalendarHome">;
+type CalendarRouteProp = RouteProp<CalendarStackParamList, "CalendarHome">;
+
+interface CalendarScreenProps {
+  navigation: CalendarNavigationProp;
+  route: CalendarRouteProp;
+}
+
+const CalendarScreen: React.FC<CalendarScreenProps> = ({ navigation }) => {
   const today = new Date();
   const [selected, setSelected] = useState(today.toISOString().split("T")[0]);
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
@@ -47,44 +60,14 @@ const CalendarScreen = () => {
   const [costId, setCostId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
-  const [checkListAgendaList, setCheckListAgendaList] = useState<ICheckListTemp[]>([]);
-  const [costAgendaLists, setCostAgendaLists] = useState<ICost[]>([]);
+  const [checkLists, setCheckLists] = useState<ICheckList[]>(checkListMockData);
 
-  const [isSummaryVisible, setIsSummaryVisible] = useState(true); // New state for controlling the summary visibility
+  const [checkListAgendaList, setCheckListAgendaList] = useState<ICheckList[]>([]);
+  const [costAgendaLists, setCostAgendaLists] = useState<ICost[]>([]);
 
   const [markedDates, setMarkedDates] = useState<MarkedDates>({
     [selected]: { selected: true, disableTouchEvent: true },
   });
-
-  const checkLists: ICheckListTemp[] = [
-    {
-      id: 1,
-      description: "사진보라",
-      isCompleted: true,
-      memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
-      reservedDate: "2024-12-01",
-      reservedTime: "12:00",
-      status: CheckListStatus.CONFIRMED,
-    },
-    {
-      id: 2,
-      description: "사진보라",
-      isCompleted: false,
-      memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
-      reservedDate: "2024-12-10",
-      reservedTime: "12:00",
-      status: CheckListStatus.REJECTED,
-    },
-    {
-      id: 3,
-      description: "사진보라",
-      isCompleted: true,
-      memo: "어쩌구저쩌구 어쩌구 저쩌구 엄청나게 어쩌구 저쩌구 가성비 어쩌구 저쩌구",
-      reservedDate: "2024-12-10",
-      reservedTime: "12:00",
-      status: CheckListStatus.REJECTED,
-    },
-  ];
 
   const costs: ICost[] = [
     {
@@ -114,14 +97,15 @@ const CalendarScreen = () => {
     if (!cur.reservedDate) {
       return acc;
     }
+    const reservedDateString = cur.reservedDate.toISOString().split("T")[0];
 
-    const isSelected = selected === cur.reservedDate;
+    const isSelected = selected === reservedDateString;
     const dot = {
       key: cur.isCompleted ? "completed" : "notCompleted",
       color: cur.isCompleted ? Color.BLUE : Color.RED,
     };
-    if (!acc[cur.reservedDate]) {
-      acc[cur.reservedDate] = {
+    if (!acc[reservedDateString]) {
+      acc[reservedDateString] = {
         selected: isSelected,
         marked: true,
         dots: [dot],
@@ -130,7 +114,7 @@ const CalendarScreen = () => {
       return acc;
     }
 
-    acc[cur.reservedDate].dots.push(dot);
+    acc[reservedDateString].dots.push(dot);
     return acc;
   }, {});
 
@@ -190,26 +174,46 @@ const CalendarScreen = () => {
     [currentMonth]
   );
 
-  const handleMenuItemPress = (type: string, action: string, id: number) => {
+  const handleCheckListMenuItemPress = (action: string, id: number) => {
     switch (action) {
       case "view":
-        console.log("상세 보기", id);
+        navigation.push("CheckListDetail", { id });
         break;
+
       case "edit":
-        console.log("수정", id);
+        navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: false });
         break;
+
       case "delete":
-        console.log("삭제", id);
         setRemoveModalVisible(true);
-        type === "cost" ? setCostId(undefined) : setCheckListId(undefined);
         break;
+
       default:
         break;
     }
+
+    setCheckListId(undefined);
   };
 
-  const handleSummaryToggle = () => {
-    setIsSummaryVisible((prev) => !prev); // Toggle summary visibility
+  const handleCostMenuItemPress = (action: string, id: number) => {
+    switch (action) {
+      case "view":
+        // navigation.push("CostDetail", { id });
+        break;
+
+      case "edit":
+        navigation.navigate("EditCost", { id });
+        break;
+
+      case "delete":
+        setRemoveModalVisible(true);
+        break;
+
+      default:
+        break;
+    }
+
+    setCostId(undefined);
   };
 
   useEffect(() => {
@@ -219,7 +223,11 @@ const CalendarScreen = () => {
 
   useEffect(() => {
     if (calendarType === CalendarType.CHECK_LIST) {
-      const checkListSections: ICheckListTemp[] = checkLists.filter((checkList) => checkList.reservedDate === selected);
+      const checkListSections: ICheckList[] = checkLists.filter((checkList) => {
+        const reservedDateString = checkList.reservedDate?.toISOString().split("T")[0];
+
+        return reservedDateString === selected;
+      });
       setCheckListAgendaList(checkListSections);
       return;
     }
@@ -284,16 +292,14 @@ const CalendarScreen = () => {
                         visible={checkListId === item.id}
                         onButtonPress={() => setCheckListId(item.id)}
                         onDismiss={() => setCheckListId(undefined)}
-                        onMenuItemPress={(action: string) =>
-                          handleMenuItemPress(CalendarType.CHECK_LIST, action, item.id)
-                        }
+                        onMenuItemPress={(action: string) => handleCheckListMenuItemPress(action, item.id)}
                       />
                     </View>
                   </View>
 
-                  <Text style={styles.dateText}>
-                    {item.reservedDate} {item.reservedTime}
-                  </Text>
+                  {item.reservedDate && (
+                    <Text style={styles.dateText}>{convertDateTimeToString(item.reservedDate)}</Text>
+                  )}
                 </View>
               </ShadowView>
             )}
@@ -327,7 +333,7 @@ const CalendarScreen = () => {
                       visible={costId === item.id}
                       onButtonPress={() => setCostId(item.id)}
                       onDismiss={() => setCostId(undefined)}
-                      onMenuItemPress={(action) => handleMenuItemPress("cost", action, item.id)}
+                      onMenuItemPress={(action: string) => handleCostMenuItemPress(action, item.id)}
                     ></CustomMenu>
                   </View>
                 </View>

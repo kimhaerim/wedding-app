@@ -10,7 +10,7 @@ import { Divider, Icon, Text } from "react-native-paper";
 import Row from "../../components/common/Row";
 import ConfirmModal from "../../modal/ConfirmModal";
 import CheckListWithCostItem from "../../components/check-list/CheckListWithCostItem";
-import { checkListMockData1 } from "../../mock/CheckListMockData";
+import { checkListMockData } from "../../mock/CheckListMockData";
 import { formatCurrency } from "../../common/util";
 import { ICostByCheckList } from "../../interface/cost.interface";
 import FloatingButton from "../../components/common/FloatingButton";
@@ -22,7 +22,7 @@ const CategoryScreen = () => {
     id: 1,
     title: "본식DVD",
     budgetAmount: 0,
-    checkList: checkListMockData1,
+    checkList: checkListMockData,
   });
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);

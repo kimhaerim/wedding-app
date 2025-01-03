@@ -17,8 +17,16 @@ export type CategoryStackParamList = {
 };
 
 export type CheckListStackParamList = {
-  CheckLists: undefined;
+  CheckListsHome: undefined;
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
+  CheckListDetail: { id: number };
+};
+
+export type CalendarStackParamList = {
+  CalendarHome: undefined;
+  EditCheckList: { checkListId?: number; isFromCategory: boolean };
+  CheckListDetail: { id: number };
+  EditCost: { id: number };
 };
 
 export type MyPageStackParamList = {

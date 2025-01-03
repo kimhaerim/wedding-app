@@ -1,14 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { ICheckListTemp } from "../../interface/check-list.interface";
 import CheckBox from "../common/CheckBox";
 import CustomMenu from "../common/Menu";
 import { Color } from "../../enum";
 import { Divider } from "react-native-paper";
 import Badge from "../common/Badge";
+import { ICheckList } from "../../interface";
+import { convertDateTimeToString } from "../../common/util";
 
 interface CheckListItemProps {
-  item: ICheckListTemp;
+  item: ICheckList;
   checkListId: number | undefined;
   onMenuButtonPress: (id: number | undefined) => void;
   onMenuItemPress: (action: string, id: number) => void;
@@ -38,9 +39,7 @@ const CheckListItem: React.FC<CheckListItemProps> = ({ item, checkListId, onMenu
         </View>
       </View>
 
-      <Text style={styles.dateText}>
-        {item.reservedDate} {item.reservedTime}
-      </Text>
+      {item.reservedDate && <Text style={styles.dateText}>{convertDateTimeToString(item.reservedDate)}</Text>}
       {item.memo && (
         <>
           <Divider />

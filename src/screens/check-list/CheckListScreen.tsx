@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ICheckList, ICost, ICostByCheckList } from "../../interface";
-import { checkListMockData1 } from "../../mock/CheckListMockData";
 import { FlatList, SafeAreaView, TouchableOpacity, View } from "react-native";
 import BackButton from "../../components/common/BackButton";
 import Badge from "../../components/common/Badge";
@@ -13,18 +12,33 @@ import ShadowView from "../../components/common/ShadowView";
 import CostItem from "../../components/cost/CostItem";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/common/FloatingButton";
+import { CheckListStackParamList } from "../../navigation/types";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { checkListMockData } from "../../mock/CheckListMockData";
 
-const CheckListScreen = () => {
+type CheckListNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListDetail">;
+type CheckListRouteProp = RouteProp<CheckListStackParamList, "CheckListDetail">;
+
+interface CheckListScreenProps {
+  navigation: CheckListNavigationProp;
+  route: CheckListRouteProp;
+}
+
+const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
+  const { id } = route.params;
+
   const [costId, setCostId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
-  const [checkList, setCheckList] = useState<ICheckList>(checkListMockData1[0]);
+  const [checkList, setCheckList] = useState<ICheckList>(checkListMockData[0]);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
     totalCost: 200000,
     paidCost: 100000,
     unpaidCost: 100000,
   });
-  const [isExpanded, setIsExpanded] = useState(false); // 열림/닫힘 상태 관리
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
@@ -60,8 +74,7 @@ const CheckListScreen = () => {
   };
 
   return (
-    <SafeAreaView>
-      <BackButton onPress={() => console.log("뒤로 가기")} label="체크리스트"></BackButton>
+    <WhiteSafeAreaView>
       <View style={{ margin: 20 }}>
         {checkList.category && <Badge label={checkList.category.title} backgroundColor={Color.BLUE200}></Badge>}
 
@@ -172,7 +185,7 @@ const CheckListScreen = () => {
       ></ConfirmModal>
 
       <FloatingButton onPress={() => console.log()}></FloatingButton>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

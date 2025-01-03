@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Color, CostType } from "../../enum";
 import BackButton from "../../components/common/BackButton";
 import { SafeAreaView, View } from "react-native";
@@ -6,8 +6,26 @@ import InputText from "../../components/common/InputText";
 import DatePicker from "../../components/common/DatePicker";
 import BottomButton from "../../components/common/BottomButton";
 import { SegmentedButtons, Text } from "react-native-paper";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CalendarStackParamList } from "../../navigation/types";
+import { RouteProp } from "@react-navigation/native";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
-const EditCostScreen = () => {
+type EditCostNavigationProp = StackNavigationProp<CalendarStackParamList, "EditCost">;
+type EditCostRouteProp = RouteProp<CalendarStackParamList, "EditCost">;
+
+interface EditCostScreenProps {
+  navigation: EditCostNavigationProp;
+  route: EditCostRouteProp;
+}
+
+const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) => {
+  const { id } = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerTitle: id ? "비용 수정" : "비용 저장" });
+  }, [navigation, id]);
+
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>("");
@@ -25,9 +43,7 @@ const EditCostScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton label={isEdit ? "비용 수정" : "비용 추가"} onPress={() => console.log("뒤로 가기")}></BackButton>
-
+    <WhiteSafeAreaView style={{ flex: 1 }}>
       <View style={{ margin: 20 }}>
         <InputText
           label="비용 *"
@@ -77,7 +93,7 @@ const EditCostScreen = () => {
         disabled={title.length === 0}
         onPress={() => console.log("0")}
       ></BottomButton>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import { ICheckListTemp, ICouple } from "../../interface";
+import { ICheckList, ICouple } from "../../interface";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
-import { FlatList, SafeAreaView, ScrollView, View } from "react-native";
+import { FlatList, ScrollView, View } from "react-native";
 import { Text } from "react-native-paper";
 import { calculateDday, convertDateToString } from "../../common/util";
 import Button from "../../components/common/Button";
@@ -17,8 +17,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { CheckListStackParamList } from "../../navigation/types";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 
-type CheckListsNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckLists">;
-type CheckListsRouteProp = RouteProp<CheckListStackParamList, "CheckLists">;
+type CheckListsNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListsHome">;
+type CheckListsRouteProp = RouteProp<CheckListStackParamList, "CheckListsHome">;
 
 interface CheckListsScreenProps {
   navigation: CheckListsNavigationProp;
@@ -31,7 +31,7 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
-  const [checkLists, setCheckLists] = useState<ICheckListTemp[]>(checkListMockData);
+  const [checkLists, setCheckLists] = useState<ICheckList[]>(checkListMockData);
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
@@ -46,26 +46,29 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
       case "view":
-        console.log("상세 보기", id);
+        navigation.push("CheckListDetail", { id });
         break;
+
       case "edit":
-        console.log("수정", id);
+        navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: false });
         break;
+
       case "delete":
-        console.log("삭제", id);
         setRemoveModalVisible(true);
-        setCheckListId(undefined);
         break;
+
       default:
         break;
     }
+
+    setCheckListId(undefined);
   };
 
   const loadMoreData = () => {
     setPage((prevPage) => prevPage + 1);
 
     // 추가 호출 API
-    const newCheckLists: ICheckListTemp[] = [];
+    const newCheckLists: ICheckList[] = [];
 
     if (newCheckLists.length > 0) {
       setCheckLists((prevLists) => [...prevLists, ...newCheckLists]);

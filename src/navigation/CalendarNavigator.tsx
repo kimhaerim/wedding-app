@@ -1,15 +1,16 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { CheckListStackParamList } from "./types";
+import { CalendarStackParamList, CheckListStackParamList } from "./types";
 import { Color } from "../enum";
 import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
 import CheckListsScreen from "../screens/check-list/CheckListsScreen";
 import { StyleSheet } from "react-native";
 import CheckListScreen from "../screens/check-list/CheckListScreen";
 import CalendarScreen from "../screens/calendar/CalendarScreen";
+import EditCostScreen from "../screens/cost/EditCostScreen";
 
-const Stack = createStackNavigator<CheckListStackParamList>();
+const Stack = createStackNavigator<CalendarStackParamList>();
 
-const CheckListNavigator = () => {
+const CalendarNavigator = () => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -19,16 +20,24 @@ const CheckListNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="CheckListsHome"
-        component={CheckListsScreen}
-        options={{ ...defaultOptions, headerTitle: "체크리스트" }}
+        name="CalendarHome"
+        component={CalendarScreen}
+        options={{ ...defaultOptions, headerTitle: "캘린더" }}
       />
+
       <Stack.Screen name="EditCheckList" component={EditCheckListScreen} options={{ ...defaultOptions }} />
       <Stack.Screen
         name="CheckListDetail"
         component={CheckListScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트" }}
       />
+
+      <Stack.Screen name="EditCost" component={EditCostScreen} options={{ ...defaultOptions }} />
+      {/* <Stack.Screen
+        name="CostDetail"
+        component={}
+        options={{ ...defaultOptions, headerTitle: "체크리스트" }}
+      /> */}
     </Stack.Navigator>
   );
 };
@@ -40,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckListNavigator;
+export default CalendarNavigator;
