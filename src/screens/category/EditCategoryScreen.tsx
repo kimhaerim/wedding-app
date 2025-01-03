@@ -1,31 +1,58 @@
-import { useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 import BackButton from "../../components/common/BackButton";
 import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
 import { SafeAreaView, View } from "react-native";
 import InputText from "../../components/common/InputText";
 import BottomButton from "../../components/common/BottomButton";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CategoryStackParamList } from "../../navigation/types";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 
-const EditCategoryScreen = () => {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+type EditCategoryNavigationProp = StackNavigationProp<CategoryStackParamList, "EditCategory">;
+type EditCategoryRouteProp = RouteProp<CategoryStackParamList, "EditCategory">;
+
+interface EditCategoryScreenProps {
+  navigation: EditCategoryNavigationProp;
+  route: EditCategoryRouteProp;
+}
+const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
+  const { categoryId, categoryTitle } = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerTitle: categoryId ? "카테고리 수정" : "카테고리 저장" });
+  }, [navigation, categoryId]);
+
+  const isEdit = categoryId ? true : false;
   const [category, setCategory] = useState<IAddCategory | IUpdateCategory | undefined>(undefined);
 
-  const [inputTitle, setInputTitle] = useState<string>(category ? category.title : "");
+  const [inputTitle, setInputTitle] = useState<string>(category ? category.title : categoryTitle ? categoryTitle : "");
   const [inputAmountBudget, setInputAmountBudget] = useState<number>(category ? category.budgetAmount : 0);
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton
-        label={isEdit ? "카테고리 수정" : "카테고리 추가"}
-        onPress={() => console.log("뒤로 가기")}
-      ></BackButton>
+  const [showExitModal, setShowExitModal] = useState<boolean>(false);
+  const [exitAction, setExitAction] = useState<(() => void) | null>(null);
 
+  const handleBottomButtonPress = () => {
+    if (isEdit) {
+      // API 호출 후 카테고리 리스트 목록으로 이동
+      navigation.popToTop();
+      return;
+    }
+
+    // 저장 API 호출
+    const categoryId = 1;
+    navigation.navigate("EditCheckList", { isFromCategory: true });
+  };
+
+  return (
+    <WhiteSafeAreaView>
       <View style={{ margin: 20 }}>
         <InputText
           label={"카테고리 이름 *"}
           placeholder="ex. 웨딩홀, 본식DVD 등"
           value={inputTitle}
-          defaultValue={category ? category.title : undefined}
+          defaultValue={category ? category.title : categoryTitle ? categoryTitle : undefined}
           onChangeText={setInputTitle}
           error={inputTitle.length === 0}
           errorMessage="이름을 입력하세요."
@@ -44,9 +71,9 @@ const EditCategoryScreen = () => {
       <BottomButton
         label={isEdit ? "수정" : "다음"}
         disabled={inputTitle.length === 0}
-        onPress={() => console.log(inputTitle, inputAmountBudget)}
+        onPress={handleBottomButtonPress}
       ></BottomButton>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

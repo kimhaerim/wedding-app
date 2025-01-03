@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ICheckListTemp, ICouple } from "../../interface";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
 import { FlatList, SafeAreaView, ScrollView, View } from "react-native";
@@ -12,8 +12,20 @@ import CheckListItem from "../../components/check-list/CheckListItem";
 import ConfirmModal from "../../modal/ConfirmModal";
 import FloatingButton from "../../components/common/FloatingButton";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import SelectDateModal from "../../modal/SelectDateModal";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CheckListStackParamList } from "../../navigation/types";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 
-const CheckListsScreen = () => {
+type CheckListsNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckLists">;
+type CheckListsRouteProp = RouteProp<CheckListStackParamList, "CheckLists">;
+
+interface CheckListsScreenProps {
+  navigation: CheckListsNavigationProp;
+  route: CheckListsRouteProp;
+}
+
+const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
   const today = dayjs();
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
@@ -23,6 +35,9 @@ const CheckListsScreen = () => {
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
+
+  const [weddingDate, setWeddingDate] = useState<Date | undefined>(couple.weddingDate ?? undefined);
+  const [weddingDateVisible, setWeddingDateVisible] = useState<boolean>(false);
 
   const handleMenuButtonPress = (id: number | undefined) => {
     setCheckListId(id);
@@ -65,16 +80,16 @@ const CheckListsScreen = () => {
     <WhiteSafeAreaView>
       <View style={{ margin: 10, marginBottom: 0 }}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          {couple.weddingDate ? (
+          {weddingDate ? (
             <>
               <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 5 }}>
                 <Text style={{ marginRight: 10 }}>결혼식까지</Text>
-                <Text>D{calculateDday(couple.weddingDate, today)}</Text>
+                <Text>D{calculateDday(weddingDate, today)}</Text>
               </View>
-              <Text>{convertDateToString(couple.weddingDate)} </Text>
+              <Text>{convertDateToString(weddingDate)} </Text>
             </>
           ) : (
-            <Button style={{ marginBottom: 20 }} onPress={() => console.log("")}>
+            <Button style={{ marginBottom: 20 }} onPress={() => setWeddingDateVisible(true)}>
               <Text style={{ fontSize: 12, fontWeight: "bold" }}>결혼 예정일 등록하기</Text>
             </Button>
           )}
@@ -118,7 +133,17 @@ const CheckListsScreen = () => {
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
 
-      <FloatingButton onPress={() => console.log()}></FloatingButton>
+      <FloatingButton
+        onPress={() => navigation.navigate("EditCheckList", { checkListId: undefined, isFromCategory: false })}
+      ></FloatingButton>
+
+      <SelectDateModal
+        title="결혼 예정일 등록하기"
+        visible={weddingDateVisible}
+        dateValue={weddingDate}
+        onDateChange={setWeddingDate}
+        hideModal={() => setWeddingDateVisible(false)}
+      ></SelectDateModal>
     </WhiteSafeAreaView>
   );
 };

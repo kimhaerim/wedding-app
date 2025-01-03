@@ -9,3 +9,14 @@ export type RootStackParamList = {
   CategoryLists: undefined;
   Home: undefined;
 };
+
+export type CategoryStackParamList = {
+  CategoryHome: undefined;
+  EditCategory: { categoryId?: number; categoryTitle?: string };
+  EditCheckList: { checkListId?: number; isFromCategory: boolean };
+};
+
+export type CheckListStackParamList = {
+  CheckLists: undefined;
+  EditCheckList: { checkListId?: number; isFromCategory: boolean };
+};

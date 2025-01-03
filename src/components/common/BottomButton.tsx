@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const BOTTOM_APPBAR_HEIGHT = 80;
+const BOTTOM_APPBAR_HEIGHT = 50;
 
 interface ButtonProps {
   label: string;
@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
     backgroundColor: "aquamarine",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
     left: 0,
     right: 0,
     bottom: 0,
   },
   buttonStyle: {
+    height: 40,
     width: "90%",
     borderRadius: 12,
   },

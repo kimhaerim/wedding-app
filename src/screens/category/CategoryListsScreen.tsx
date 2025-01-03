@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { ICategory } from "../../interface/category.interface";
 import { Divider, Text } from "react-native-paper";
@@ -10,6 +10,10 @@ import ShadowView from "../../components/common/ShadowView";
 import { formatCurrency } from "../../common/util";
 import CustomMenu from "../../components/common/Menu";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import FloatingButton from "../../components/common/FloatingButton";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CategoryStackParamList, RootStackParamList } from "../../navigation/types";
+import { RouteProp } from "@react-navigation/native";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -22,7 +26,14 @@ const defaultCategories = [
   "🌅 스냅 촬영",
 ];
 
-const CategoryListsScreen = () => {
+type CategoryListsNavigationProp = StackNavigationProp<CategoryStackParamList, "CategoryHome">;
+type CategoryListsRouteProp = RouteProp<CategoryStackParamList, "CategoryHome">;
+
+interface CategoryListsScreenProps {
+  navigation: CategoryListsNavigationProp;
+  route: CategoryListsRouteProp;
+}
+const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
   const [userCategories, setUserCategories] = useState<ICategory[]>(categoryMockData);
 
   const [page, setPage] = useState<number>(0);
@@ -46,6 +57,13 @@ const CategoryListsScreen = () => {
         break;
     }
   };
+
+  const handleDefaultCategoryOnPress = useCallback(
+    (category: string) => {
+      navigation.navigate("EditCategory", { categoryId: undefined, categoryTitle: category });
+    },
+    [navigation]
+  );
 
   const loadMoreData = () => {
     setPage((prevPage) => prevPage + 1);
@@ -73,7 +91,7 @@ const CategoryListsScreen = () => {
             <CategoryButton
               key={category}
               isPressed={true}
-              onPress={() => console.log(category)}
+              onPress={() => handleDefaultCategoryOnPress(category)}
               label={category}
             ></CategoryButton>
           ))}
@@ -116,6 +134,10 @@ const CategoryListsScreen = () => {
           />
         </View>
       </View>
+
+      <FloatingButton
+        onPress={() => navigation.navigate("EditCategory", { categoryId: undefined, categoryTitle: undefined })}
+      />
 
       <ConfirmModal
         title="카테고리를 정말 삭제하시겠습니까?"

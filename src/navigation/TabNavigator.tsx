@@ -6,6 +6,8 @@ import BudgetScreen from "../screens/cost/Budget";
 import MyPageScreen from "../screens/my-page/MyPageScreen";
 import { Icon, Text } from "react-native-paper";
 import { Color } from "../enum";
+import CategoryNavigator from "./CategoryNavigator";
+import CheckListNavigator from "./CheckListNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,15 +31,26 @@ export default function TabNavigator() {
     >
       <Tab.Screen
         name="checkLists"
-        component={CheckListsScreen}
+        component={CheckListNavigator}
         options={{
           tabBarIcon: ({ size, focused }) => <Icon source="check-circle" size={size} color={getTabBarStyle(focused)} />,
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: getTabBarStyle(focused), fontSize: 10, marginTop: 2 }}>체크리스트</Text>
           ),
-          headerTitle: "체크리스트",
+          headerShown: false,
         }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "checkLists" }],
+            });
+          },
+        })}
       />
+
       <Tab.Screen
         name="Calendar"
         component={CalendarScreen}
@@ -49,17 +62,29 @@ export default function TabNavigator() {
           headerTitle: "캘린더",
         }}
       />
+
       <Tab.Screen
         name="CategoryLists"
-        component={CategoryListsScreen}
+        component={CategoryNavigator}
         options={{
           tabBarIcon: ({ size, focused }) => <Icon source="folder" size={size} color={getTabBarStyle(focused)} />,
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: getTabBarStyle(focused), fontSize: 10, marginTop: 2 }}>카테고리</Text>
           ),
-          headerTitle: "카테고리",
+          headerShown: false,
         }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "CategoryLists" }],
+            });
+          },
+        })}
       />
+
       <Tab.Screen
         name="예산 / 지출"
         component={BudgetScreen}
@@ -71,6 +96,7 @@ export default function TabNavigator() {
           headerTitle: "예산 / 지출",
         }}
       />
+
       <Tab.Screen
         name="마이페이지"
         component={MyPageScreen}

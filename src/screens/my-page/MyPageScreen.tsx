@@ -11,6 +11,7 @@ import Row from "../../components/common/Row";
 import { Color, Gender } from "../../enum";
 // import SelectDateModal from "../../modal/SelectDateModal";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import SelectDateModal from "../../modal/SelectDateModal";
 
 const MyPageScreen = () => {
   const today = dayjs();
@@ -115,7 +116,7 @@ const MyPageScreen = () => {
         </View>
       </View>
 
-      {/* <SelectDateModal
+      <SelectDateModal
         title="기념일 등록하기"
         visible={coupleStartDateVisible}
         dateValue={coupleStartDate}
@@ -123,12 +124,12 @@ const MyPageScreen = () => {
         hideModal={() => setCoupleStartDateVisible(false)}
       ></SelectDateModal>
       <SelectDateModal
-        title="결혼예정일 등록하기"
+        title="결혼 예정일 등록하기"
         visible={weddingDateVisible}
         dateValue={weddingDate}
         onDateChange={setWeddingDate}
         hideModal={() => setWeddingDateVisible(false)}
-      ></SelectDateModal> */}
+      ></SelectDateModal>
     </WhiteSafeAreaView>
   );
 };
