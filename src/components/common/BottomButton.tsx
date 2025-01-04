@@ -24,7 +24,6 @@ const BottomButton: React.FC<ButtonProps> = (props) => {
           backgroundColor: Color.WHITE,
         },
       ]}
-      safeAreaInsets={{ bottom }}
     >
       <Button
         mode="contained"
@@ -41,6 +40,7 @@ const BottomButton: React.FC<ButtonProps> = (props) => {
 
 const styles = StyleSheet.create({
   bottom: {
+    position: "absolute", // 화면의 하단에 고정
     backgroundColor: "aquamarine",
     alignItems: "center",
     justifyContent: "center",

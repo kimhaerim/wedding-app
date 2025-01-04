@@ -17,6 +17,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { checkListMockData } from "../../mock/CheckListMockData";
+import BottomButton from "../../components/common/BottomButton";
+import BudgetDetailModal from "../../modal/BudgetDetailModal";
 
 type CheckListNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListDetail">;
 type CheckListRouteProp = RouteProp<CheckListStackParamList, "CheckListDetail">;
@@ -106,60 +108,16 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
           borderColor: Color.BLUE200,
         }}
       >
-        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
-          <Text style={{ fontSize: 14, fontWeight: "bold", color: Color.BLUE }}>
-            예산 / 지출 내역 {isExpanded ? "닫기" : "보기"}
-          </Text>
-        </TouchableOpacity>
-
-        {isExpanded && (
-          <View style={{ margin: 5 }}>
-            {checkList.category && (
-              <BudgetSummaryRow
-                iconSource="cash"
-                label="총 예산"
-                value={checkList.category.budgetAmount}
-              ></BudgetSummaryRow>
-            )}
-
-            <BudgetSummaryRow
-              iconSource="currency-usd"
-              label="총 비용"
-              value={combinedCost.totalCost}
-            ></BudgetSummaryRow>
-
-            <Divider style={{ margin: 5 }} />
-
-            <BudgetSummaryRow
-              iconSource="check-circle"
-              label="결제 금액"
-              value={combinedCost.paidCost}
-            ></BudgetSummaryRow>
-            <BudgetSummaryRow
-              iconSource="clock-outline"
-              label="결제 예정 금액"
-              value={combinedCost.unpaidCost}
-            ></BudgetSummaryRow>
-
-            {checkList.category && (
-              <>
-                <Divider style={{ margin: 5 }} />
-                <BudgetSummaryRow
-                  iconSource="wallet-outline"
-                  label="남은 예산"
-                  value={checkList.category.budgetAmount - combinedCost.totalCost}
-                  valueStyle={{
-                    color: checkList.category.budgetAmount - combinedCost.totalCost < 0 ? Color.RED : Color.BLACK,
-                    fontWeight: "bold",
-                  }}
-                ></BudgetSummaryRow>
-              </>
-            )}
-          </View>
+        {checkList.category && (
+          <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
+            <Text style={{ fontSize: 14, fontWeight: "bold", color: Color.BLUE }}>
+              예산 / 지출 내역 {isExpanded ? "닫기" : "보기"}
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
 
-      <View style={{ margin: 10, marginTop: 0 }}>
+      <View style={{ margin: 10, marginTop: 0, flex: 1 }}>
         <FlatList
           data={checkList.costs}
           keyExtractor={(item) => `${item.id}`}
@@ -178,13 +136,23 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
         />
       </View>
 
+      <BottomButton label="비용 추가" onPress={() => console.log("ddd1")} disabled={false} />
+
       <ConfirmModal
         title="비용 정보를 정말 삭제하시겠습니까?"
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
 
-      <FloatingButton onPress={() => console.log()}></FloatingButton>
+      {checkList.category && (
+        <BudgetDetailModal
+          visible={isExpanded}
+          checkList={checkList}
+          category={checkList.category}
+          combinedCost={combinedCost}
+          hideModal={() => setIsExpanded(false)}
+        />
+      )}
     </WhiteSafeAreaView>
   );
 };

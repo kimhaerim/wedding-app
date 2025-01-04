@@ -14,6 +14,7 @@ import FloatingButton from "../../components/common/FloatingButton";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CategoryStackParamList, RootStackParamList } from "../../navigation/types";
 import { RouteProp } from "@react-navigation/native";
+import BottomButton from "../../components/common/BottomButton";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -43,19 +44,22 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
       case "view":
-        console.log("상세 보기", id);
+        navigation.push("CategoryDetail", { id });
         break;
+
       case "edit":
-        console.log("수정", id);
+        navigation.push("EditCategory", { categoryId: id });
         break;
+
       case "delete":
-        console.log("삭제", id);
         setRemoveModalVisible(true);
-        setCategoryId(undefined);
+
         break;
       default:
         break;
     }
+
+    setCategoryId(undefined);
   };
 
   const handleDefaultCategoryOnPress = useCallback(
@@ -101,7 +105,7 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
 
         <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 30, marginBottom: 10 }}>추가된 카테고리 목록</Text>
 
-        <View>
+        <View style={{ flex: 1 }}>
           <FlatList
             data={userCategories}
             keyExtractor={(item) => `${item.id}`}
@@ -135,9 +139,7 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
         </View>
       </View>
 
-      <FloatingButton
-        onPress={() => navigation.navigate("EditCategory", { categoryId: undefined, categoryTitle: undefined })}
-      />
+      <BottomButton label="카테고리 추가" disabled={false} onPress={() => console.log("ddd")} />
 
       <ConfirmModal
         title="카테고리를 정말 삭제하시겠습니까?"

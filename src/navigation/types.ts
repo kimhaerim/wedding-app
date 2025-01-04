@@ -12,6 +12,7 @@ export type RootStackParamList = {
 
 export type CategoryStackParamList = {
   CategoryHome: undefined;
+  CategoryDetail: { id: number };
   EditCategory: { categoryId?: number; categoryTitle?: string };
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
 };
@@ -26,7 +27,7 @@ export type CalendarStackParamList = {
   CalendarHome: undefined;
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
   CheckListDetail: { id: number };
-  EditCost: { id: number };
+  EditCost: { id?: number };
 };
 
 export type MyPageStackParamList = {

@@ -4,6 +4,7 @@ import EditCategoryScreen from "../screens/category/EditCategoryScreen";
 import CategoryListsScreen from "../screens/category/CategoryListsScreen";
 import { Color } from "../enum";
 import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
+import CategoryScreen from "../screens/category/CategoryScreen";
 
 const Stack = createStackNavigator<CategoryStackParamList>();
 
@@ -24,13 +25,15 @@ const CategoryNavigator = () => {
         component={CategoryListsScreen}
         options={{ ...defaultOptions, headerTitle: "카테고리" }}
       />
+
       <Stack.Screen
-        name="EditCategory"
-        component={EditCategoryScreen}
-        options={({ navigation }) => ({
-          ...defaultOptions,
-        })}
+        name="CategoryDetail"
+        component={CategoryScreen}
+        options={{ ...defaultOptions, headerTitle: "카테고리 상세" }}
       />
+
+      <Stack.Screen name="EditCategory" component={EditCategoryScreen} options={defaultOptions} />
+
       <Stack.Screen name="EditCheckList" component={EditCheckListScreen} options={defaultOptions} />
     </Stack.Navigator>
   );

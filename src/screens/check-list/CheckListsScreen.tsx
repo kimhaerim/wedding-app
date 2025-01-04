@@ -16,6 +16,7 @@ import SelectDateModal from "../../modal/SelectDateModal";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CheckListStackParamList } from "../../navigation/types";
 import { RouteProp, useNavigation } from "@react-navigation/native";
+import BottomButton from "../../components/common/BottomButton";
 
 type CheckListsNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListsHome">;
 type CheckListsRouteProp = RouteProp<CheckListStackParamList, "CheckListsHome">;
@@ -98,22 +99,25 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
           )}
         </View>
 
-        <ScrollView horizontal={true} style={{ width: "100%" }}>
-          {userCategories.map((category) => (
+        <FlatList
+          data={userCategories}
+          keyExtractor={(item) => `category-${item.id}`}
+          renderItem={({ item }) => (
             <CategoryButton
-              key={category.id}
-              label={category.category}
-              isPressed={category.id === selectedCategory}
-              onPress={() => setSelectedCategory(category.id)}
+              key={item.id}
+              label={item.category}
+              isPressed={item.id === selectedCategory}
+              onPress={() => setSelectedCategory(item.id)}
             ></CategoryButton>
-          ))}
-        </ScrollView>
+          )}
+          horizontal={true}
+        />
       </View>
 
-      <View style={{ height: "100%", margin: 10 }}>
+      <View style={{ flex: 1, margin: 10 }}>
         <FlatList
           data={checkLists}
-          keyExtractor={(item) => `${item.id}`}
+          keyExtractor={(item) => `checkList-${item.id}`}
           renderItem={({ item }) => (
             <ShadowView>
               <CheckListItem
@@ -129,6 +133,8 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
         />
       </View>
 
+      <BottomButton label="체크리스트 추가" disabled={false} onPress={() => console.log("ddd")} />
+
       <ConfirmModal
         title="체크리스트를 정말 삭제하시겠습니까?"
         description="비용 정보도 모두 삭제됩니다."
@@ -136,9 +142,9 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
 
-      <FloatingButton
+      {/* <FloatingButton
         onPress={() => navigation.navigate("EditCheckList", { checkListId: undefined, isFromCategory: false })}
-      ></FloatingButton>
+      ></FloatingButton> */}
 
       <SelectDateModal
         title="결혼 예정일 등록하기"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import BackButton from "../../components/common/BackButton";
 import { ICategory } from "../../interface/category.interface";
 import { Color } from "../../enum";
@@ -14,8 +14,22 @@ import { checkListMockData } from "../../mock/CheckListMockData";
 import { formatCurrency } from "../../common/util";
 import { ICostByCheckList } from "../../interface/cost.interface";
 import FloatingButton from "../../components/common/FloatingButton";
+import { CategoryStackParamList } from "../../navigation/types";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
-const CategoryScreen = () => {
+type CategoryNavigationProp = StackNavigationProp<CategoryStackParamList, "CategoryDetail">;
+type CategoryRouteProp = RouteProp<CategoryStackParamList, "CategoryDetail">;
+
+interface CategoryScreenProps {
+  navigation: CategoryNavigationProp;
+  route: CategoryRouteProp;
+}
+
+const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) => {
+  const { id } = route.params;
+
   const checkListCount = 1;
 
   const [category, setCategory] = useState<ICategory>({
@@ -56,23 +70,9 @@ const CategoryScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <BackButton label={"카테고리"} onPress={() => console.log("뒤로 가기")} />
-
+    <WhiteSafeAreaView>
       <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: Color.BLUE100,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: 20 }}>📸</Text>
-        </View>
-        <View style={{ marginLeft: 10 }}>
+        <View>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>{category.title}</Text>
         </View>
         <Text style={{ marginLeft: 10, fontSize: 10 }}>{`${checkListCount}개`}</Text>
@@ -162,7 +162,7 @@ const CategoryScreen = () => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-    </SafeAreaView>
+    </WhiteSafeAreaView>
   );
 };
 

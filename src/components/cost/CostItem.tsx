@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { ICost } from "../../interface/check-list.interface";
 
 import CustomMenu from "../common/Menu";
-import { Color } from "../../enum";
+import { Color, CostType } from "../../enum";
 import { Divider } from "react-native-paper";
 import { convertDateToString, covertCostType, formatCurrency } from "../../common/util";
 import Badge from "../common/Badge";
@@ -19,7 +19,7 @@ const CostItem: React.FC<CostItemProps> = ({ item, costId, onMenuButtonPress, on
   return (
     <View style={{ marginTop: 10 }}>
       <Badge
-        backgroundColor={item.paymentDate ? Color.BLUE : Color.DARK_GRAY}
+        backgroundColor={item.costType === CostType.BASE ? Color.BLUE : Color.DARK_GRAY}
         label={covertCostType(item.costType)}
         labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
       ></Badge>

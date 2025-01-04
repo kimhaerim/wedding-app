@@ -23,7 +23,9 @@ const CheckListNavigator = () => {
         component={CheckListsScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트" }}
       />
+
       <Stack.Screen name="EditCheckList" component={EditCheckListScreen} options={{ ...defaultOptions }} />
+
       <Stack.Screen
         name="CheckListDetail"
         component={CheckListScreen}

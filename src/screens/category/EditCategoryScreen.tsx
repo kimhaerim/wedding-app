@@ -17,6 +17,7 @@ interface EditCategoryScreenProps {
   navigation: EditCategoryNavigationProp;
   route: EditCategoryRouteProp;
 }
+
 const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
   const { categoryId, categoryTitle } = route.params;
 
