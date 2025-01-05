@@ -11,20 +11,17 @@ import { CalendarStackParamList } from "../../navigation/types";
 import { RouteProp } from "@react-navigation/native";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
-type EditCostNavigationProp = StackNavigationProp<CalendarStackParamList, "EditCost">;
-type EditCostRouteProp = RouteProp<CalendarStackParamList, "EditCost">;
-
 interface EditCostScreenProps {
-  navigation: EditCostNavigationProp;
-  route: EditCostRouteProp;
+  navigation: StackNavigationProp<CalendarStackParamList, "EditCost">;
+  route: RouteProp<CalendarStackParamList, "EditCost">;
 }
 
 const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) => {
-  const { id } = route.params;
+  const { costId } = route.params;
 
   useLayoutEffect(() => {
-    navigation.setOptions({ headerTitle: id ? "비용 수정" : "비용 저장" });
-  }, [navigation, id]);
+    navigation.setOptions({ headerTitle: costId ? "비용 수정" : "비용 저장" });
+  }, [navigation, costId]);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
 

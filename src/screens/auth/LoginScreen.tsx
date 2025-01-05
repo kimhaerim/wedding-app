@@ -2,17 +2,21 @@ import React from "react";
 
 import { Color } from "../../enum";
 import { Button, Text } from "react-native-paper";
-import { SafeAreaView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/types";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+type LoginNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+type LoginRouteProp = RouteProp<RootStackParamList, "Login">;
 
-const LoginScreen = () => {
-  const navigation = useNavigation<LoginScreenNavigationProp>();
+interface LoginScreenProps {
+  navigation: LoginNavigationProp;
+  route: LoginRouteProp;
+  setIsLoggedIn: () => void;
+}
 
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation, setIsLoggedIn }) => {
   return (
     <WhiteSafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
       <Text variant="titleSmall" style={{ textAlign: "center", marginBottom: 10 }}>
@@ -39,7 +43,7 @@ const LoginScreen = () => {
       </Button>
       <Button
         mode="contained"
-        onPress={() => navigation.navigate("EmailLogin")}
+        onPress={() => navigation.navigate("EmailLogin", { setIsLoggedIn })}
         buttonColor={Color.WHITE}
         textColor="#191919"
         style={{

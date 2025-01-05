@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-import BackButton from "../../components/common/BackButton";
 import { Color } from "../../enum";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import InputText from "../../components/common/InputText";
 import { Button } from "react-native-paper";
 import BottomButton from "../../components/common/BottomButton";
@@ -17,13 +16,13 @@ const enum EmailLoginField {
 }
 
 type EmailLoginScreenProps = {
-  setIsLoggedIn: (loggedIn: boolean) => void;
-  route: RouteProp<RootStackParamList, "EmailLogin">; // 'EmailLogin'의 route 정보
-  navigation: StackNavigationProp<RootStackParamList, "EmailLogin">; // 'EmailLogin'을 위한 navigation 정보
+  route: RouteProp<RootStackParamList, "EmailLogin">;
+  navigation: StackNavigationProp<RootStackParamList, "EmailLogin">;
 };
 
-const EmailLoginScreen = ({ route, setIsLoggedIn, navigation }: EmailLoginScreenProps) => {
-  const [email, setEmail] = useState("");
+const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
+  const { setIsLoggedIn } = route.params;
+  const [email, setEmail] = useState<string | undefined>(undefined);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
 
@@ -92,7 +91,8 @@ const EmailLoginScreen = ({ route, setIsLoggedIn, navigation }: EmailLoginScreen
           onChangeText={(value) => handleInputChange(EmailLoginField.EMAIL, value)}
           error={!isEmailValid}
           errorMessage={emailErrorMessage}
-          value={email}
+          placeholder="wedding@gmail.com"
+          value={email || ""}
         ></InputText>
         <InputText
           label="비밀번호 *"

@@ -1,12 +1,20 @@
 import React from "react";
 
 import { Color } from "../../enum";
-import { SafeAreaView, View } from "react-native";
-import CancelButton from "../../components/common/CancelButton";
+import { View } from "react-native";
+
 import { Button, Text } from "react-native-paper";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/types";
+import { RouteProp } from "@react-navigation/native";
 
-const ConfirmSignupScreen = () => {
+interface ConfirmSignupProps {
+  navigation: StackNavigationProp<RootStackParamList, "ConfirmSignup">;
+  route: RouteProp<RootStackParamList, "ConfirmSignup">;
+}
+
+const ConfirmSignupScreen: React.FC<ConfirmSignupProps> = () => {
   return (
     <WhiteSafeAreaView style={{ flex: 1 }}>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>

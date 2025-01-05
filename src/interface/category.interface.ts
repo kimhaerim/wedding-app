@@ -20,4 +20,6 @@ export interface IUpdateCategory {
 
 export interface ICategoryBudgetAmount {
   totalBudgetAmount: number;
+  paidBudgetAmount: number;
+  unpaidBudgetAmount: number;
 }

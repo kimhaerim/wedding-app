@@ -17,24 +17,19 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { checkListMockData } from "../../mock/CheckListMockData";
-import BottomButton from "../../components/common/BottomButton";
+
 import BudgetDetailModal from "../../modal/BudgetDetailModal";
-import Button from "../../components/common/Button";
-import Row from "../../components/common/Row";
+
 import EditDeleteButtons from "../../components/common/EditDeleteButtons";
 
-type CheckListNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListDetail">;
-type CheckListRouteProp = RouteProp<CheckListStackParamList, "CheckListDetail">;
-
 interface CheckListScreenProps {
-  navigation: CheckListNavigationProp;
-  route: CheckListRouteProp;
+  navigation: StackNavigationProp<CheckListStackParamList, "CheckListDetail" | "EditCheckList" | "CostDetail">;
+  route: RouteProp<CheckListStackParamList, "CheckListDetail">;
 }
 
 const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) => {
-  const { id } = route.params;
+  const { checkListId } = route.params;
 
-  const [costId, setCostId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
   const [checkList, setCheckList] = useState<ICheckList>(checkListMockData[0]);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
@@ -46,24 +41,6 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) 
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [removeCheckListModalVisible, setRemoveCheckListModalVisible] = useState<boolean>(false);
-
-  const handleMenuItemPress = (action: string, id: number) => {
-    switch (action) {
-      case "view":
-        console.log("상세 보기", id);
-        break;
-      case "edit":
-        console.log("수정", id);
-        break;
-      case "delete":
-        console.log("삭제", id);
-        setRemoveModalVisible(true);
-        setCostId(undefined);
-        break;
-      default:
-        break;
-    }
-  };
 
   const loadMoreData = () => {
     setPage((prevPage) => prevPage + 1);
@@ -105,7 +82,7 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) 
       <EditDeleteButtons
         onEditButtonPress={() =>
           navigation.navigate("EditCheckList", {
-            checkListId: id,
+            checkListId,
             isFromCategory: checkList.category ? true : false,
           })
         }
@@ -140,12 +117,9 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) 
             <ShadowView>
               <CostItem
                 item={item}
-                costId={costId}
                 onCostPress={() => {
-                  // navigation.navigate("CostDetail", { id: item.id });
+                  navigation.navigate("CostDetail", { costId: item.id });
                 }}
-                onMenuButtonPress={() => setCostId(item.id)}
-                onMenuItemPress={handleMenuItemPress}
               />
             </ShadowView>
           )}

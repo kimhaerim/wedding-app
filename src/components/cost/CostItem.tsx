@@ -10,13 +10,10 @@ import Badge from "../common/Badge";
 
 interface CostItemProps {
   item: ICost;
-  costId: number | undefined;
   onCostPress: () => void;
-  onMenuButtonPress: (id: number | undefined) => void;
-  onMenuItemPress: (action: string, id: number) => void;
 }
 
-const CostItem: React.FC<CostItemProps> = ({ item, costId, onCostPress, onMenuItemPress }) => {
+const CostItem: React.FC<CostItemProps> = ({ item, onCostPress }) => {
   return (
     <TouchableOpacity style={{ marginTop: 10 }} onPress={onCostPress}>
       <Badge
@@ -27,15 +24,7 @@ const CostItem: React.FC<CostItemProps> = ({ item, costId, onCostPress, onMenuIt
 
       <View style={styles.costListRow}>
         {item.title && <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>}
-        {/* <View style={styles.menuContainer}> */}
         <Text>{formatCurrency(item.amount)}</Text>
-        {/* <CustomMenu
-            visible={costId === item.id}
-            onButtonPress={() => onMenuButtonPress(item.id)}
-            onDismiss={() => onMenuButtonPress(undefined)}
-            onMenuItemPress={(action: string) => onMenuItemPress(action, item.id)}
-          /> */}
-        {/* </View> */}
       </View>
 
       <Text style={styles.dateText}> {item.paymentDate ? convertDateToString(item.paymentDate) : "지불 예정"}</Text>

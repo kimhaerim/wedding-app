@@ -26,13 +26,11 @@ const CategoryNavigator = () => {
         component={CategoryListsScreen}
         options={{ ...defaultOptions, headerTitle: "카테고리" }}
       />
-
       <Stack.Screen
         name="CategoryDetail"
         component={CategoryScreen}
         options={{ ...defaultOptions, headerTitle: "카테고리 상세" }}
       />
-
       <Stack.Screen name="EditCategory" component={EditCategoryScreen} options={defaultOptions} />
 
       <Stack.Screen
@@ -40,7 +38,6 @@ const CategoryNavigator = () => {
         component={CheckListScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트" }}
       />
-
       <Stack.Screen name="EditCheckList" component={EditCheckListScreen} options={defaultOptions} />
     </Stack.Navigator>
   );

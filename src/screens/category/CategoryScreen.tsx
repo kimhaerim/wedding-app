@@ -24,19 +24,16 @@ import EditDeleteButtons from "../../components/common/EditDeleteButtons";
 import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
 import BudgetSummary from "../../components/cost/BudgetSummary";
 
-type CategoryNavigationProp = StackNavigationProp<
-  CategoryStackParamList,
-  "CategoryDetail" | "EditCategory" | "CheckListDetail"
->;
-type CategoryRouteProp = RouteProp<CategoryStackParamList, "CategoryDetail" | "EditCategory" | "CheckListDetail">;
-
 interface CategoryScreenProps {
-  navigation: CategoryNavigationProp;
-  route: CategoryRouteProp;
+  navigation: StackNavigationProp<
+    CategoryStackParamList,
+    "CategoryDetail" | "EditCategory" | "CheckListDetail" | "EditCheckList"
+  >;
+  route: RouteProp<CategoryStackParamList, "CategoryDetail">;
 }
 
 const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) => {
-  const { id } = route.params;
+  const { categoryId } = route.params;
 
   const checkListCount = 1;
 
@@ -63,10 +60,12 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
       case "view":
-        navigation.navigate("CheckListDetail", { id });
+        navigation.navigate("CheckListDetail", { checkListId: id });
         break;
       case "edit":
         console.log("수정", id);
+        navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: true });
+
         break;
       case "delete":
         console.log("삭제", id);
@@ -81,9 +80,9 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
   };
 
   const handleEditButtonPress = useCallback(() => {
-    console.log(id, category.title);
-    navigation.navigate("EditCategory", { id: id, title: category.title });
-  }, [id]);
+    console.log(categoryId, category.title);
+    navigation.navigate("EditCategory", { categoryId });
+  }, [categoryId]);
 
   return (
     <WhiteSafeAreaView>

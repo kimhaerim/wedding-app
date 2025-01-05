@@ -19,7 +19,6 @@ const CalendarScreen: React.FC = () => {
   const [selected, setSelected] = useState(today.toISOString().split("T")[0]);
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth() + 1);
-  const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
   const [checkLists, setCheckLists] = useState<ICheckList[]>(checkListMockData);
   const [costs, setCosts] = useState<ICost[]>(costsMockData);
@@ -69,7 +68,6 @@ const CalendarScreen: React.FC = () => {
       }
     });
 
-    console.log(result);
     return result;
   }, [checkLists, costs]);
 

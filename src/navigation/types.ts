@@ -12,23 +12,24 @@ export type RootStackParamList = {
 
 export type CategoryStackParamList = {
   CategoryHome: undefined;
-  CategoryDetail: { id: number };
-  EditCategory: { id?: number; title?: string };
-  CheckListDetail: { id: number };
+  CategoryDetail: { categoryId: number };
+  EditCategory: { categoryId?: number; categoryTitle?: string };
+  CheckListDetail: { checkListId: number };
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
 };
 
 export type CheckListStackParamList = {
   CheckListsHome: undefined;
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
-  CheckListDetail: { id: number };
+  CheckListDetail: { checkListId: number };
+  CostDetail: { costId: number };
 };
 
 export type CalendarStackParamList = {
   CalendarHome: undefined;
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
-  CheckListDetail: { id: number };
-  EditCost: { id?: number };
+  CheckListDetail: { checkListId: number };
+  EditCost: { costId?: number };
 };
 
 export type MyPageStackParamList = {

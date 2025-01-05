@@ -5,7 +5,6 @@ import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
 import CheckListsScreen from "../screens/check-list/CheckListsScreen";
 import { StyleSheet } from "react-native";
 import CheckListScreen from "../screens/check-list/CheckListScreen";
-import CalendarScreen from "../screens/calendar/CalendarScreen";
 
 const Stack = createStackNavigator<CheckListStackParamList>();
 
@@ -29,7 +28,7 @@ const CheckListNavigator = () => {
       <Stack.Screen
         name="CheckListDetail"
         component={CheckListScreen}
-        options={{ ...defaultOptions, headerTitle: "체크리스트" }}
+        options={{ ...defaultOptions, headerTitle: "체크리스트 상세" }}
       />
     </Stack.Navigator>
   );

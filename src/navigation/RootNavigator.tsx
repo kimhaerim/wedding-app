@@ -1,4 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackParamList } from "./types";
 import { Color } from "../enum";
@@ -55,9 +54,7 @@ const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boolean) =
           headerLeft: () => <IconButton icon="close" size={20} onPress={() => navigation.navigate("Login")} />,
         })}
       />
-      <Stack.Screen name="EmailLogin" initialParams={{ setIsLoggedIn }}>
-        {(props) => <EmailLoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
-      </Stack.Screen>
+      <Stack.Screen name="EmailLogin" initialParams={{ setIsLoggedIn }} component={EmailLoginScreen} />
 
       <Stack.Screen name="CategoryLists" component={TabNavigator} options={{ headerShown: false }} />
     </Stack.Navigator>

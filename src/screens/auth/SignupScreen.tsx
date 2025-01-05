@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from "react";
-import BackButton from "../../components/common/BackButton";
-import { SafeAreaView, View } from "react-native";
+
+import { View } from "react-native";
 import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/types";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 
 const enum SignupField {
   EMAIL = "email",
@@ -20,9 +20,12 @@ interface SignupData {
   confirmPassword: string | undefined;
 }
 
-type SignupNavigationProp = StackNavigationProp<RootStackParamList, "Signup">;
+interface SignupScreenProps {
+  navigation: StackNavigationProp<RootStackParamList, "Signup">;
+  route: RouteProp<RootStackParamList, "Signup">;
+}
 
-const SignupScreen = ({ navigation }: { navigation: SignupNavigationProp }) => {
+const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
   const [formData, setFormData] = useState<SignupData>({
     email: undefined,
     password: undefined,

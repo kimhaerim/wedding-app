@@ -10,25 +10,22 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { CategoryStackParamList } from "../../navigation/types";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
 
-type EditCategoryNavigationProp = StackNavigationProp<CategoryStackParamList, "EditCategory">;
-type EditCategoryRouteProp = RouteProp<CategoryStackParamList, "EditCategory">;
-
 interface EditCategoryScreenProps {
-  navigation: EditCategoryNavigationProp;
-  route: EditCategoryRouteProp;
+  navigation: StackNavigationProp<CategoryStackParamList, "EditCategory">;
+  route: RouteProp<CategoryStackParamList, "EditCategory">;
 }
 
 const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
-  const { id, title } = route.params;
+  const { categoryId, categoryTitle } = route.params;
 
   useLayoutEffect(() => {
-    navigation.setOptions({ headerTitle: id ? "카테고리 수정" : "카테고리 저장" });
-  }, [navigation, id]);
+    navigation.setOptions({ headerTitle: categoryId ? "카테고리 수정" : "카테고리 저장" });
+  }, [navigation, categoryId]);
 
-  const isEdit = id ? true : false;
+  const isEdit = categoryId ? true : false;
   const [category, setCategory] = useState<IAddCategory | IUpdateCategory | undefined>(undefined);
 
-  const [inputTitle, setInputTitle] = useState<string>(category ? category.title : title ? title : "");
+  const [inputTitle, setInputTitle] = useState<string>(category ? category.title : categoryTitle ? categoryTitle : "");
   const [inputAmountBudget, setInputAmountBudget] = useState<number>(category ? category.budgetAmount : 0);
 
   const [showExitModal, setShowExitModal] = useState<boolean>(false);
@@ -52,7 +49,7 @@ const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, rou
           label={"카테고리 이름 *"}
           placeholder="ex. 웨딩홀, 본식DVD 등"
           value={inputTitle}
-          defaultValue={category ? category.title : title ? title : undefined}
+          defaultValue={category ? category.title : categoryTitle ? categoryTitle : undefined}
           onChangeText={setInputTitle}
           error={inputTitle.length === 0}
           errorMessage="이름을 입력하세요."

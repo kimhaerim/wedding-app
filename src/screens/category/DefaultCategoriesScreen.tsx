@@ -7,10 +7,14 @@ import CategoryButton from "../../components/category/CategoryButton";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/types";
+import { RouteProp } from "@react-navigation/native";
 
-type DefaultCategoriesNavigationProp = StackNavigationProp<RootStackParamList, "DefaultCategories">;
+interface DefaultCategoriesProps {
+  navigation: StackNavigationProp<RootStackParamList, "DefaultCategories">;
+  route: RouteProp<RootStackParamList, "DefaultCategories">;
+}
 
-const DefaultCategoriesScreen = ({ navigation }: { navigation: DefaultCategoriesNavigationProp }) => {
+const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navigation }) => {
   const defaultCategories = [
     "🏩 웨딩홀",
     "📸 스튜디오",

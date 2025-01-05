@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import React, { useState } from "react";
 import { ICheckList, ICouple } from "../../interface";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
-import { FlatList, ScrollView, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { Text } from "react-native-paper";
 import { calculateDday, convertDateToString } from "../../common/util";
 import Button from "../../components/common/Button";
@@ -16,14 +16,10 @@ import SelectDateModal from "../../modal/SelectDateModal";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CheckListStackParamList } from "../../navigation/types";
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import BottomButton from "../../components/common/BottomButton";
-
-type CheckListsNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListsHome">;
-type CheckListsRouteProp = RouteProp<CheckListStackParamList, "CheckListsHome">;
 
 interface CheckListsScreenProps {
-  navigation: CheckListsNavigationProp;
-  route: CheckListsRouteProp;
+  navigation: StackNavigationProp<CheckListStackParamList, "CheckListsHome">;
+  route: RouteProp<CheckListStackParamList, "CheckListsHome">;
 }
 
 const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
@@ -45,13 +41,14 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
   };
 
   const handleMenuItemPress = (action: string, id: number) => {
+    const checkListId = id;
     switch (action) {
       case "view":
-        navigation.push("CheckListDetail", { id });
+        navigation.push("CheckListDetail", { checkListId });
         break;
 
       case "edit":
-        navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: false });
+        navigation.navigate("EditCheckList", { checkListId, isFromCategory: false });
         break;
 
       case "delete":

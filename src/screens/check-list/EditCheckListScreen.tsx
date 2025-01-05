@@ -14,12 +14,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { CheckListStackParamList } from "../../navigation/types";
 import { RouteProp } from "@react-navigation/native";
 
-type EditCheckListNavigationProp = StackNavigationProp<CheckListStackParamList, "EditCheckList">;
-type EditCheckListRouteProp = RouteProp<CheckListStackParamList, "EditCheckList">;
-
 interface EditCheckListScreenProps {
-  navigation: EditCheckListNavigationProp;
-  route: EditCheckListRouteProp;
+  navigation: StackNavigationProp<CheckListStackParamList, "EditCheckList">;
+  route: RouteProp<CheckListStackParamList, "EditCheckList">;
 }
 
 const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, route }) => {
@@ -46,7 +43,6 @@ const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, r
     backgroundColor: Color.BLUE100,
   };
 
-  // Form Item 컴포넌트 반환 함수
   const renderFormItems = () => {
     return [
       {
@@ -136,7 +132,7 @@ const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, r
           </>
         ),
       },
-    ].filter((item) => item !== false && item !== null && item !== undefined); // false, null, undefined 제거
+    ].filter((item) => item !== false && item !== null && item !== undefined);
   };
 
   return (

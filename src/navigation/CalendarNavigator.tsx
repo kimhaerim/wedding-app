@@ -1,8 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { CalendarStackParamList, CheckListStackParamList } from "./types";
+import { CalendarStackParamList } from "./types";
 import { Color } from "../enum";
 import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
-import CheckListsScreen from "../screens/check-list/CheckListsScreen";
 import { StyleSheet } from "react-native";
 import CheckListScreen from "../screens/check-list/CheckListScreen";
 import CalendarScreen from "../screens/calendar/CalendarScreen";
@@ -33,11 +32,6 @@ const CalendarNavigator = () => {
       />
 
       <Stack.Screen name="EditCost" component={EditCostScreen} options={{ ...defaultOptions }} />
-      {/* <Stack.Screen
-        name="CostDetail"
-        component={}
-        options={{ ...defaultOptions, headerTitle: "체크리스트" }}
-      /> */}
     </Stack.Navigator>
   );
 };

@@ -1,9 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import CalendarScreen from "../screens/calendar/CalendarScreen";
-
 import BudgetScreen from "../screens/cost/Budget";
-
 import { Icon, Text } from "react-native-paper";
 import { Color } from "../enum";
 import CategoryNavigator from "./CategoryNavigator";

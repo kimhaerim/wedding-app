@@ -26,12 +26,9 @@ const defaultCategories = [
   "🌅 스냅 촬영",
 ];
 
-type CategoryListsNavigationProp = StackNavigationProp<CategoryStackParamList, "CategoryHome">;
-type CategoryListsRouteProp = RouteProp<CategoryStackParamList, "CategoryHome">;
-
 interface CategoryListsScreenProps {
-  navigation: CategoryListsNavigationProp;
-  route: CategoryListsRouteProp;
+  navigation: StackNavigationProp<CategoryStackParamList, "CategoryHome" | "CategoryDetail">;
+  route: RouteProp<CategoryStackParamList, "CategoryHome">;
 }
 
 const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
@@ -41,32 +38,11 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
   const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
-  const handleMenuItemPress = (action: string, id: number) => {
-    switch (action) {
-      case "view":
-        navigation.push("CategoryDetail", { id });
-        break;
-
-      case "edit":
-        navigation.push("EditCategory", { id });
-        break;
-
-      case "delete":
-        setRemoveModalVisible(true);
-
-        break;
-      default:
-        break;
-    }
-
-    setCategoryId(undefined);
-  };
-
   const renderItem = useCallback(
     (item: ICategory) => {
       return (
         <ShadowView key={item.id}>
-          <TouchableOpacity onPress={() => navigation.navigate("CategoryDetail", { id: item.id })}>
+          <TouchableOpacity onPress={() => navigation.navigate("CategoryDetail", { categoryId: item.id })}>
             <View
               key={item.id}
               style={{
@@ -90,7 +66,7 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
 
   const handleDefaultCategoryOnPress = useCallback(
     (category: string) => {
-      navigation.navigate("EditCategory", { id: undefined, title: category });
+      navigation.navigate("EditCategory", { categoryTitle: category });
     },
     [navigation]
   );

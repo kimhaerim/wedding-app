@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import BackButton from "../../components/common/BackButton";
+
 import { Divider, Text } from "react-native-paper";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import BottomButton from "../../components/common/BottomButton";
 import CheckBox from "../../components/common/CheckBox";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/types";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -15,9 +15,12 @@ const initialAgreements = {
   isTermsAgreed: false,
 };
 
-type AgreeToTermsNavigationProp = StackNavigationProp<RootStackParamList, "AgreeToTerms">;
+interface AgreeToTermsProps {
+  navigation: StackNavigationProp<RootStackParamList, "AgreeToTerms">;
+  route: RouteProp<RootStackParamList, "AgreeToTerms">;
+}
 
-const AgreeToTermsScreen = ({ navigation }: { navigation: AgreeToTermsNavigationProp }) => {
+const AgreeToTermsScreen: React.FC<AgreeToTermsProps> = ({ navigation }) => {
   const [agreements, setAgreements] = useState(initialAgreements);
 
   const toggleAgreement = (agreement: keyof typeof initialAgreements) => {
