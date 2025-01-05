@@ -2,19 +2,18 @@ import { useCallback, useState } from "react";
 
 import { ICategory } from "../../interface/category.interface";
 import { Divider, Text } from "react-native-paper";
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import ConfirmModal from "../../modal/ConfirmModal";
 import CategoryButton from "../../components/category/CategoryButton";
 import { categoryMockData } from "../../mock/CheckListMockData";
 import ShadowView from "../../components/common/ShadowView";
 import { formatCurrency } from "../../common/util";
-import CustomMenu from "../../components/common/Menu";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import FloatingButton from "../../components/common/FloatingButton";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CategoryStackParamList, RootStackParamList } from "../../navigation/types";
 import { RouteProp } from "@react-navigation/native";
 import BottomButton from "../../components/common/BottomButton";
+import FloatingButton from "../../components/common/FloatingButton";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -34,6 +33,7 @@ interface CategoryListsScreenProps {
   navigation: CategoryListsNavigationProp;
   route: CategoryListsRouteProp;
 }
+
 const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
   const [userCategories, setUserCategories] = useState<ICategory[]>(categoryMockData);
 
@@ -61,6 +61,32 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
 
     setCategoryId(undefined);
   };
+
+  const renderItem = useCallback(
+    (item: ICategory) => {
+      return (
+        <ShadowView key={item.id}>
+          <TouchableOpacity onPress={() => navigation.navigate("CategoryDetail", { id: item.id })}>
+            <View
+              key={item.id}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 5,
+                marginBottom: 5,
+              }}
+            >
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>
+            </View>
+            <Text style={{ marginBottom: 5 }}>예산 : {formatCurrency(item.budgetAmount)}</Text>
+            <Text>연결된 체크리스트 : 2개</Text>
+          </TouchableOpacity>
+        </ShadowView>
+      );
+    },
+    [userCategories]
+  );
 
   const handleDefaultCategoryOnPress = useCallback(
     (category: string) => {
@@ -105,41 +131,18 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
 
         <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 30, marginBottom: 10 }}>추가된 카테고리 목록</Text>
 
-        <View style={{ flex: 1 }}>
+        <View>
           <FlatList
             data={userCategories}
             keyExtractor={(item) => `${item.id}`}
-            renderItem={({ item }) => (
-              <ShadowView key={item.id}>
-                <View
-                  key={item.id}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginTop: 5,
-                    marginBottom: 5,
-                  }}
-                >
-                  <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>
-                  <CustomMenu
-                    visible={categoryId === item.id}
-                    onDismiss={() => setCategoryId(undefined)}
-                    onButtonPress={() => setCategoryId(item.id)}
-                    onMenuItemPress={(action: string) => handleMenuItemPress(action, item.id)}
-                  ></CustomMenu>
-                </View>
-                <Text style={{ marginBottom: 5 }}>예산 : {formatCurrency(item.budgetAmount)}</Text>
-                <Text>연결된 체크리스트 : 2개</Text>
-              </ShadowView>
-            )}
+            renderItem={({ item }) => renderItem(item)}
             onEndReached={loadMoreData}
             onEndReachedThreshold={0.5}
           />
         </View>
       </View>
 
-      <BottomButton label="카테고리 추가" disabled={false} onPress={() => console.log("ddd")} />
+      <FloatingButton onPress={() => navigation.navigate("EditCategory", {})} />
 
       <ConfirmModal
         title="카테고리를 정말 삭제하시겠습니까?"

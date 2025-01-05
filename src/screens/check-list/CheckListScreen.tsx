@@ -19,6 +19,8 @@ import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { checkListMockData } from "../../mock/CheckListMockData";
 import BottomButton from "../../components/common/BottomButton";
 import BudgetDetailModal from "../../modal/BudgetDetailModal";
+import Button from "../../components/common/Button";
+import Row from "../../components/common/Row";
 
 type CheckListNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListDetail">;
 type CheckListRouteProp = RouteProp<CheckListStackParamList, "CheckListDetail">;
@@ -28,7 +30,7 @@ interface CheckListScreenProps {
   route: CheckListRouteProp;
 }
 
-const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
+const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) => {
   const { id } = route.params;
 
   const [costId, setCostId] = useState<number | undefined>(undefined);
@@ -41,6 +43,8 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
     unpaidCost: 100000,
   });
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const [removeCheckListModalVisible, setRemoveCheckListModalVisible] = useState<boolean>(false);
 
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
@@ -94,7 +98,32 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
             {convertDateTimeToString(checkList.reservedDate)}
           </Text>
         )}
-        {checkList.memo && <Text style={{ fontSize: 12, marginBottom: 10 }}>{checkList.memo}</Text>}
+        {checkList.memo && <Text style={{ fontSize: 12 }}>{checkList.memo}</Text>}
+      </View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginHorizontal: 10,
+          marginBottom: 10,
+        }}
+      >
+        <Button
+          style={{ width: "50%" }}
+          onPress={() =>
+            navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: checkList.category ? true : false })
+          }
+        >
+          <Text>수정하기</Text>
+        </Button>
+        <Button
+          style={{ width: "50%", marginLeft: 5, backgroundColor: Color.GRAY }}
+          onPress={() => setRemoveCheckListModalVisible(true)}
+        >
+          <Text>삭제하기</Text>
+        </Button>
       </View>
 
       <Divider />
@@ -126,6 +155,9 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
               <CostItem
                 item={item}
                 costId={costId}
+                onCostPress={() => {
+                  // navigation.navigate("CostDetail", { id: item.id });
+                }}
                 onMenuButtonPress={() => setCostId(item.id)}
                 onMenuItemPress={handleMenuItemPress}
               />
@@ -136,12 +168,18 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route }) => {
         />
       </View>
 
-      <BottomButton label="비용 추가" onPress={() => console.log("ddd1")} disabled={false} />
+      <FloatingButton onPress={() => console.log("추가하기 클릭")}></FloatingButton>
 
       <ConfirmModal
         title="비용 정보를 정말 삭제하시겠습니까?"
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
+      ></ConfirmModal>
+
+      <ConfirmModal
+        title="체크리스트 정보를 정말 삭제하시겠습니까?"
+        visible={removeCheckListModalVisible}
+        hideModal={() => setRemoveCheckListModalVisible(false)}
       ></ConfirmModal>
 
       {checkList.category && (

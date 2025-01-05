@@ -19,8 +19,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 
-type CategoryNavigationProp = StackNavigationProp<CategoryStackParamList, "CategoryDetail">;
-type CategoryRouteProp = RouteProp<CategoryStackParamList, "CategoryDetail">;
+type CategoryNavigationProp = StackNavigationProp<CategoryStackParamList, "CategoryDetail" | "CheckListDetail">;
+type CategoryRouteProp = RouteProp<CategoryStackParamList, "CategoryDetail" | "CheckListDetail">;
 
 interface CategoryScreenProps {
   navigation: CategoryNavigationProp;
@@ -54,7 +54,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
       case "view":
-        console.log("상세 보기", id);
+        navigation.navigate("CheckListDetail", { id });
         break;
       case "edit":
         console.log("수정", id);
@@ -62,11 +62,13 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
       case "delete":
         console.log("삭제", id);
         setRemoveModalVisible(true);
-        setCheckListId(undefined);
+
         break;
       default:
         break;
     }
+
+    setCheckListId(undefined);
   };
 
   return (

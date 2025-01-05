@@ -14,6 +14,7 @@ export type CategoryStackParamList = {
   CategoryHome: undefined;
   CategoryDetail: { id: number };
   EditCategory: { categoryId?: number; categoryTitle?: string };
+  CheckListDetail: { id: number };
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
 };
 

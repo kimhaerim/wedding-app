@@ -133,7 +133,7 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
         />
       </View>
 
-      <BottomButton label="체크리스트 추가" disabled={false} onPress={() => console.log("ddd")} />
+      <FloatingButton onPress={() => navigation.navigate("EditCheckList", { isFromCategory: false })}></FloatingButton>
 
       <ConfirmModal
         title="체크리스트를 정말 삭제하시겠습니까?"
@@ -141,10 +141,6 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-
-      {/* <FloatingButton
-        onPress={() => navigation.navigate("EditCheckList", { checkListId: undefined, isFromCategory: false })}
-      ></FloatingButton> */}
 
       <SelectDateModal
         title="결혼 예정일 등록하기"
