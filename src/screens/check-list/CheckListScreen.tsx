@@ -21,6 +21,7 @@ import BottomButton from "../../components/common/BottomButton";
 import BudgetDetailModal from "../../modal/BudgetDetailModal";
 import Button from "../../components/common/Button";
 import Row from "../../components/common/Row";
+import EditDeleteButtons from "../../components/common/EditDeleteButtons";
 
 type CheckListNavigationProp = StackNavigationProp<CheckListStackParamList, "CheckListDetail">;
 type CheckListRouteProp = RouteProp<CheckListStackParamList, "CheckListDetail">;
@@ -101,30 +102,15 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) 
         {checkList.memo && <Text style={{ fontSize: 12 }}>{checkList.memo}</Text>}
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          marginHorizontal: 10,
-          marginBottom: 10,
-        }}
-      >
-        <Button
-          style={{ width: "50%" }}
-          onPress={() =>
-            navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: checkList.category ? true : false })
-          }
-        >
-          <Text>수정하기</Text>
-        </Button>
-        <Button
-          style={{ width: "50%", marginLeft: 5, backgroundColor: Color.GRAY }}
-          onPress={() => setRemoveCheckListModalVisible(true)}
-        >
-          <Text>삭제하기</Text>
-        </Button>
-      </View>
+      <EditDeleteButtons
+        onEditButtonPress={() =>
+          navigation.navigate("EditCheckList", {
+            checkListId: id,
+            isFromCategory: checkList.category ? true : false,
+          })
+        }
+        onRemoveButtonPress={() => setRemoveCheckListModalVisible(true)}
+      />
 
       <Divider />
       <View

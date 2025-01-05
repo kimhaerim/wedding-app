@@ -48,7 +48,7 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
         break;
 
       case "edit":
-        navigation.push("EditCategory", { categoryId: id });
+        navigation.push("EditCategory", { id });
         break;
 
       case "delete":
@@ -90,7 +90,7 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
 
   const handleDefaultCategoryOnPress = useCallback(
     (category: string) => {
-      navigation.navigate("EditCategory", { categoryId: undefined, categoryTitle: category });
+      navigation.navigate("EditCategory", { id: undefined, title: category });
     },
     [navigation]
   );

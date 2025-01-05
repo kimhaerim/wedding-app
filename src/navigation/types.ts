@@ -13,7 +13,7 @@ export type RootStackParamList = {
 export type CategoryStackParamList = {
   CategoryHome: undefined;
   CategoryDetail: { id: number };
-  EditCategory: { categoryId?: number; categoryTitle?: string };
+  EditCategory: { id?: number; title?: string };
   CheckListDetail: { id: number };
   EditCheckList: { checkListId?: number; isFromCategory: boolean };
 };

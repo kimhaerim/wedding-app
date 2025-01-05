@@ -13,13 +13,14 @@ interface props {
   error?: boolean;
   errorMessage?: string;
   secureTextEntry?: boolean;
+  titleStyle?: Object;
   style?: Object;
 }
 
 const InputText: React.FC<props> = (props) => {
   return (
     <>
-      <Text style={[styles.textStyle]}>{props.label}</Text>
+      <Text style={[styles.textStyle, props.titleStyle]}>{props.label}</Text>
       <TextInput
         mode="outlined"
         placeholder={props.placeholder}

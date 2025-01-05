@@ -19,16 +19,16 @@ interface EditCategoryScreenProps {
 }
 
 const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
-  const { categoryId, categoryTitle } = route.params;
+  const { id, title } = route.params;
 
   useLayoutEffect(() => {
-    navigation.setOptions({ headerTitle: categoryId ? "카테고리 수정" : "카테고리 저장" });
-  }, [navigation, categoryId]);
+    navigation.setOptions({ headerTitle: id ? "카테고리 수정" : "카테고리 저장" });
+  }, [navigation, id]);
 
-  const isEdit = categoryId ? true : false;
+  const isEdit = id ? true : false;
   const [category, setCategory] = useState<IAddCategory | IUpdateCategory | undefined>(undefined);
 
-  const [inputTitle, setInputTitle] = useState<string>(category ? category.title : categoryTitle ? categoryTitle : "");
+  const [inputTitle, setInputTitle] = useState<string>(category ? category.title : title ? title : "");
   const [inputAmountBudget, setInputAmountBudget] = useState<number>(category ? category.budgetAmount : 0);
 
   const [showExitModal, setShowExitModal] = useState<boolean>(false);
@@ -42,7 +42,6 @@ const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, rou
     }
 
     // 저장 API 호출
-    const categoryId = 1;
     navigation.navigate("EditCheckList", { isFromCategory: true });
   };
 
@@ -53,7 +52,7 @@ const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, rou
           label={"카테고리 이름 *"}
           placeholder="ex. 웨딩홀, 본식DVD 등"
           value={inputTitle}
-          defaultValue={category ? category.title : categoryTitle ? categoryTitle : undefined}
+          defaultValue={category ? category.title : title ? title : undefined}
           onChangeText={setInputTitle}
           error={inputTitle.length === 0}
           errorMessage="이름을 입력하세요."
@@ -66,6 +65,7 @@ const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, rou
           onChangeText={(value) => setInputAmountBudget(+value)}
           error={typeof inputAmountBudget !== "number"}
           errorMessage="카테고리 예산은 숫자로 입력하세요."
+          titleStyle={{ marginTop: 5 }}
         ></InputText>
       </View>
 

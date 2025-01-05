@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import BackButton from "../../components/common/BackButton";
 import { ICategory } from "../../interface/category.interface";
 import { Color } from "../../enum";
 
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Divider, Icon, Text } from "react-native-paper";
 
@@ -18,9 +18,17 @@ import { CategoryStackParamList } from "../../navigation/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import Button from "../../components/common/Button";
+import CustomMenu from "../../components/common/Menu";
+import EditDeleteButtons from "../../components/common/EditDeleteButtons";
+import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
+import BudgetSummary from "../../components/cost/BudgetSummary";
 
-type CategoryNavigationProp = StackNavigationProp<CategoryStackParamList, "CategoryDetail" | "CheckListDetail">;
-type CategoryRouteProp = RouteProp<CategoryStackParamList, "CategoryDetail" | "CheckListDetail">;
+type CategoryNavigationProp = StackNavigationProp<
+  CategoryStackParamList,
+  "CategoryDetail" | "EditCategory" | "CheckListDetail"
+>;
+type CategoryRouteProp = RouteProp<CategoryStackParamList, "CategoryDetail" | "EditCategory" | "CheckListDetail">;
 
 interface CategoryScreenProps {
   navigation: CategoryNavigationProp;
@@ -41,6 +49,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
+  const [removeCategoryModalVisible, setRemoveCategoryModalVisible] = useState<boolean>(false);
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
     totalCost: 200000,
     paidCost: 100000,
@@ -71,6 +80,11 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
     setCheckListId(undefined);
   };
 
+  const handleEditButtonPress = useCallback(() => {
+    console.log(id, category.title);
+    navigation.navigate("EditCategory", { id: id, title: category.title });
+  }, [id]);
+
   return (
     <WhiteSafeAreaView>
       <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
@@ -80,66 +94,12 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
         <Text style={{ marginLeft: 10, fontSize: 10 }}>{`${checkListCount}개`}</Text>
       </View>
 
-      <View
-        style={{
-          margin: 10,
-          padding: 10,
-          borderWidth: 1,
-          borderRadius: 10,
-          borderColor: Color.BLUE100,
-        }}
-      >
-        <Row style={{ marginBottom: 5 }}>
-          <Icon color={Color.DARK_GRAY} source="cash" size={15} />
-          <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 예산</Text>
-          <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(category.budgetAmount)}
-          </Text>
-        </Row>
+      <BudgetSummary category={category} combinedCost={combinedCost} />
 
-        <Row style={{ marginBottom: 5 }}>
-          <Icon color={Color.DARK_GRAY} source="currency-usd" size={15} />
-          <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>총 비용</Text>
-          <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(combinedCost.totalCost)}
-          </Text>
-        </Row>
-
-        <Divider style={{ margin: 5 }} />
-        <Row style={{ marginBottom: 5 }}>
-          <Icon color={Color.DARK_GRAY} source="check-circle" size={15} />
-          <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 금액</Text>
-          <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(combinedCost.paidCost)}
-          </Text>
-        </Row>
-
-        <Row style={{ marginBottom: 5 }}>
-          <Icon color={Color.DARK_GRAY} source="clock-outline" size={15} />
-          <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>결제 예정 금액</Text>
-          <Text style={{ fontSize: 13, flex: 1, textAlign: "right", marginRight: 15 }}>
-            {formatCurrency(combinedCost.unpaidCost)}
-          </Text>
-        </Row>
-
-        <Divider />
-
-        <Row style={{ marginTop: 5 }}>
-          <Icon color={Color.DARK_GRAY} source="wallet-outline" size={15} />
-          <Text style={{ marginLeft: 5, fontSize: 13, flex: 0, fontWeight: "bold" }}>남은 예산</Text>
-          <Text
-            style={{
-              fontSize: 13,
-              flex: 1,
-              textAlign: "right",
-              marginRight: 15,
-              fontWeight: "bold",
-            }}
-          >
-            {formatCurrency(category.budgetAmount - combinedCost.totalCost)}
-          </Text>
-        </Row>
-      </View>
+      <EditDeleteButtons
+        onEditButtonPress={handleEditButtonPress}
+        onRemoveButtonPress={() => setRemoveCategoryModalVisible(true)}
+      />
 
       <ScrollView>
         <View style={{ margin: 10 }}>
@@ -157,6 +117,13 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
       </ScrollView>
 
       <FloatingButton onPress={() => console.log("추가하기 클릭")}></FloatingButton>
+
+      <ConfirmModal
+        title="카데고리를 정말 삭제하시겠습니까?"
+        description="비용 정보도 모두 삭제됩니다."
+        visible={removeCategoryModalVisible}
+        hideModal={() => setRemoveCategoryModalVisible(false)}
+      ></ConfirmModal>
 
       <ConfirmModal
         title="체크리스트를 정말 삭제하시겠습니까?"
