@@ -1,22 +1,20 @@
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { useState } from "react";
-import { ICheckList, ICost, ICostByCheckList } from "../../interface";
-import { FlatList, SafeAreaView, TouchableOpacity, View } from "react-native";
-import BackButton from "../../components/common/BackButton";
-import Badge from "../../components/common/Badge";
-import CheckBox from "../../components/common/CheckBox";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
 import { convertDateTimeToString } from "../../common/util";
-import { Color } from "../../enum";
-import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
-import ShadowView from "../../components/common/ShadowView";
-import CostItem from "../../components/cost/CostItem";
-import ConfirmModal from "../../modal/ConfirmModal";
+import Badge from "../../components/common/Badge";
+import CheckBox from "../../components/common/CheckBox";
 import FloatingButton from "../../components/common/FloatingButton";
-import { CheckListStackParamList } from "../../navigation/types";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
+import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import CostItem from "../../components/cost/CostItem";
+import { Color } from "../../enum";
+import { ICheckList, ICost, ICostByCheckList } from "../../interface";
 import { checkListMockData } from "../../mock/CheckListMockData";
+import ConfirmModal from "../../modal/ConfirmModal";
+import { CheckListStackParamList } from "../../navigation/types";
 
 import BudgetDetailModal from "../../modal/BudgetDetailModal";
 

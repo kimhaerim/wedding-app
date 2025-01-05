@@ -1,28 +1,21 @@
 import React, { useCallback, useState } from "react";
-import BackButton from "../../components/common/BackButton";
 import { ICategory } from "../../interface/category.interface";
-import { Color } from "../../enum";
 
-import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
-import { Divider, Icon, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 
-import Row from "../../components/common/Row";
-import ConfirmModal from "../../modal/ConfirmModal";
-import CheckListWithCostItem from "../../components/check-list/CheckListWithCostItem";
-import { checkListMockData } from "../../mock/CheckListMockData";
-import { formatCurrency } from "../../common/util";
-import { ICostByCheckList } from "../../interface/cost.interface";
-import FloatingButton from "../../components/common/FloatingButton";
-import { CategoryStackParamList } from "../../navigation/types";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import Button from "../../components/common/Button";
-import CustomMenu from "../../components/common/Menu";
+import { StackNavigationProp } from "@react-navigation/stack";
+import CheckListWithCostItem from "../../components/check-list/CheckListWithCostItem";
 import EditDeleteButtons from "../../components/common/EditDeleteButtons";
-import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
+import FloatingButton from "../../components/common/FloatingButton";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import BudgetSummary from "../../components/cost/BudgetSummary";
+import { ICostByCheckList } from "../../interface/cost.interface";
+import { checkListMockData } from "../../mock/CheckListMockData";
+import ConfirmModal from "../../modal/ConfirmModal";
+import { CategoryStackParamList } from "../../navigation/types";
 
 interface CategoryScreenProps {
   navigation: StackNavigationProp<

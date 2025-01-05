@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
-import BackButton from "../../components/common/BackButton";
-import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
-import { SafeAreaView, View } from "react-native";
-import InputText from "../../components/common/InputText";
-import BottomButton from "../../components/common/BottomButton";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { View } from "react-native";
+import BottomButton from "../../components/common/BottomButton";
+import InputText from "../../components/common/InputText";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
 import { CategoryStackParamList } from "../../navigation/types";
-import { RouteProp, useFocusEffect } from "@react-navigation/native";
 
 interface EditCategoryScreenProps {
   navigation: StackNavigationProp<CategoryStackParamList, "EditCategory">;

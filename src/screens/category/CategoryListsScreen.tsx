@@ -1,19 +1,18 @@
 import { useCallback, useState } from "react";
 
-import { ICategory } from "../../interface/category.interface";
-import { Divider, Text } from "react-native-paper";
-import { FlatList, TouchableOpacity, View } from "react-native";
-import ConfirmModal from "../../modal/ConfirmModal";
-import CategoryButton from "../../components/category/CategoryButton";
-import { categoryMockData } from "../../mock/CheckListMockData";
-import ShadowView from "../../components/common/ShadowView";
-import { formatCurrency } from "../../common/util";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CategoryStackParamList, RootStackParamList } from "../../navigation/types";
 import { RouteProp } from "@react-navigation/native";
-import BottomButton from "../../components/common/BottomButton";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import { Divider, Text } from "react-native-paper";
+import { formatCurrency } from "../../common/util";
+import CategoryButton from "../../components/category/CategoryButton";
 import FloatingButton from "../../components/common/FloatingButton";
+import ShadowView from "../../components/common/ShadowView";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { ICategory } from "../../interface/category.interface";
+import { categoryMockData } from "../../mock/CheckListMockData";
+import ConfirmModal from "../../modal/ConfirmModal";
+import { CategoryStackParamList } from "../../navigation/types";
 
 const defaultCategories = [
   "🏩 웨딩홀",

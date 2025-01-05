@@ -1,7 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { Color, CostType } from "../../enum";
-import BackButton from "../../components/common/BackButton";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import InputText from "../../components/common/InputText";
 import DatePicker from "../../components/common/DatePicker";
 import BottomButton from "../../components/common/BottomButton";

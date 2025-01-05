@@ -1,20 +1,19 @@
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import Title from "../../components/common/Title";
 
 import { Color } from "../../enum";
 
 import { useState } from "react";
-import { ICostsByCategoryId } from "../../interface/cost.interface";
-import { ICategory, ICategoryBudgetAmount } from "../../interface/category.interface";
-import { categoryMockData, costsByCategoryIdsMockData } from "../../mock/CheckListMockData";
-import ShadowView from "../../components/common/ShadowView";
-import CustomMenu from "../../components/common/Menu";
-import ConfirmModal from "../../modal/ConfirmModal";
-import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
 import CategoryButton from "../../components/category/CategoryButton";
 import Button from "../../components/common/Button";
+import CustomMenu from "../../components/common/Menu";
+import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import BudgetSummaryRow from "../../components/cost/BudgetSummaryRow";
+import { ICategory, ICategoryBudgetAmount } from "../../interface/category.interface";
+import { ICostsByCategoryId } from "../../interface/cost.interface";
+import { categoryMockData, costsByCategoryIdsMockData } from "../../mock/CheckListMockData";
+import ConfirmModal from "../../modal/ConfirmModal";
 
 const defaultCategories = [
   "🏩 웨딩홀",

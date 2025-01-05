@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["Calendartack"]
+  "cSpell.words": ["Calendartack"],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
 }

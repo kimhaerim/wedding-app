@@ -1,13 +1,12 @@
-import { View, StyleSheet, SafeAreaView } from "react-native";
-import { Text } from "react-native-paper";
-import BottomButton from "../../components/common/BottomButton";
-import BackButton from "../../components/common/BackButton";
-import { useCallback, useState } from "react";
-import CategoryButton from "../../components/category/CategoryButton";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
 import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useCallback, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
+import CategoryButton from "../../components/category/CategoryButton";
+import BottomButton from "../../components/common/BottomButton";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { RootStackParamList } from "../../navigation/types";
 
 interface DefaultCategoriesProps {
   navigation: StackNavigationProp<RootStackParamList, "DefaultCategories">;
