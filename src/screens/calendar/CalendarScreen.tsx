@@ -77,7 +77,6 @@ export const CalendarScreen: React.FC = () => {
     (date: DateData) => {
       setCurrentYear(date.year);
       setCurrentMonth(date.month);
-      console.log(currentMonth);
     },
     [currentMonth]
   );
@@ -85,7 +84,6 @@ export const CalendarScreen: React.FC = () => {
   useEffect(() => {
     const checkListSections: ICheckList[] = checkLists.filter((checkList) => {
       const reservedDateString = checkList.reservedDate?.toISOString().split("T")[0];
-
       return reservedDateString === selected;
     });
     setCheckListAgendaList(checkListSections);

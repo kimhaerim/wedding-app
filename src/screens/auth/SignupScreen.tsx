@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
-
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import React, { useCallback, useMemo, useState } from "react";
 import { View } from "react-native";
+import { validateEmail, validatePassword } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
@@ -15,9 +15,9 @@ const enum SignupField {
 }
 
 interface SignupData {
-  email: string | undefined;
-  password: string | undefined;
-  confirmPassword: string | undefined;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 interface SignupScreenProps {
@@ -25,11 +25,11 @@ interface SignupScreenProps {
   route: RouteProp<RootStackParamList, "Signup">;
 }
 
-export const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
+const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
   const [formData, setFormData] = useState<SignupData>({
-    email: undefined,
-    password: undefined,
-    confirmPassword: undefined,
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [formValidity, setFormValidity] = useState({
@@ -38,56 +38,53 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     isPasswordMatching: false,
   });
 
-  const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
+  const [errorMessages, setErrorMessages] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!email) {
-      setFormValidity((prev) => ({ ...prev, isEmailValid: false }));
-      setEmailErrorMessage("이메일은 필수 항목입니다.");
-    } else if (!emailRegex.test(email)) {
-      setFormValidity((prev) => ({ ...prev, isEmailValid: false }));
-      setEmailErrorMessage("유효한 이메일을 입력하세요.");
-    } else {
-      setFormValidity((prev) => ({ ...prev, isEmailValid: true }));
-    }
-  };
+  const validateField = useCallback(
+    (field: SignupField, value: string) => {
+      switch (field) {
+        case SignupField.EMAIL: {
+          const { isValid, errorMessage } = validateEmail(value);
+          setFormValidity((prev) => ({ ...prev, isEmailValid: isValid }));
+          setErrorMessages((prev) => ({ ...prev, email: errorMessage }));
+          break;
+        }
+        case SignupField.PASSWORD: {
+          const { isValid, errorMessage } = validatePassword(value);
+          setFormValidity((prev) => ({ ...prev, isPasswordValid: isValid }));
+          setErrorMessages((prev) => ({ ...prev, password: errorMessage }));
+          break;
+        }
+        case SignupField.CONFIRM_PASSWORD: {
+          const isMatching = formData.password === value;
+          setFormValidity((prev) => ({ ...prev, isPasswordMatching: isMatching }));
+          setErrorMessages((prev) => ({
+            ...prev,
+            confirmPassword: isMatching ? "" : "비밀번호와 동일하게 입력해주세요.",
+          }));
+          break;
+        }
+      }
+    },
+    [formData.password]
+  );
 
-  const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/-]).{8,20}$/;
+  const handleInputChange = useCallback(
+    (field: SignupField, value: string) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      validateField(field, value);
+    },
+    [validateField]
+  );
 
-    if (!password) {
-      setFormValidity((prev) => ({ ...prev, isPasswordValid: false }));
-      setPasswordErrorMessage("비밀번호를 입력해주세요.");
-    } else if (!passwordRegex.test(password)) {
-      setFormValidity((prev) => ({ ...prev, isPasswordValid: false }));
-      setPasswordErrorMessage("비밀번호는 8자 이상 20자 이하이고, 알파벳, 숫자, 특수문자를 포함해야 합니다.");
-    } else {
-      setFormValidity((prev) => ({ ...prev, isPasswordValid: true }));
-    }
-  };
-
-  const handleInputChange = (field: SignupField, value: string) => {
-    setFormData({ ...formData, [field]: value });
-
-    if (field === SignupField.EMAIL) {
-      validateEmail(value);
-    }
-
-    if (field === SignupField.PASSWORD) {
-      validatePassword(value);
-    }
-
-    if (field === SignupField.CONFIRM_PASSWORD) {
-      const isPasswordMatching = formData.password === value;
-      setFormValidity((prev) => ({ ...prev, isPasswordMatching }));
-    }
-  };
-
-  const isFormValid = useMemo(() => {
-    return formValidity.isEmailValid && formValidity.isPasswordValid && formValidity.isPasswordMatching;
-  }, [formValidity]);
+  const isFormValid = useMemo(
+    () => formValidity.isEmailValid && formValidity.isPasswordValid && formValidity.isPasswordMatching,
+    [formValidity]
+  );
 
   return (
     <WhiteSafeAreaView>
@@ -97,28 +94,30 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
           placeholder="ex. wedding@email.com"
           onChangeText={(value) => handleInputChange(SignupField.EMAIL, value)}
           error={!formValidity.isEmailValid}
-          errorMessage={emailErrorMessage}
-          value={formData.email || ""}
-        ></InputText>
+          errorMessage={errorMessages.email}
+          value={formData.email}
+        />
         <InputText
           label="비밀번호 *"
           onChangeText={(value) => handleInputChange(SignupField.PASSWORD, value)}
           error={!formValidity.isPasswordValid}
-          errorMessage={passwordErrorMessage}
-          value={formData.password || ""}
+          errorMessage={errorMessages.password}
+          value={formData.password}
           secureTextEntry
-        ></InputText>
+        />
         <InputText
           label="비밀번호 확인 *"
           onChangeText={(value) => handleInputChange(SignupField.CONFIRM_PASSWORD, value)}
           error={!formValidity.isPasswordMatching}
-          errorMessage="비밀번호와 동일하게 입력해주세요."
-          value={formData.confirmPassword || ""}
+          errorMessage={errorMessages.confirmPassword}
+          value={formData.confirmPassword}
           secureTextEntry
-        ></InputText>
+        />
       </View>
 
-      <BottomButton label="다음" disabled={!isFormValid} onPress={() => navigation.navigate("Profile")}></BottomButton>
+      <BottomButton label="다음" disabled={!isFormValid} onPress={() => navigation.navigate("Profile")} />
     </WhiteSafeAreaView>
   );
 };
+
+export default SignupScreen;

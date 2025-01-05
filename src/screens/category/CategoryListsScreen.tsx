@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
 import { formatCurrency } from "../../common/util";
 import CategoryButton from "../../components/category/CategoryButton";
@@ -26,7 +26,7 @@ const defaultCategories = [
 ];
 
 interface CategoryListsScreenProps {
-  navigation: StackNavigationProp<CategoryStackParamList, "CategoryHome" | "CategoryDetail">;
+  navigation: StackNavigationProp<CategoryStackParamList, "CategoryHome">;
   route: RouteProp<CategoryStackParamList, "CategoryHome">;
 }
 
@@ -34,7 +34,6 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
   const [userCategories, setUserCategories] = useState<ICategory[]>(categoryMockData);
 
   const [page, setPage] = useState<number>(0);
-  const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
   const renderItem = useCallback(
@@ -42,17 +41,8 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
       return (
         <ShadowView key={item.id}>
           <TouchableOpacity onPress={() => navigation.navigate("CategoryDetail", { categoryId: item.id })}>
-            <View
-              key={item.id}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: 5,
-                marginBottom: 5,
-              }}
-            >
-              <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>
+            <View key={item.id} style={[styles.userCategoryContainer]}>
+              <Text style={styles.categoryTitle}>{item.title}</Text>
             </View>
             <Text style={{ marginBottom: 5 }}>예산 : {formatCurrency(item.budgetAmount)}</Text>
             <Text>연결된 체크리스트 : 2개</Text>
@@ -88,10 +78,10 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
   return (
     <WhiteSafeAreaView>
       <View style={{ margin: 10 }}>
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 10 }}>기본 카테고리 목록</Text>
+        <Text style={[styles.title]}>기본 카테고리 목록</Text>
         <Text style={{ fontSize: 12, marginTop: 10 }}>클릭 시 추가 가능합니다.</Text>
 
-        <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
+        <View style={[styles.defaultCategoryContainer]}>
           {defaultCategories.map((category) => (
             <CategoryButton
               key={category}
@@ -104,7 +94,7 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
 
         <Divider style={{ marginTop: 10 }} />
 
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 30, marginBottom: 10 }}>추가된 카테고리 목록</Text>
+        <Text style={[styles.title]}>추가된 카테고리 목록</Text>
 
         <View>
           <FlatList
@@ -128,3 +118,20 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
     </WhiteSafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  defaultCategoryContainer: { marginTop: 10, flexDirection: "row", flexWrap: "wrap" },
+  userCategoryContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  categoryTitle: { fontWeight: "bold", fontSize: 15 },
+});

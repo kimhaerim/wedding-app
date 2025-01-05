@@ -3,7 +3,9 @@ import { Divider, Text } from "react-native-paper";
 
 import { Color } from "../../enum";
 
-import { useState } from "react";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useCallback, useState } from "react";
 import CategoryButton from "../../components/category/CategoryButton";
 import Button from "../../components/common/Button";
 import CustomMenu from "../../components/common/Menu";
@@ -14,6 +16,7 @@ import { ICategory, ICategoryBudgetAmount } from "../../interface/category.inter
 import { ICostsByCategoryId } from "../../interface/cost.interface";
 import { categoryMockData, costsByCategoryIdsMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
+import { BudgetStackParamList } from "../../navigation/interface/BudgetStackParamList";
 
 const defaultCategories = [
   "🏩 웨딩홀",
@@ -26,7 +29,12 @@ const defaultCategories = [
   "🌅 스냅 촬영",
 ];
 
-export const BudgetScreen = () => {
+interface BudgetScreenProps {
+  navigation: StackNavigationProp<BudgetStackParamList, "BudgetHome">;
+  route: RouteProp<BudgetStackParamList, "BudgetHome">;
+}
+
+export const BudgetScreen: React.FC<BudgetScreenProps> = ({ navigation }) => {
   const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
   const [combinedBudget, setCombinedBudget] = useState<ICategoryBudgetAmount>({
     totalBudgetAmount: 200000,
@@ -42,19 +50,19 @@ export const BudgetScreen = () => {
   const handleMenuItemPress = (action: string, id: number) => {
     switch (action) {
       case "view":
-        console.log("상세 보기", id);
+        navigation.navigate("CategoryDetail", { categoryId: id });
         break;
       case "edit":
-        console.log("수정", id);
+        navigation.navigate("EditCategory", { categoryId: id });
         break;
       case "delete":
         console.log("삭제", id);
         setRemoveModalVisible(true);
-        setCategoryId(undefined);
         break;
       default:
         break;
     }
+    setCategoryId(undefined);
   };
 
   const calculateRemainingBudget = (budgetAmount: number, paid: number, unpaid: number) => {
@@ -73,6 +81,13 @@ export const BudgetScreen = () => {
       setPage(-1);
     }
   };
+
+  const handleDefaultCategoryOnPress = useCallback(
+    (category: string) => {
+      navigation.navigate("EditCategory", { categoryTitle: category });
+    },
+    [navigation]
+  );
 
   return (
     <WhiteSafeAreaView>
@@ -100,7 +115,7 @@ export const BudgetScreen = () => {
                     key={category}
                     label={category}
                     isPressed={true}
-                    onPress={() => console.log(`${category} 추가`)}
+                    onPress={() => handleDefaultCategoryOnPress(category)}
                   />
                 ))}
               </View>
@@ -112,7 +127,7 @@ export const BudgetScreen = () => {
               </View>
 
               <Button
-                onPress={() => console.log("카테고리 직접 추가하기")}
+                onPress={() => navigation.navigate("EditCategory", {})}
                 style={{
                   backgroundColor: Color.BLUE,
                   width: 200,

@@ -1,6 +1,27 @@
 import dayjs from "dayjs";
 import { CheckListStatus, CostType } from "../enum";
 
+export const validateEmail = (email: string) => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return { isValid: false, errorMessage: "유효한 이메일을 입력하세요." };
+  }
+
+  return { isValid: true, errorMessage: "" };
+};
+
+export const validatePassword = (password: string) => {
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/-]).{8,20}$/;
+  if (!passwordRegex.test(password)) {
+    return {
+      isValid: false,
+      errorMessage: "비밀번호는 8자 이상 20자 이하이고, 알파벳, 숫자, 특수문자를 포함해야 합니다.",
+    };
+  }
+
+  return { isValid: true, errorMessage: "" };
+};
+
 export const convertDateToString = (inputDate: Date) => {
   const year = inputDate.getFullYear();
   const month = inputDate.getMonth() + 1;

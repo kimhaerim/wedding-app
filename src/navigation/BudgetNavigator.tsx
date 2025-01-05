@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { Color } from "../enum";
+import { CategoryScreen, EditCategoryScreen } from "../screens/category";
 import { BudgetScreen } from "../screens/cost";
 import { BudgetStackParamList } from "./interface/BudgetStackParamList";
 
@@ -20,6 +21,12 @@ export const BudgetNavigator = () => {
         component={BudgetScreen}
         options={{ ...defaultOptions, headerTitle: "예산 / 지출" }}
       />
+      <Stack.Screen
+        name="CategoryDetail"
+        component={CategoryScreen}
+        options={{ ...defaultOptions, headerTitle: "예산 / 지출" }}
+      />
+      <Stack.Screen name="EditCategory" component={EditCategoryScreen} options={defaultOptions} />
     </Stack.Navigator>
   );
 };
