@@ -1,7 +1,8 @@
+import { useQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Text } from "react-native-paper";
 import { calculateDday, convertDateToString } from "../../common/util";
@@ -11,6 +12,7 @@ import Button from "../../components/common/Button";
 import FloatingButton from "../../components/common/FloatingButton";
 import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { QueryGetCheckList } from "../../graphql/checkList";
 import { ICheckList, ICouple } from "../../interface";
 import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
@@ -23,6 +25,14 @@ interface CheckListsScreenProps {
 }
 
 export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
+  const { loading, error, data } = useQuery<ICheckList, { id: number }>(QueryGetCheckList, {
+    variables: { id: 1 },
+  });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const today = dayjs();
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
