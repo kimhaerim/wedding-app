@@ -1,10 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { CheckListStackParamList } from "./types";
-import { Color } from "../enum";
-import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
-import CheckListsScreen from "../screens/check-list/CheckListsScreen";
 import { StyleSheet } from "react-native";
+import { Color } from "../enum";
 import CheckListScreen from "../screens/check-list/CheckListScreen";
+import CheckListsScreen from "../screens/check-list/CheckListsScreen";
+import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
+import { CheckListStackParamList } from "./interface";
 
 const Stack = createStackNavigator<CheckListStackParamList>();
 

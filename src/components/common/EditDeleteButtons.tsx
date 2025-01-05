@@ -1,14 +1,16 @@
 import { StyleSheet, View } from "react-native";
-import Button from "./Button";
 import { Text } from "react-native-paper";
 import { Color } from "../../enum";
+import Button from "./Button";
 
 interface EditDeleteButtonsProps {
   onEditButtonPress: () => void;
   onRemoveButtonPress: () => void;
 }
 
-const EditDeleteButtons: React.FC<EditDeleteButtonsProps> = ({ onEditButtonPress, onRemoveButtonPress }) => {
+const EditDeleteButtons: React.FC<EditDeleteButtonsProps> = (props) => {
+  const { onEditButtonPress, onRemoveButtonPress } = props;
+
   return (
     <View style={[styles.buttonContainer]}>
       <Button style={[styles.editButton]} onPress={onEditButtonPress}>

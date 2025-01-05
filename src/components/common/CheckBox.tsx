@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import { Color } from "../../enum";
 
@@ -11,7 +11,8 @@ interface CheckBoxProps {
   labelStyle?: Object;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ isChecked, onPress, label, style, labelStyle }) => {
+const CheckBox: React.FC<CheckBoxProps> = (props) => {
+  const { isChecked, onPress, label, style, labelStyle } = props;
   const color = isChecked ? Color.BLUE : Color.GRAY;
 
   return (

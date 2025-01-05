@@ -1,21 +1,21 @@
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import { ICheckList, ICouple } from "../../interface";
-import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
 import { FlatList, View } from "react-native";
 import { Text } from "react-native-paper";
 import { calculateDday, convertDateToString } from "../../common/util";
-import Button from "../../components/common/Button";
 import { CategoryButton } from "../../components/category";
-import ShadowView from "../../components/common/ShadowView";
 import CheckListItem from "../../components/check-list/CheckListItem";
-import ConfirmModal from "../../modal/ConfirmModal";
+import Button from "../../components/common/Button";
 import FloatingButton from "../../components/common/FloatingButton";
+import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { ICheckList, ICouple } from "../../interface";
+import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
+import ConfirmModal from "../../modal/ConfirmModal";
 import SelectDateModal from "../../modal/SelectDateModal";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CheckListStackParamList } from "../../navigation/types";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { CheckListStackParamList } from "../../navigation/interface";
 
 interface CheckListsScreenProps {
   navigation: StackNavigationProp<CheckListStackParamList, "CheckListsHome">;

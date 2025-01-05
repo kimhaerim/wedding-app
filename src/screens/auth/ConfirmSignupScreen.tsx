@@ -1,13 +1,13 @@
 import React from "react";
 
-import { Color } from "../../enum";
 import { View } from "react-native";
+import { Color } from "../../enum";
 
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Button, Text } from "react-native-paper";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
-import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigation/interface";
 
 interface ConfirmSignupProps {
   navigation: StackNavigationProp<RootStackParamList, "ConfirmSignup">;

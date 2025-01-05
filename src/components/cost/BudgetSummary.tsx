@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Divider } from "react-native-paper";
 import { Color } from "../../enum";
 import BudgetSummaryRow from "./BudgetSummaryRow";
@@ -9,7 +9,8 @@ interface BudgetSummaryProps {
   combinedCost: { totalCost: number; paidCost: number; unpaidCost: number };
 }
 
-const BudgetSummary: React.FC<BudgetSummaryProps> = ({ category, combinedCost }) => {
+const BudgetSummary: React.FC<BudgetSummaryProps> = (props) => {
+  const { category, combinedCost } = props;
   const remainingBudget = category.budgetAmount - combinedCost.totalCost;
   const remainingBudgetColor = remainingBudget < 0 ? Color.RED : Color.BLACK;
 

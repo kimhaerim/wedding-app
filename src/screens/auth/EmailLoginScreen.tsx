@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
-import { Color } from "../../enum";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { View } from "react-native";
-import InputText from "../../components/common/InputText";
 import { Button } from "react-native-paper";
 import BottomButton from "../../components/common/BottomButton";
+import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
-import { RouteProp } from "@react-navigation/native";
+import { Color } from "../../enum";
+import { RootStackParamList } from "../../navigation/interface";
 
 const enum EmailLoginField {
   EMAIL = "email",

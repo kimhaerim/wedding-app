@@ -6,7 +6,7 @@ import { Text } from "react-native-paper";
 import CategoryButton from "../../components/category/CategoryButton";
 import BottomButton from "../../components/common/BottomButton";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { RootStackParamList } from "../../navigation/types";
+import { RootStackParamList } from "../../navigation/interface";
 
 interface DefaultCategoriesProps {
   navigation: StackNavigationProp<RootStackParamList, "DefaultCategories">;

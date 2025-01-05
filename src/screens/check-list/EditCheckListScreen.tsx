@@ -1,18 +1,18 @@
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useLayoutEffect, useState } from "react";
 import { FlatList, View } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import { SegmentedButtons, Text } from "react-native-paper";
-import { CheckListStatus, Color } from "../../enum";
-import InputText from "../../components/common/InputText";
-import DatePicker from "../../components/common/DatePicker";
 import BottomButton from "../../components/common/BottomButton";
+import DatePicker from "../../components/common/DatePicker";
+import InputText from "../../components/common/InputText";
 import TimePicker from "../../components/common/TimePicker";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { CheckListStatus, Color } from "../../enum";
 import { ICategory } from "../../interface/category.interface";
 import { categoryMockData } from "../../mock/CheckListMockData";
-import DropDownPicker from "react-native-dropdown-picker";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CheckListStackParamList } from "../../navigation/types";
-import { RouteProp } from "@react-navigation/native";
+import { CheckListStackParamList } from "../../navigation/interface";
 
 interface EditCheckListScreenProps {
   navigation: StackNavigationProp<CheckListStackParamList, "EditCheckList">;

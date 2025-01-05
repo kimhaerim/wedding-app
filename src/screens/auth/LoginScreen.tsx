@@ -1,11 +1,11 @@
 import React from "react";
 
-import { Color } from "../../enum";
-import { Button, Text } from "react-native-paper";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
+import { Button, Text } from "react-native-paper";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { Color } from "../../enum";
+import { RootStackParamList } from "../../navigation/interface";
 
 type LoginNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
 type LoginRouteProp = RouteProp<RootStackParamList, "Login">;

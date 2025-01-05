@@ -1,8 +1,8 @@
 import * as React from "react";
+import { StyleSheet, View } from "react-native";
 import { Modal, Text } from "react-native-paper";
-import { Color } from "../enum";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Button from "../components/common/Button";
+import { Color } from "../enum";
 
 interface modalProps {
   title: string;
@@ -11,7 +11,9 @@ interface modalProps {
   hideModal: () => void;
 }
 
-const ConfirmModal: React.FC<modalProps> = ({ title, description, visible, hideModal }) => {
+const ConfirmModal: React.FC<modalProps> = (props) => {
+  const { title, description, visible, hideModal } = props;
+
   return (
     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={[styles.contentContainerStyle]}>
       <Text style={[styles.titleStyle]}>{title}</Text>

@@ -9,7 +9,8 @@ interface BottomModalProps {
   height: number;
 }
 
-const BottomModal: React.FC<BottomModalProps> = ({ visible, hideModal, children, height }) => {
+const BottomModal: React.FC<BottomModalProps> = (props) => {
+  const { visible, hideModal, children, height } = props;
   return (
     <Modal
       isVisible={visible}

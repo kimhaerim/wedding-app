@@ -1,9 +1,9 @@
 import * as React from "react";
+import { StyleSheet, View } from "react-native";
 import { Modal, Text } from "react-native-paper";
-import { Color } from "../enum";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Button from "../components/common/Button";
 import DatePicker from "../components/common/DatePicker";
+import { Color } from "../enum";
 
 interface SelectDateModalProps {
   title: string;
@@ -13,7 +13,9 @@ interface SelectDateModalProps {
   hideModal: () => void;
 }
 
-const SelectDateModal: React.FC<SelectDateModalProps> = ({ title, visible, dateValue, onDateChange, hideModal }) => {
+const SelectDateModal: React.FC<SelectDateModalProps> = (props) => {
+  const { title, visible, dateValue, onDateChange, hideModal } = props;
+
   return (
     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={[styles.contentContainerStyle]}>
       <Text style={[styles.titleStyle]}>{title}</Text>

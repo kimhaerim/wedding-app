@@ -1,25 +1,22 @@
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import dayjs from "dayjs";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, Icon, Text } from "react-native-paper";
-import React, { useState } from "react";
-import { ICouple, IUser } from "../../interface";
-import { coupleMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
 import { calculateDday, convertDateToString } from "../../common/util";
-import dayjs from "dayjs";
 import Button from "../../components/common/Button";
 import Row from "../../components/common/Row";
-import { Color, Gender } from "../../enum";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { Color, Gender } from "../../enum";
+import { ICouple, IUser } from "../../interface";
+import { coupleMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
 import SelectDateModal from "../../modal/SelectDateModal";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-import { MyPageStackParamList } from "../../navigation/types";
-
-type MyPageNavigationProp = StackNavigationProp<MyPageStackParamList, "MyPageHome">;
-type MyPageRouteProp = RouteProp<MyPageStackParamList, "MyPageHome">;
+import { MyPageStackParamList } from "../../navigation/interface";
 
 interface MyPageScreenProps {
-  navigation: MyPageNavigationProp;
-  route: MyPageRouteProp;
+  navigation: StackNavigationProp<MyPageStackParamList, "MyPageHome">;
+  route: RouteProp<MyPageStackParamList, "MyPageHome">;
 }
 
 const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {

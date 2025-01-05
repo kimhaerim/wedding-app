@@ -7,8 +7,8 @@ interface WhiteSafeAreaViewProps {
   children: React.ReactNode;
 }
 
-const WhiteSafeAreaView: React.FC<WhiteSafeAreaViewProps> = ({ style, children }) => (
-  <SafeAreaView style={[styles.container, style]}>{children}</SafeAreaView>
+const WhiteSafeAreaView: React.FC<WhiteSafeAreaViewProps> = (props) => (
+  <SafeAreaView style={[styles.container, props.style]}>{props.children}</SafeAreaView>
 );
 
 const styles = StyleSheet.create({

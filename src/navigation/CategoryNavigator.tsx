@@ -1,11 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { CategoryStackParamList } from "./types";
-import EditCategoryScreen from "../screens/category/EditCategoryScreen";
-import CategoryListsScreen from "../screens/category/CategoryListsScreen";
 import { Color } from "../enum";
-import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
+import CategoryListsScreen from "../screens/category/CategoryListsScreen";
 import CategoryScreen from "../screens/category/CategoryScreen";
+import EditCategoryScreen from "../screens/category/EditCategoryScreen";
 import CheckListScreen from "../screens/check-list/CheckListScreen";
+import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
+import { CategoryStackParamList } from "./interface";
 
 const Stack = createStackNavigator<CategoryStackParamList>();
 

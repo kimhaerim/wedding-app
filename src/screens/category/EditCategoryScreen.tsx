@@ -7,7 +7,7 @@ import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { IAddCategory, IUpdateCategory } from "../../interface/category.interface";
-import { CategoryStackParamList } from "../../navigation/types";
+import { CategoryStackParamList } from "../../navigation/interface";
 
 interface EditCategoryScreenProps {
   navigation: StackNavigationProp<CategoryStackParamList, "EditCategory">;

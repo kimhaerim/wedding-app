@@ -1,8 +1,8 @@
 import React from "react";
 
+import { StyleSheet } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 import { Color } from "../../enum";
-import { StyleSheet } from "react-native";
 
 interface props {
   label: string;
@@ -18,24 +18,36 @@ interface props {
 }
 
 const InputText: React.FC<props> = (props) => {
+  const {
+    label,
+    onChangeText,
+    value,
+    defaultValue,
+    placeholder,
+    error,
+    errorMessage,
+    secureTextEntry,
+    titleStyle,
+    style,
+  } = props;
   return (
     <>
-      <Text style={[styles.textStyle, props.titleStyle]}>{props.label}</Text>
+      <Text style={[styles.textStyle, titleStyle]}>{label}</Text>
       <TextInput
         mode="outlined"
-        placeholder={props.placeholder}
-        value={`${props.value}`}
-        defaultValue={`${props.defaultValue}`}
-        keyboardType={typeof props.value === "number" ? "numeric" : undefined}
-        onChangeText={props.onChangeText}
-        error={props.error}
+        placeholder={placeholder}
+        value={`${value}`}
+        defaultValue={`${defaultValue}`}
+        keyboardType={typeof value === "number" ? "numeric" : undefined}
+        onChangeText={onChangeText}
+        error={error}
         multiline
-        secureTextEntry={props.secureTextEntry}
+        secureTextEntry={secureTextEntry}
         placeholderTextColor={Color.DARK_GRAY}
         outlineStyle={[styles.outlineStyle]}
-        style={[styles.inputStyle, props.style]}
+        style={[styles.inputStyle, style]}
       />
-      {props.error && <Text style={[styles.errorTextStyle]}>{props.errorMessage}</Text>}
+      {error && <Text style={[styles.errorTextStyle]}>{errorMessage}</Text>}
     </>
   );
 };

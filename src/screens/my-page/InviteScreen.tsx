@@ -1,24 +1,21 @@
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "react-native-paper";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import dayjs from "dayjs";
 import { useLayoutEffect, useState } from "react";
+import { Text } from "react-native-paper";
+import { calculateDday } from "../../common/util";
+import Button from "../../components/common/Button";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { Color, Gender } from "../../enum";
 import { ICouple, IUser } from "../../interface";
 import { coupleMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
-import { Color, Gender } from "../../enum";
-import Button from "../../components/common/Button";
-import { calculateDday } from "../../common/util";
-import dayjs from "dayjs";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-import { MyPageStackParamList } from "../../navigation/types";
-
-type InviteNavigationProp = StackNavigationProp<MyPageStackParamList, "Invite">;
-type InviteRouteProp = RouteProp<MyPageStackParamList, "Invite">;
+import { MyPageStackParamList } from "../../navigation/interface";
 
 interface InviteScreenProps {
-  navigation: InviteNavigationProp;
-  route: InviteRouteProp;
+  navigation: StackNavigationProp<MyPageStackParamList, "Invite">;
+  route: RouteProp<MyPageStackParamList, "Invite">;
 }
 
 const InviteScreen: React.FC<InviteScreenProps> = ({ navigation }) => {

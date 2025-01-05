@@ -8,7 +8,8 @@ interface ICategoryButtonProps {
   label: string;
 }
 
-export const CategoryButton: React.FC<ICategoryButtonProps> = ({ onPress, isPressed, label }) => {
+export const CategoryButton: React.FC<ICategoryButtonProps> = (props) => {
+  const { onPress, isPressed, label } = props;
   return (
     <TouchableOpacity
       style={[

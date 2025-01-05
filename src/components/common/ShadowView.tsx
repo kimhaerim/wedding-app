@@ -6,7 +6,7 @@ interface ShadowViewProps {
   children: React.ReactNode;
 }
 
-const ShadowView: React.FC<ShadowViewProps> = ({ children }) => <View style={styles.container}>{children}</View>;
+const ShadowView: React.FC<ShadowViewProps> = (props) => <View style={styles.container}>{props.children}</View>;
 
 const styles = StyleSheet.create({
   container: {

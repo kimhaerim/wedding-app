@@ -1,12 +1,11 @@
 import * as React from "react";
-import { Dialog, Divider, Portal, Text } from "react-native-paper";
-import { Color } from "../enum";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { Divider, Text } from "react-native-paper";
 import Button from "../components/common/Button";
-import BudgetSummaryRow from "../components/cost/BudgetSummaryRow";
-import { ICategory, ICheckList, ICostByCheckList } from "../interface";
-import Modal from "react-native-modal";
 import Title from "../components/common/Title";
+import BudgetSummaryRow from "../components/cost/BudgetSummaryRow";
+import { Color } from "../enum";
+import { ICategory, ICheckList, ICostByCheckList } from "../interface";
 import BottomModal from "./BottomModal";
 
 interface BudgetDetailModalProps {
@@ -17,13 +16,8 @@ interface BudgetDetailModalProps {
   hideModal: () => void;
 }
 
-const BudgetDetailModal: React.FC<BudgetDetailModalProps> = ({
-  checkList,
-  category,
-  combinedCost,
-  visible,
-  hideModal,
-}) => {
+const BudgetDetailModal: React.FC<BudgetDetailModalProps> = (props) => {
+  const { checkList, category, combinedCost, visible, hideModal } = props;
   return (
     <BottomModal visible={visible} hideModal={hideModal} height={30}>
       <Title label={`<${category.title}> 내역`}></Title>

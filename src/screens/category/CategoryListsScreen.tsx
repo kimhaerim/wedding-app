@@ -12,7 +12,7 @@ import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { ICategory } from "../../interface/category.interface";
 import { categoryMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
-import { CategoryStackParamList } from "../../navigation/types";
+import { CategoryStackParamList } from "../../navigation/interface";
 
 const defaultCategories = [
   "🏩 웨딩홀",

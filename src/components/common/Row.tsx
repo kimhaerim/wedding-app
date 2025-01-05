@@ -6,7 +6,8 @@ interface RowProps {
   style?: Object;
 }
 
-const Row: React.FC<RowProps> = ({ children, style }) => {
+const Row: React.FC<RowProps> = (props) => {
+  const { children, style } = props;
   const wrappedChildren = React.Children.map(children, (child, index) => <View style={{ flex: index }}>{child}</View>);
   return (
     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", ...style }}>

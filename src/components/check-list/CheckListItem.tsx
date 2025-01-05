@@ -1,21 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { Divider } from "react-native-paper";
+import { convertDateTimeToString } from "../../common/util";
+import { Color } from "../../enum";
+import { ICheckList } from "../../interface";
+import Badge from "../common/Badge";
 import CheckBox from "../common/CheckBox";
 import CustomMenu from "../common/Menu";
-import { Color } from "../../enum";
-import { Divider } from "react-native-paper";
-import Badge from "../common/Badge";
-import { ICheckList } from "../../interface";
-import { convertDateTimeToString } from "../../common/util";
 
 interface CheckListItemProps {
   item: ICheckList;
-  checkListId: number | undefined;
-  onMenuButtonPress: (id: number | undefined) => void;
+  checkListId?: number;
+  onMenuButtonPress: (id?: number) => void;
   onMenuItemPress: (action: string, id: number) => void;
 }
 
-const CheckListItem: React.FC<CheckListItemProps> = ({ item, checkListId, onMenuButtonPress, onMenuItemPress }) => {
+const CheckListItem: React.FC<CheckListItemProps> = (props) => {
+  const { item, checkListId, onMenuButtonPress, onMenuItemPress } = props;
   return (
     <View>
       <View style={styles.checkListRow}>

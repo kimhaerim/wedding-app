@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from "react";
 
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { View } from "react-native";
 import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
-import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigation/interface";
 
 const enum SignupField {
   EMAIL = "email",

@@ -6,7 +6,7 @@ interface TitleProps {
   label: string;
 }
 
-const Title: React.FC<TitleProps> = ({ label }) => <Text style={[styles.labelStyle]}>{label}</Text>;
+const Title: React.FC<TitleProps> = (props) => <Text style={[styles.labelStyle]}>{props.label}</Text>;
 
 const styles = StyleSheet.create({
   labelStyle: { fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 20 },

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Divider } from "react-native-paper";
-import Row from "./Row";
 import { Color } from "../../enum";
+import Row from "./Row";
 
 interface MonthlySummaryProps {
   currentMonth: number;
@@ -18,7 +18,8 @@ interface MonthlySummaryProps {
   };
 }
 
-const MonthlySummary: React.FC<MonthlySummaryProps> = ({ currentMonth, checkListCount, paymentSummary }) => {
+const MonthlySummary: React.FC<MonthlySummaryProps> = (props) => {
+  const { currentMonth, checkListCount, paymentSummary } = props;
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (

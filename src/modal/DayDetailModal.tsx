@@ -1,34 +1,31 @@
-import Modal from "react-native-modal";
-import { ICheckList, ICost } from "../interface";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import ShadowView from "../components/common/ShadowView";
-import CheckBox from "../components/common/CheckBox";
-import Badge from "../components/common/Badge";
-import CustomMenu from "../components/common/Menu";
 import { Text } from "react-native-paper";
 import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../common/util";
-import { CalendarType, Color } from "../enum";
+import Badge from "../components/common/Badge";
 import Button from "../components/common/Button";
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { CalendarStackParamList } from "../navigation/types";
-import CheckListItem from "../components/check-list/CheckListItem";
+import CheckBox from "../components/common/CheckBox";
 import Row from "../components/common/Row";
-import BottomModal from "./BottomModal";
+import ShadowView from "../components/common/ShadowView";
 import Title from "../components/common/Title";
+import { CalendarType, Color } from "../enum";
+import { ICheckList, ICost } from "../interface";
+import { CalendarStackParamList } from "../navigation/interface";
+import BottomModal from "./BottomModal";
 
 interface DayDetailModalProps {
   isVisible: boolean;
   checkList: ICheckList[];
   costs: ICost[];
   selectedDate: string;
-  onHide: () => void;
+  hideModal: () => void;
 }
 
 type CheckListNavigationProp = StackNavigationProp<CalendarStackParamList, "CheckListDetail" | "EditCheckList">;
 
-const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, costs, selectedDate, onHide }) => {
+const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, costs, selectedDate, hideModal }) => {
   const [calendarType, setCalendarType] = useState<CalendarType>(
     checkList.length === 0 && costs.length === 0
       ? CalendarType.CHECK_LIST
@@ -40,17 +37,17 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
   const navigation = useNavigation<CheckListNavigationProp>();
 
   const handleCheckListPress = (id: number) => {
-    onHide();
-    navigation.navigate("CheckListDetail", { id });
+    hideModal();
+    navigation.navigate("CheckListDetail", { checkListId: id });
   };
 
   const handleAddCheckListPress = () => {
-    onHide();
+    hideModal();
     navigation.navigate("EditCheckList", { isFromCategory: false });
   };
 
   const handleAddCostPress = () => {
-    onHide();
+    hideModal();
     navigation.navigate("EditCost", {});
   };
 
@@ -87,7 +84,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
   }, [calendarType, checkList, costs]);
 
   return (
-    <BottomModal visible={isVisible} hideModal={onHide} height={modalHeight}>
+    <BottomModal visible={isVisible} hideModal={hideModal} height={modalHeight}>
       <Title
         label={`${formattedDate} ${calendarType === CalendarType.CHECK_LIST ? "체크리스트" : "지출 내역"}`}
       ></Title>
@@ -129,7 +126,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
                   renderItem={({ item }) => renderItem(item)}
                 />
                 <View style={{ justifyContent: "center", alignItems: "center", marginTop: 10 }}>
-                  <Button onPress={onHide} style={{ backgroundColor: Color.GRAY, width: "50%" }}>
+                  <Button onPress={hideModal} style={{ backgroundColor: Color.GRAY, width: "50%" }}>
                     <Text>닫기</Text>
                   </Button>
                 </View>
@@ -176,7 +173,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
                   )}
                 />
                 <View style={{ justifyContent: "center", alignItems: "center", marginTop: 10 }}>
-                  <Button onPress={onHide} style={{ backgroundColor: Color.GRAY, width: "50%" }}>
+                  <Button onPress={hideModal} style={{ backgroundColor: Color.GRAY, width: "50%" }}>
                     <Text>닫기</Text>
                   </Button>
                 </View>

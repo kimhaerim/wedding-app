@@ -1,10 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { MyPageStackParamList } from "./types";
-import { Color } from "../enum";
 import { StyleSheet } from "react-native";
-import MyPageScreen from "../screens/my-page/MyPageScreen";
+import { Color } from "../enum";
 import InviteScreen from "../screens/my-page/InviteScreen";
+import MyPageScreen from "../screens/my-page/MyPageScreen";
 import ProfileScreen from "../screens/my-page/ProfileScreen";
+import { MyPageStackParamList } from "./interface";
 
 const Stack = createStackNavigator<MyPageStackParamList>();
 

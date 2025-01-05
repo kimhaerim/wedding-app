@@ -8,7 +8,9 @@ interface FloatingButtonProps {
   onPress: () => void;
 }
 
-const FloatingButton: React.FC<FloatingButtonProps> = ({ onPress }) => {
+const FloatingButton: React.FC<FloatingButtonProps> = (props) => {
+  const { onPress } = props;
+
   return (
     <TouchableOpacity style={styles.floatingButton} onPress={onPress}>
       <Icon source="plus" size={30} color="white" />

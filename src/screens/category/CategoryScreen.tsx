@@ -15,7 +15,7 @@ import BudgetSummary from "../../components/cost/BudgetSummary";
 import { ICostByCheckList } from "../../interface/cost.interface";
 import { checkListMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
-import { CategoryStackParamList } from "../../navigation/types";
+import { CategoryStackParamList } from "../../navigation/interface";
 
 interface CategoryScreenProps {
   navigation: StackNavigationProp<

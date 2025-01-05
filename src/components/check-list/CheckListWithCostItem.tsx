@@ -1,29 +1,25 @@
-import { Divider, Text } from "react-native-paper";
-import ShadowView from "../common/ShadowView";
-import React, { useState } from "react";
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
+import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../../common/util";
+import { Color, CostType } from "../../enum";
 import { ICheckList } from "../../interface/check-list.interface";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import Badge from "../common/Badge";
 import CheckBox from "../common/CheckBox";
 import CustomMenu from "../common/Menu";
-import { Color, CostType } from "../../enum";
-import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../../common/util";
-import Badge from "../common/Badge";
+import ShadowView from "../common/ShadowView";
 
 interface CheckListWithCostItemProps {
   checkList: ICheckList;
   checkListId: number | undefined;
   onCheckListPress: () => void;
   onMenuItemPress: (action: string, id: number) => void;
-  onMenuButtonPress: (id: number | undefined) => void;
+  onMenuButtonPress: (id?: number) => void;
 }
 
-const CheckListWithCostItem: React.FC<CheckListWithCostItemProps> = ({
-  checkList,
-  checkListId,
-  onCheckListPress,
-  onMenuItemPress,
-  onMenuButtonPress,
-}) => {
+const CheckListWithCostItem: React.FC<CheckListWithCostItemProps> = (props) => {
+  const { checkList, checkListId, onCheckListPress, onMenuItemPress, onMenuButtonPress } = props;
+
   return (
     <ShadowView key={`checkList-${checkList.id}`}>
       <View>

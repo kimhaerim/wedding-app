@@ -14,7 +14,7 @@ import { Color } from "../../enum";
 import { ICheckList, ICost, ICostByCheckList } from "../../interface";
 import { checkListMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
-import { CheckListStackParamList } from "../../navigation/types";
+import { CheckListStackParamList } from "../../navigation/interface";
 
 import BudgetDetailModal from "../../modal/BudgetDetailModal";
 

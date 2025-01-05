@@ -17,7 +17,8 @@ interface CommonCalendarProps {
   onDayPress: (day: DateData) => void;
 }
 
-const CommonCalendar: React.FC<CommonCalendarProps> = ({ markedDates, onMonthChange, onDayPress }) => {
+const CommonCalendar: React.FC<CommonCalendarProps> = (props) => {
+  const { markedDates, onMonthChange, onDayPress } = props;
   return (
     <Calendar
       style={{ height: 300 }}

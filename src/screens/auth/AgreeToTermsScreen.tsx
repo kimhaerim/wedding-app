@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import { Divider, Text } from "react-native-paper";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { View } from "react-native";
+import { Divider, Text } from "react-native-paper";
 import BottomButton from "../../components/common/BottomButton";
 import CheckBox from "../../components/common/CheckBox";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
-import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigation/interface";
 
 const initialAgreements = {
   isAllAgreed: false,

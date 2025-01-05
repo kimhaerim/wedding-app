@@ -1,14 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { RootStackParamList } from "./types";
+import { IconButton } from "react-native-paper";
 import { Color } from "../enum";
-import LoginScreen from "../screens/auth/LoginScreen";
-import SignupScreen from "../screens/auth/SignupScreen";
 import AgreeToTermsScreen from "../screens/auth/AgreeToTermsScreen";
-import ProfileScreen from "../screens/my-page/ProfileScreen";
-import DefaultCategoriesScreen from "../screens/category/DefaultCategoriesScreen";
 import ConfirmSignupScreen from "../screens/auth/ConfirmSignupScreen";
 import EmailLoginScreen from "../screens/auth/EmailLoginScreen";
-import { IconButton } from "react-native-paper";
+import LoginScreen from "../screens/auth/LoginScreen";
+import SignupScreen from "../screens/auth/SignupScreen";
+import DefaultCategoriesScreen from "../screens/category/DefaultCategoriesScreen";
+import ProfileScreen from "../screens/my-page/ProfileScreen";
+import { RootStackParamList } from "./interface";
 import TabNavigator from "./TabNavigator";
 
 const Stack = createStackNavigator<RootStackParamList>();

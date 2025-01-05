@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { SegmentedButtons, Text } from "react-native-paper";
-import { Color, Gender } from "../../enum";
-import InputText from "../../components/common/InputText";
 import BottomButton from "../../components/common/BottomButton";
+import InputText from "../../components/common/InputText";
+import { Color, Gender } from "../../enum";
 
-import TimePicker from "../../components/common/TimePicker";
-import DatePicker from "../../components/common/DatePicker";
-import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../navigation/types";
 import { View } from "react-native";
+import DatePicker from "../../components/common/DatePicker";
+import TimePicker from "../../components/common/TimePicker";
+import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { RootStackParamList } from "../../navigation/interface";
 
 const baseDate = new Date(new Date().getFullYear() - 30, 0, 1);
-type ProfileNavigationProp = StackNavigationProp<RootStackParamList, "Profile">;
 
-const ProfileScreen = ({ navigation }: { navigation: ProfileNavigationProp }) => {
+interface MyPageScreenProps {
+  navigation: StackNavigationProp<RootStackParamList, "Profile">;
+  route: RouteProp<RootStackParamList, "Profile">;
+}
+
+const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const [name, setName] = useState<string | undefined>(undefined);
   const [gender, setGender] = useState<Gender>(Gender.FEMALE);
   const [birthDay, setBirthDay] = useState<Date>(baseDate);

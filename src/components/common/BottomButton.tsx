@@ -1,8 +1,8 @@
 import React from "react";
-import { Color } from "../../enum";
 import { StyleSheet } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Color } from "../../enum";
 
 const BOTTOM_APPBAR_HEIGHT = 50;
 
@@ -13,6 +13,7 @@ interface ButtonProps {
 }
 
 const BottomButton: React.FC<ButtonProps> = (props) => {
+  const { label, disabled, onPress } = props;
   const { bottom } = useSafeAreaInsets();
 
   return (
@@ -27,12 +28,12 @@ const BottomButton: React.FC<ButtonProps> = (props) => {
     >
       <Button
         mode="contained"
-        onPress={props.onPress}
+        onPress={onPress}
         buttonColor={Color.BLUE}
-        disabled={props.disabled}
+        disabled={disabled}
         style={[styles.buttonStyle]}
       >
-        {props.label}
+        {label}
       </Button>
     </Appbar>
   );
@@ -40,7 +41,7 @@ const BottomButton: React.FC<ButtonProps> = (props) => {
 
 const styles = StyleSheet.create({
   bottom: {
-    position: "absolute", // 화면의 하단에 고정
+    position: "absolute",
     backgroundColor: "aquamarine",
     alignItems: "center",
     justifyContent: "center",

@@ -1,11 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ICost } from "../../interface/check-list.interface";
 
-import CustomMenu from "../common/Menu";
-import { Color, CostType } from "../../enum";
 import { Divider } from "react-native-paper";
 import { convertDateToString, covertCostType, formatCurrency } from "../../common/util";
+import { Color, CostType } from "../../enum";
 import Badge from "../common/Badge";
 
 interface CostItemProps {
@@ -13,7 +12,8 @@ interface CostItemProps {
   onCostPress: () => void;
 }
 
-const CostItem: React.FC<CostItemProps> = ({ item, onCostPress }) => {
+const CostItem: React.FC<CostItemProps> = (props) => {
+  const { item, onCostPress } = props;
   return (
     <TouchableOpacity style={{ marginTop: 10 }} onPress={onCostPress}>
       <Badge

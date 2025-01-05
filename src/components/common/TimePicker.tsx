@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { TimePickerModal } from "react-native-paper-dates";
-import { View } from "react-native";
 
+import dayjs from "dayjs";
 import { ko, registerTranslation } from "react-native-paper-dates";
 import { Color } from "../../enum";
-import dayjs from "dayjs";
 registerTranslation("ko", ko);
 
 interface TimeInputProps {
@@ -13,7 +13,8 @@ interface TimeInputProps {
   onChange: (time: string) => void;
 }
 
-const TimeInput: React.FC<TimeInputProps> = ({ value, onChange }) => {
+const TimeInput: React.FC<TimeInputProps> = (props) => {
+  const { value, onChange } = props;
   const [visible, setVisible] = useState(false);
 
   const onDismiss = () => setVisible(false);
