@@ -20,7 +20,7 @@ interface AgreeToTermsProps {
   route: RouteProp<RootStackParamList, "AgreeToTerms">;
 }
 
-const AgreeToTermsScreen: React.FC<AgreeToTermsProps> = ({ navigation }) => {
+export const AgreeToTermsScreen: React.FC<AgreeToTermsProps> = ({ navigation }) => {
   const [agreements, setAgreements] = useState(initialAgreements);
 
   const toggleAgreement = (agreement: keyof typeof initialAgreements) => {
@@ -88,5 +88,3 @@ const AgreeToTermsScreen: React.FC<AgreeToTermsProps> = ({ navigation }) => {
     </WhiteSafeAreaView>
   );
 };
-
-export default AgreeToTermsScreen;

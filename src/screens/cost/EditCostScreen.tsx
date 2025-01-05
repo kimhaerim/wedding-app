@@ -15,7 +15,7 @@ interface EditCostScreenProps {
   route: RouteProp<CalendarStackParamList, "EditCost">;
 }
 
-const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) => {
+export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) => {
   const { costId } = route.params;
 
   useLayoutEffect(() => {
@@ -92,5 +92,3 @@ const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) =>
     </WhiteSafeAreaView>
   );
 };
-
-export default EditCostScreen;

@@ -1,19 +1,16 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { IconButton } from "react-native-paper";
 import { Color } from "../enum";
-import AgreeToTermsScreen from "../screens/auth/AgreeToTermsScreen";
-import ConfirmSignupScreen from "../screens/auth/ConfirmSignupScreen";
-import EmailLoginScreen from "../screens/auth/EmailLoginScreen";
-import LoginScreen from "../screens/auth/LoginScreen";
-import SignupScreen from "../screens/auth/SignupScreen";
-import DefaultCategoriesScreen from "../screens/category/DefaultCategoriesScreen";
-import ProfileScreen from "../screens/my-page/ProfileScreen";
+import { AgreeToTermsScreen, ConfirmSignupScreen, EmailLoginScreen, LoginScreen, SignupScreen } from "../screens/auth";
+
+import { DefaultCategoriesScreen } from "../screens/category";
+import { ProfileScreen } from "../screens/my-page";
 import { RootStackParamList } from "./interface";
-import TabNavigator from "./TabNavigator";
+import { TabNavigator } from "./TabNavigator";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boolean) => void }) => {
+export const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boolean) => void }) => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -60,5 +57,3 @@ const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boolean) =
     </Stack.Navigator>
   );
 };
-
-export default RootNavigator;

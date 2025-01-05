@@ -14,7 +14,7 @@ interface ConfirmSignupProps {
   route: RouteProp<RootStackParamList, "ConfirmSignup">;
 }
 
-const ConfirmSignupScreen: React.FC<ConfirmSignupProps> = () => {
+export const ConfirmSignupScreen: React.FC<ConfirmSignupProps> = () => {
   return (
     <WhiteSafeAreaView style={{ flex: 1 }}>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
@@ -58,5 +58,3 @@ const ConfirmSignupScreen: React.FC<ConfirmSignupProps> = () => {
     </WhiteSafeAreaView>
   );
 };
-
-export default ConfirmSignupScreen;

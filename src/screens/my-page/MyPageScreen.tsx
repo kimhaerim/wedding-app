@@ -19,7 +19,7 @@ interface MyPageScreenProps {
   route: RouteProp<MyPageStackParamList, "MyPageHome">;
 }
 
-const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
+export const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const today = dayjs();
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
   const [user, setUser] = useState<IUser>(userWithPartnerMockData);
@@ -183,5 +183,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-export default MyPageScreen;

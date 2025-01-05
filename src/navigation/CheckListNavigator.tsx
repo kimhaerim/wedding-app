@@ -1,14 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { Color } from "../enum";
-import CheckListScreen from "../screens/check-list/CheckListScreen";
-import CheckListsScreen from "../screens/check-list/CheckListsScreen";
-import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
+import { CheckListScreen, CheckListsScreen, EditCheckListScreen } from "../screens/check-list";
 import { CheckListStackParamList } from "./interface";
 
 const Stack = createStackNavigator<CheckListStackParamList>();
 
-const CheckListNavigator = () => {
+export const CheckListNavigator = () => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -40,5 +38,3 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
 });
-
-export default CheckListNavigator;

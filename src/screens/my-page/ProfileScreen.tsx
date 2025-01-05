@@ -19,7 +19,7 @@ interface MyPageScreenProps {
   route: RouteProp<RootStackParamList, "Profile">;
 }
 
-const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
+export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const [name, setName] = useState<string | undefined>(undefined);
   const [gender, setGender] = useState<Gender>(Gender.FEMALE);
   const [birthDay, setBirthDay] = useState<Date>(baseDate);
@@ -99,5 +99,3 @@ const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
     </WhiteSafeAreaView>
   );
 };
-
-export default ProfileScreen;

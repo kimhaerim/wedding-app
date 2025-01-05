@@ -19,7 +19,7 @@ interface EditCheckListScreenProps {
   route: RouteProp<CheckListStackParamList, "EditCheckList">;
 }
 
-const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, route }) => {
+export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, route }) => {
   const { checkListId, isFromCategory } = route.params;
 
   useLayoutEffect(() => {
@@ -151,5 +151,3 @@ const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, r
     </WhiteSafeAreaView>
   );
 };
-
-export default EditCheckListScreen;

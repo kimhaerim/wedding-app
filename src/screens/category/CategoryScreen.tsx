@@ -25,7 +25,7 @@ interface CategoryScreenProps {
   route: RouteProp<CategoryStackParamList, "CategoryDetail">;
 }
 
-const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) => {
+export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) => {
   const { categoryId } = route.params;
 
   const checkListCount = 1;
@@ -126,5 +126,3 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) =>
     </WhiteSafeAreaView>
   );
 };
-
-export default CategoryScreen;

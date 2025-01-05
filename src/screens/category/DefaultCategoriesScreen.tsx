@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Text } from "react-native-paper";
 import CategoryButton from "../../components/category/CategoryButton";
 import BottomButton from "../../components/common/BottomButton";
@@ -13,7 +13,7 @@ interface DefaultCategoriesProps {
   route: RouteProp<RootStackParamList, "DefaultCategories">;
 }
 
-const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navigation }) => {
+export const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navigation }) => {
   const defaultCategories = [
     "🏩 웨딩홀",
     "📸 스튜디오",
@@ -63,15 +63,3 @@ const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navigation 
     </WhiteSafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  categoryButton: {
-    height: 40,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 6,
-  },
-});
-
-export default DefaultCategoriesScreen;

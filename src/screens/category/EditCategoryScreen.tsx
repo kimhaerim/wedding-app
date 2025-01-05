@@ -14,7 +14,7 @@ interface EditCategoryScreenProps {
   route: RouteProp<CategoryStackParamList, "EditCategory">;
 }
 
-const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
+export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
   const { categoryId, categoryTitle } = route.params;
 
   useLayoutEffect(() => {
@@ -26,9 +26,6 @@ const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, rou
 
   const [inputTitle, setInputTitle] = useState<string>(category ? category.title : categoryTitle ? categoryTitle : "");
   const [inputAmountBudget, setInputAmountBudget] = useState<number>(category ? category.budgetAmount : 0);
-
-  const [showExitModal, setShowExitModal] = useState<boolean>(false);
-  const [exitAction, setExitAction] = useState<(() => void) | null>(null);
 
   const handleBottomButtonPress = () => {
     if (isEdit) {
@@ -73,5 +70,3 @@ const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, rou
     </WhiteSafeAreaView>
   );
 };
-
-export default EditCategoryScreen;

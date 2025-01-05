@@ -1,15 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { Color } from "../enum";
-import CalendarScreen from "../screens/calendar/CalendarScreen";
-import CheckListScreen from "../screens/check-list/CheckListScreen";
-import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
-import EditCostScreen from "../screens/cost/EditCostScreen";
+import { CalendarScreen } from "../screens/calendar";
+import { CheckListScreen, EditCheckListScreen } from "../screens/check-list";
+import { EditCostScreen } from "../screens/cost";
 import { CalendarStackParamList } from "./interface";
 
 const Stack = createStackNavigator<CalendarStackParamList>();
 
-const CalendarNavigator = () => {
+export const CalendarNavigator = () => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -42,5 +41,3 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
 });
-
-export default CalendarNavigator;

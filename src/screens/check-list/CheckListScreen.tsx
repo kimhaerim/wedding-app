@@ -25,7 +25,7 @@ interface CheckListScreenProps {
   route: RouteProp<CheckListStackParamList, "CheckListDetail">;
 }
 
-const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) => {
+export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) => {
   const { checkListId } = route.params;
 
   const [page, setPage] = useState<number>(0);
@@ -152,5 +152,3 @@ const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) 
     </WhiteSafeAreaView>
   );
 };
-
-export default CheckListScreen;

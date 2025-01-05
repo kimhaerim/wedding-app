@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 
-import { Color } from "../../enum";
-import { ICheckList, ICost } from "../../interface/check-list.interface";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CommonCalendar from "../../components/calendar/Calendar";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { Color } from "../../enum";
+import { ICheckList, ICost } from "../../interface/check-list.interface";
 
+import MonthlySummary from "../../components/common/MonthlySummary";
 import { checkListMockData, costsMockData } from "../../mock/CheckListMockData";
 import DayDetailModal from "../../modal/DayDetailModal";
-import MonthlySummary from "../../components/common/MonthlySummary";
 
-const CalendarScreen: React.FC = () => {
+export const CalendarScreen: React.FC = () => {
   const today = new Date();
 
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
@@ -138,11 +138,9 @@ const CalendarScreen: React.FC = () => {
           isVisible={showDetailModal}
           checkList={checkListAgendaList}
           costs={costAgendaLists}
-          onHide={() => setShowDetailModal(false)}
+          hideModal={() => setShowDetailModal(false)}
         />
       </View>
     </WhiteSafeAreaView>
   );
 };
-
-export default CalendarScreen;

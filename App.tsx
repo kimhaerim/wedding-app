@@ -1,9 +1,7 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React, { useState } from "react";
 import { PaperProvider } from "react-native-paper";
-import { NavigationContainer } from "@react-navigation/native";
-
-import RootNavigator from "./src/navigation/RootNavigator";
-import TabNavigator from "./src/navigation/TabNavigator";
+import { RootNavigator, TabNavigator } from "./src/navigation";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);

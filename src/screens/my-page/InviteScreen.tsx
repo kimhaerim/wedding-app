@@ -18,7 +18,7 @@ interface InviteScreenProps {
   route: RouteProp<MyPageStackParamList, "Invite">;
 }
 
-const InviteScreen: React.FC<InviteScreenProps> = ({ navigation }) => {
+export const InviteScreen: React.FC<InviteScreenProps> = ({ navigation }) => {
   const today = dayjs();
 
   useLayoutEffect(() => {
@@ -104,22 +104,22 @@ const InviteScreen: React.FC<InviteScreenProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: "row", // 수평 배치
-    justifyContent: "center", // 가로 중앙 정렬
-    alignItems: "center", // 세로 중앙 정렬
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   userContainer: {
-    justifyContent: "center", // 내부 수직 정렬
-    alignItems: "center", // 내부 가로 정렬
-    marginHorizontal: 10, // 사용자 간 간격 추가
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
   },
   genderContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: Color.BLUE100,
-    justifyContent: "center", // 내부 수직 정렬
-    alignItems: "center", // 내부 가로 정렬
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 10,
   },
   icon: {
@@ -133,43 +133,17 @@ const styles = StyleSheet.create({
   },
   heart: {
     fontSize: 40,
-    marginHorizontal: 10, // 하트와 프로필 사이의 간격 추가
+    marginHorizontal: 10,
   },
   profileContainer: {
-    // flex: 1,
     width: "100%",
     marginBottom: 20,
     borderWidth: 1,
     padding: 10,
-    justifyContent: "center", // 내부 수직 정렬
+    justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
     borderColor: Color.BLUE200,
   },
   text: { fontSize: 14, fontWeight: "bold", marginBottom: 5 },
-  dateText: { fontSize: 12, color: Color.DARK_GRAY, textAlign: "center" },
-  menuButton: {
-    margin: 10,
-    padding: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
-    borderWidth: 1,
-    borderColor: Color.GRAY,
-    borderRadius: 8,
-  },
-  menuContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Color.GRAY,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 20,
-  },
-  menuText: {
-    fontSize: 15,
-    fontWeight: "bold",
-  },
 });
-
-export default InviteScreen;

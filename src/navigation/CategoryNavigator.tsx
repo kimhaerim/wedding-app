@@ -1,15 +1,13 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { Color } from "../enum";
-import CategoryListsScreen from "../screens/category/CategoryListsScreen";
-import CategoryScreen from "../screens/category/CategoryScreen";
-import EditCategoryScreen from "../screens/category/EditCategoryScreen";
-import CheckListScreen from "../screens/check-list/CheckListScreen";
-import EditCheckListScreen from "../screens/check-list/EditCheckListScreen";
+
+import { CategoryListsScreen, CategoryScreen, EditCategoryScreen } from "../screens/category";
+import { CheckListScreen, EditCheckListScreen } from "../screens/check-list";
 import { CategoryStackParamList } from "./interface";
 
 const Stack = createStackNavigator<CategoryStackParamList>();
 
-const CategoryNavigator = () => {
+export const CategoryNavigator = () => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -42,5 +40,3 @@ const CategoryNavigator = () => {
     </Stack.Navigator>
   );
 };
-
-export default CategoryNavigator;

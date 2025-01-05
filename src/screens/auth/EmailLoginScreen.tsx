@@ -20,7 +20,7 @@ type EmailLoginScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, "EmailLogin">;
 };
 
-const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
+export const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
   const { setIsLoggedIn } = route.params;
   const [email, setEmail] = useState<string | undefined>(undefined);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
@@ -115,5 +115,3 @@ const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
     </WhiteSafeAreaView>
   );
 };
-
-export default EmailLoginScreen;

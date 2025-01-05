@@ -16,7 +16,7 @@ interface LoginScreenProps {
   setIsLoggedIn: () => void;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ navigation, setIsLoggedIn }) => {
+export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation, setIsLoggedIn }) => {
   return (
     <WhiteSafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
       <Text variant="titleSmall" style={{ textAlign: "center", marginBottom: 10 }}>
@@ -65,5 +65,3 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation, setIsLoggedIn }) 
     </WhiteSafeAreaView>
   );
 };
-
-export default LoginScreen;

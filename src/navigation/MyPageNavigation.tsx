@@ -1,14 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { Color } from "../enum";
-import InviteScreen from "../screens/my-page/InviteScreen";
-import MyPageScreen from "../screens/my-page/MyPageScreen";
-import ProfileScreen from "../screens/my-page/ProfileScreen";
+import { InviteScreen, MyPageScreen } from "../screens/my-page";
 import { MyPageStackParamList } from "./interface";
 
 const Stack = createStackNavigator<MyPageStackParamList>();
 
-const MyPageNavigator = () => {
+export const MyPageNavigator = () => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -23,7 +21,7 @@ const MyPageNavigator = () => {
         options={{ ...defaultOptions, headerTitle: "마이페이지" }}
       />
       <Stack.Screen name="Invite" component={InviteScreen} options={defaultOptions} />
-      <Stack.Screen name="EditProfile" component={ProfileScreen} options={defaultOptions} />
+      {/* <Stack.Screen name="EditProfile" component={ProfileScreen} options={defaultOptions} /> */}
     </Stack.Navigator>
   );
 };
@@ -34,5 +32,3 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
 });
-
-export default MyPageNavigator;

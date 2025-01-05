@@ -22,7 +22,7 @@ interface CheckListsScreenProps {
   route: RouteProp<CheckListStackParamList, "CheckListsHome">;
 }
 
-const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
+export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
   const today = dayjs();
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
@@ -149,5 +149,3 @@ const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
     </WhiteSafeAreaView>
   );
 };
-
-export default CheckListsScreen;

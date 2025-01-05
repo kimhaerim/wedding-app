@@ -1,15 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import BudgetScreen from "../screens/cost/Budget";
 import { Icon, Text } from "react-native-paper";
 import { Color } from "../enum";
-import CategoryNavigator from "./CategoryNavigator";
-import CheckListNavigator from "./CheckListNavigator";
-import MyPageNavigator from "./MyPageNavigation";
-import CalendarNavigator from "./CalendarNavigator";
+import { BudgetNavigator } from "./BudgetNavigator";
+import { CalendarNavigator } from "./CalendarNavigator";
+import { CategoryNavigator } from "./CategoryNavigator";
+import { CheckListNavigator } from "./CheckListNavigator";
+import { MyPageNavigator } from "./MyPageNavigation";
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
+export const TabNavigator = () => {
   const getTabBarStyle = (focused: boolean) => {
     return focused ? Color.BLUE : Color.DARK_GRAY;
   };
@@ -86,13 +86,13 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="예산 / 지출"
-        component={BudgetScreen}
+        component={BudgetNavigator}
         options={{
           tabBarIcon: ({ size, focused }) => <Icon source="cash" size={size} color={getTabBarStyle(focused)} />,
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: getTabBarStyle(focused), fontSize: 10, marginTop: 2 }}>예산 / 지출</Text>
           ),
-          headerTitle: "예산 / 지출",
+          headerShown: false,
         }}
       />
 
@@ -110,5 +110,3 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-export default TabNavigator;

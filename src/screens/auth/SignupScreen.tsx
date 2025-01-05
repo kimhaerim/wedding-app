@@ -25,7 +25,7 @@ interface SignupScreenProps {
   route: RouteProp<RootStackParamList, "Signup">;
 }
 
-const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
+export const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
   const [formData, setFormData] = useState<SignupData>({
     email: undefined,
     password: undefined,
@@ -122,5 +122,3 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     </WhiteSafeAreaView>
   );
 };
-
-export default SignupScreen;

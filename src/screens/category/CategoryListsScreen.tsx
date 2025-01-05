@@ -30,7 +30,7 @@ interface CategoryListsScreenProps {
   route: RouteProp<CategoryStackParamList, "CategoryHome">;
 }
 
-const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
+export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
   const [userCategories, setUserCategories] = useState<ICategory[]>(categoryMockData);
 
   const [page, setPage] = useState<number>(0);
@@ -128,5 +128,3 @@ const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation })
     </WhiteSafeAreaView>
   );
 };
-
-export default CategoryListsScreen;
