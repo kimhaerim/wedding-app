@@ -3,7 +3,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-paper";
-import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../common/util";
+import { convertCostType, convertDateTimeToString, convertDateToString, formatCurrency } from "../common/util";
 import Badge from "../components/common/Badge";
 import Button from "../components/common/Button";
 import CheckBox from "../components/common/CheckBox";
@@ -150,7 +150,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
                     <ShadowView>
                       <TouchableOpacity onPress={() => handleCheckListPress(item.id)} key={`cost-${item.id}`}>
                         <Row>
-                          <Text style={{ fontSize: 10 }}>{covertCostType(item.costType)}</Text>
+                          <Text style={{ fontSize: 10 }}>{convertCostType(item.costType)}</Text>
                           <Text
                             style={{ fontSize: 10, marginLeft: 10, color: item.paymentDate ? Color.BLUE : Color.RED }}
                           >

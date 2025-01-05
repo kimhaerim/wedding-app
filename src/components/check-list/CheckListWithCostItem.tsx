@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-import { convertDateTimeToString, convertDateToString, covertCostType, formatCurrency } from "../../common/util";
+import { convertCostType, convertDateTimeToString, convertDateToString, formatCurrency } from "../../common/util";
 import { Color, CostType } from "../../enum";
 import { ICheckList } from "../../interface/check-list.interface";
 import Badge from "../common/Badge";
@@ -52,7 +52,7 @@ const CheckListWithCostItem: React.FC<CheckListWithCostItemProps> = (props) => {
               <View key={`cost-${cost.id}`} style={styles.costItemContainer}>
                 <Badge
                   backgroundColor={cost.costType === CostType.BASE ? Color.BLUE : Color.DARK_GRAY}
-                  label={covertCostType(cost.costType)}
+                  label={convertCostType(cost.costType)}
                   labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
                 />
                 <Text style={{ fontWeight: "bold", fontSize: 15, marginTop: 10 }}>{cost.title || "제목 없음"}</Text>

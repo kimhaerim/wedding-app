@@ -1,6 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
 import { convertDateTimeToString } from "../../common/util";
@@ -21,7 +21,7 @@ import BudgetDetailModal from "../../modal/BudgetDetailModal";
 import EditDeleteButtons from "../../components/common/EditDeleteButtons";
 
 interface CheckListScreenProps {
-  navigation: StackNavigationProp<CheckListStackParamList, "CheckListDetail" | "EditCheckList" | "CostDetail">;
+  navigation: StackNavigationProp<CheckListStackParamList, "CheckListDetail" | "EditCheckList" | "EditCost">;
   route: RouteProp<CheckListStackParamList, "CheckListDetail">;
 }
 
@@ -29,8 +29,9 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
   const { checkListId } = route.params;
 
   const [page, setPage] = useState<number>(0);
+  const [costId, setCostId] = useState<number | undefined>(undefined);
   const [checkList, setCheckList] = useState<ICheckList>(checkListMockData[0]);
-  const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
+  const [removeCostModalVisible, setRemoveCostModalVisible] = useState<boolean>(false);
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
     totalCost: 200000,
     paidCost: 100000,
@@ -54,6 +55,19 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
       setPage(-1);
     }
   };
+
+  const handleEditCost = useCallback(
+    (costId: number) => {
+      navigation.navigate("EditCost", { costId });
+      setCostId(undefined);
+    },
+    [costId]
+  );
+
+  const handleRemoveCost = useCallback(() => {
+    setRemoveCostModalVisible(true);
+    setCostId(undefined);
+  }, [costId]);
 
   return (
     <WhiteSafeAreaView>
@@ -115,9 +129,10 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
             <ShadowView>
               <CostItem
                 item={item}
-                onCostPress={() => {
-                  navigation.navigate("CostDetail", { costId: item.id });
-                }}
+                costId={costId}
+                onMenuButtonPress={() => setCostId(item.id)}
+                onEditButtonPress={() => handleEditCost(item.id)}
+                onDeleteButtonPress={handleRemoveCost}
               />
             </ShadowView>
           )}
@@ -130,8 +145,8 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
 
       <ConfirmModal
         title="비용 정보를 정말 삭제하시겠습니까?"
-        visible={removeModalVisible}
-        hideModal={() => setRemoveModalVisible(false)}
+        visible={removeCostModalVisible}
+        hideModal={() => setRemoveCostModalVisible(false)}
       ></ConfirmModal>
 
       <ConfirmModal

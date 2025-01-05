@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { Color } from "../enum";
 import { CheckListScreen, CheckListsScreen, EditCheckListScreen } from "../screens/check-list";
+import { EditCostScreen } from "../screens/cost";
 import { CheckListStackParamList } from "./interface";
 
 const Stack = createStackNavigator<CheckListStackParamList>();
@@ -28,6 +29,8 @@ export const CheckListNavigator = () => {
         component={CheckListScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트 상세" }}
       />
+
+      <Stack.Screen name="EditCost" component={EditCostScreen} options={{ ...defaultOptions }} />
     </Stack.Navigator>
   );
 };

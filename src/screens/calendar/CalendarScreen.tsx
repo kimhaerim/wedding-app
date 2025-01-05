@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CommonCalendar from "../../components/calendar/Calendar";
@@ -7,6 +7,7 @@ import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color } from "../../enum";
 import { ICheckList, ICost } from "../../interface/check-list.interface";
 
+import { Text } from "react-native-paper";
 import MonthlySummary from "../../components/common/MonthlySummary";
 import { checkListMockData, costsMockData } from "../../mock/CheckListMockData";
 import DayDetailModal from "../../modal/DayDetailModal";
@@ -125,6 +126,16 @@ export const CalendarScreen: React.FC = () => {
           }}
         />
 
+        <View style={[styles.legendContainer]}>
+          <View style={[styles.legendDot]}></View>
+          <Text style={[styles.legendText]}>체크리스트</Text>
+        </View>
+
+        <View style={[styles.legendContainer]}>
+          <View style={[styles.legendDot, { backgroundColor: Color.RED }]}></View>
+          <Text style={[styles.legendText]}>지출 내역</Text>
+        </View>
+
         <CommonCalendar
           markedDates={markedDates}
           onMonthChange={onMonthChange}
@@ -142,3 +153,15 @@ export const CalendarScreen: React.FC = () => {
     </WhiteSafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  legendContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  legendDot: { width: 10, height: 10, backgroundColor: Color.BLUE, borderRadius: 5, marginHorizontal: 20 },
+  legendText: {
+    fontSize: 12,
+  },
+});

@@ -49,7 +49,7 @@ export const convertCheckListStatus = (status: CheckListStatus) => {
   }
 };
 
-export const covertCostType = (costType: CostType) => {
+export const convertCostType = (costType: CostType) => {
   switch (costType) {
     case CostType.BASE:
       return "기본금";
