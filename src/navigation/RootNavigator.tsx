@@ -3,6 +3,7 @@ import { IconButton } from "react-native-paper";
 import { Color } from "../enum";
 import { AgreeToTermsScreen, ConfirmSignupScreen, EmailLoginScreen, LoginScreen, SignupScreen } from "../screens/auth";
 
+import { StyleSheet } from "react-native";
 import { DefaultCategoriesScreen } from "../screens/category";
 import { ProfileScreen } from "../screens/my-page";
 import { RootStackParamList } from "./interface";
@@ -14,6 +15,7 @@ export const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boo
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
+    headerStyle: [styles.headerStyle],
   };
 
   return (
@@ -51,9 +53,21 @@ export const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boo
           headerLeft: () => <IconButton icon="close" size={20} onPress={() => navigation.navigate("Login")} />,
         })}
       />
-      <Stack.Screen name="EmailLogin" initialParams={{ setIsLoggedIn }} component={EmailLoginScreen} />
+      <Stack.Screen
+        name="EmailLogin"
+        initialParams={{ setIsLoggedIn }}
+        component={EmailLoginScreen}
+        options={{ ...defaultOptions, headerTitle: "이메일 로그인" }}
+      />
 
       <Stack.Screen name="CategoryLists" component={TabNavigator} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  headerStyle: {
+    shadowColor: "transparent",
+    elevation: 0,
+  },
+});

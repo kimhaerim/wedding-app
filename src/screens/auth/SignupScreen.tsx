@@ -1,11 +1,17 @@
+import { useLazyQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback, useMemo, useState } from "react";
 import { View } from "react-native";
-import { validateEmail, validatePassword } from "../../common/util";
+import { Text } from "react-native-paper";
+import Toast from "react-native-toast-message";
+import { showToast, validateEmail, validatePassword } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
+import Button from "../../components/common/Button";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { Color } from "../../enum";
+import { QueryExistsUser } from "../../graphql/user";
 import { RootStackParamList } from "../../navigation/interface";
 
 const enum SignupField {
@@ -20,12 +26,16 @@ interface SignupData {
   confirmPassword: string;
 }
 
-interface SignupScreenProps {
+interface SignupProps {
   navigation: StackNavigationProp<RootStackParamList, "Signup">;
   route: RouteProp<RootStackParamList, "Signup">;
 }
 
-const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
+export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
+  const [existsUser] = useLazyQuery<{ existsUser: boolean }, { email: string }>(QueryExistsUser);
+
+  const [isExistsUser, setIsExistsUser] = useState<boolean>(true);
+
   const [formData, setFormData] = useState<SignupData>({
     email: "",
     password: "",
@@ -81,9 +91,40 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     [validateField]
   );
 
+  const handleEmailCheck = useCallback(() => {
+    existsUser({ variables: { email: formData.email } })
+      .then(({ data }) => {
+        if (!data) {
+          showToast("다시 시도해주세요.");
+          return;
+        }
+
+        const result = data.existsUser;
+        if (result) {
+          Toast.show({
+            type: "info", // 'success', 'error', 'info'
+            text1: "알림",
+            text2: "이미 가입된 이메일 입니다.",
+          });
+          console.log(result);
+          showToast("이미 가입된 이메일 입니다.", "info");
+        }
+
+        if (!result) {
+          console.log(result);
+          showToast("사용 가능한 이메일입니다.", "success");
+        }
+
+        setIsExistsUser(data.existsUser);
+      })
+      .catch(() => {
+        alert("에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      });
+  }, [existsUser, formData.email]);
+
   const isFormValid = useMemo(
-    () => formValidity.isEmailValid && formValidity.isPasswordValid && formValidity.isPasswordMatching,
-    [formValidity]
+    () => formValidity.isEmailValid && formValidity.isPasswordValid && formValidity.isPasswordMatching && !isExistsUser,
+    [formValidity, isExistsUser]
   );
 
   return (
@@ -96,13 +137,24 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
           error={!formValidity.isEmailValid}
           errorMessage={errorMessages.email}
           value={formData.email}
+          style={{ marginBottom: 0 }}
         />
+
+        <Button
+          onPress={handleEmailCheck}
+          style={{ backgroundColor: !formValidity.isEmailValid ? Color.GRAY : Color.BLUE200 }}
+        >
+          <Text style={{ color: !formValidity.isEmailValid ? Color.DARK_GRAY : Color.BLACK }}>이메일 중복 확인</Text>
+        </Button>
+
         <InputText
+          titleStyle={{ marginTop: 20 }}
           label="비밀번호 *"
           onChangeText={(value) => handleInputChange(SignupField.PASSWORD, value)}
           error={!formValidity.isPasswordValid}
           errorMessage={errorMessages.password}
           value={formData.password}
+          placeholder="알파벳, 숫자, 특수 문자 조합"
           secureTextEntry
         />
         <InputText
@@ -119,5 +171,3 @@ const SignupScreen: React.FC<SignupScreenProps> = ({ navigation }) => {
     </WhiteSafeAreaView>
   );
 };
-
-export default SignupScreen;

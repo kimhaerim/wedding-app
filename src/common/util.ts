@@ -1,5 +1,13 @@
 import dayjs from "dayjs";
+import Toast from "react-native-toast-message";
 import { CheckListStatus, CostType } from "../enum";
+
+export const showToast = (message: string, type: "success" | "error" | "info" = "success") => {
+  Toast.show({
+    type,
+    text1: message,
+  });
+};
 
 export const validateEmail = (email: string) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

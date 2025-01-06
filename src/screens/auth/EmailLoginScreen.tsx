@@ -73,6 +73,8 @@ export const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
           error={!!passwordErrorMessage}
           errorMessage={passwordErrorMessage}
           value={password}
+          titleStyle={{ marginVertical: 10 }}
+          placeholder="알파벳, 숫자, 특수 문자 조합"
           secureTextEntry
         />
 

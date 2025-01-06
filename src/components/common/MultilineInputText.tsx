@@ -15,13 +15,15 @@ interface props {
   secureTextEntry?: boolean;
   titleStyle?: Object;
   style?: Object;
+  multiline?: boolean;
 }
 
-const InputText: React.FC<props> = (props) => {
+const MultilineInputText: React.FC<props> = (props) => {
   const {
     label,
     onChangeText,
     value,
+    multiline,
     defaultValue,
     placeholder,
     error,
@@ -44,6 +46,7 @@ const InputText: React.FC<props> = (props) => {
         keyboardType={typeof value === "number" ? "numeric" : undefined}
         onChangeText={onChangeText}
         error={error}
+        multiline
         secureTextEntry={secureTextEntry}
         placeholderTextColor={Color.DARK_GRAY}
         outlineStyle={[styles.outlineStyle]}
@@ -77,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InputText;
+export default MultilineInputText;
