@@ -1,14 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react";
 
+import { useLazyQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { View } from "react-native";
 import { Button } from "react-native-paper";
-import { validateEmail, validatePassword } from "../../common/util";
+import { setTokens } from "../../common/tokenUtil";
+import { showErrorToast, showToast, validateEmail, validatePassword } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color } from "../../enum";
+import { QueryLogin } from "../../graphql/user";
 import { RootStackParamList } from "../../navigation/interface";
 
 const enum EmailLoginField {
@@ -21,8 +24,12 @@ type EmailLoginScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, "EmailLogin">;
 };
 
-export const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
-  const { setIsLoggedIn } = route.params;
+export const EmailLoginScreen = ({ route, navigation }: EmailLoginScreenProps) => {
+  const [login] = useLazyQuery<
+    { login: { accessToken: string; refreshToken: string } },
+    { email: string; password: string }
+  >(QueryLogin);
+
   const [email, setEmail] = useState<string>("");
   const [emailErrorMessage, setEmailErrorMessage] = useState<string>("");
 
@@ -41,6 +48,7 @@ export const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
       const { isValid, errorMessage } = validateEmail(value);
       setIsEmailValid(isValid);
       setEmail(value);
+
       setEmailErrorMessage(errorMessage);
     } else if (field === EmailLoginField.PASSWORD) {
       const { isValid, errorMessage } = validatePassword(value);
@@ -50,11 +58,22 @@ export const EmailLoginScreen = ({ route }: EmailLoginScreenProps) => {
     }
   }, []);
 
-  const handleLogin = useCallback(() => {
+  const handleLogin = useCallback(async () => {
     if (isEmailValid && isPasswordValid) {
-      setIsLoggedIn(true);
+      try {
+        const { data, error } = await login({ variables: { email, password } });
+        if (error) {
+          showToast(error.message, "error");
+        }
+
+        if (data) {
+          setTokens(data.login.accessToken, data.login.refreshToken);
+        }
+      } catch {
+        showErrorToast();
+      }
     }
-  }, [isEmailValid, isPasswordValid, setIsLoggedIn]);
+  }, [isEmailValid, isPasswordValid, , email, password]);
 
   return (
     <WhiteSafeAreaView>

@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Text } from "react-native-paper";
 import { calculateDday, convertDateToString } from "../../common/util";
@@ -29,10 +29,6 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
     variables: { id: 1 },
   });
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const today = dayjs();
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
@@ -46,9 +42,12 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
   const [weddingDate, setWeddingDate] = useState<Date | undefined>(couple.weddingDate ?? undefined);
   const [weddingDateVisible, setWeddingDateVisible] = useState<boolean>(false);
 
-  const handleMenuButtonPress = (id: number | undefined) => {
-    setCheckListId(id);
-  };
+  const handleMenuButtonPress = useCallback(
+    (id: number | undefined) => {
+      setCheckListId(id);
+    },
+    [checkListId]
+  );
 
   const handleMenuItemPress = (action: string, id: number) => {
     const checkListId = id;

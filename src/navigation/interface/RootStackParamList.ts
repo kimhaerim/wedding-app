@@ -5,7 +5,7 @@ export type RootStackParamList = {
   Profile: undefined;
   DefaultCategories: undefined;
   ConfirmSignup: undefined;
-  EmailLogin: { setIsLoggedIn: (loggedIn: boolean) => void };
+  EmailLogin: undefined;
   CategoryLists: undefined;
   Home: undefined;
 };

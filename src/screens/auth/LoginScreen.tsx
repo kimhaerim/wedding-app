@@ -13,10 +13,9 @@ type LoginRouteProp = RouteProp<RootStackParamList, "Login">;
 interface LoginScreenProps {
   navigation: LoginNavigationProp;
   route: LoginRouteProp;
-  setIsLoggedIn: () => void;
 }
 
-export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation, setIsLoggedIn }) => {
+export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   return (
     <WhiteSafeAreaView style={{ justifyContent: "center", alignItems: "center" }}>
       <Text variant="titleSmall" style={{ textAlign: "center", marginBottom: 10 }}>
@@ -43,7 +42,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation, setIsLogge
       </Button>
       <Button
         mode="contained"
-        onPress={() => navigation.navigate("EmailLogin", { setIsLoggedIn })}
+        onPress={() => navigation.navigate("EmailLogin")}
         buttonColor={Color.WHITE}
         textColor="#191919"
         style={{

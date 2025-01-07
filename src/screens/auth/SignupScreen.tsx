@@ -4,8 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback, useMemo, useState } from "react";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
-import Toast from "react-native-toast-message";
-import { showToast, validateEmail, validatePassword } from "../../common/util";
+import { showErrorToast, showToast, validateEmail, validatePassword } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
 import Button from "../../components/common/Button";
 import InputText from "../../components/common/InputText";
@@ -101,24 +100,17 @@ export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
 
         const result = data.existsUser;
         if (result) {
-          Toast.show({
-            type: "info", // 'success', 'error', 'info'
-            text1: "알림",
-            text2: "이미 가입된 이메일 입니다.",
-          });
-          console.log(result);
           showToast("이미 가입된 이메일 입니다.", "info");
         }
 
         if (!result) {
-          console.log(result);
           showToast("사용 가능한 이메일입니다.", "success");
         }
 
         setIsExistsUser(data.existsUser);
       })
       .catch(() => {
-        alert("에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        showErrorToast();
       });
   }, [existsUser, formData.email]);
 

@@ -11,7 +11,7 @@ import { TabNavigator } from "./TabNavigator";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boolean) => void }) => {
+export const RootNavigator = () => {
   const defaultOptions = {
     headerBackTitle: "",
     headerTintColor: Color.BLACK,
@@ -20,11 +20,7 @@ export const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boo
 
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="Login"
-        component={(props: any) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen
         name="AgreeToTerms"
         component={AgreeToTermsScreen}
@@ -55,7 +51,6 @@ export const RootNavigator = ({ setIsLoggedIn }: { setIsLoggedIn: (loggedIn: boo
       />
       <Stack.Screen
         name="EmailLogin"
-        initialParams={{ setIsLoggedIn }}
         component={EmailLoginScreen}
         options={{ ...defaultOptions, headerTitle: "이메일 로그인" }}
       />

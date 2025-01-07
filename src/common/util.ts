@@ -5,7 +5,16 @@ import { CheckListStatus, CostType } from "../enum";
 export const showToast = (message: string, type: "success" | "error" | "info" = "success") => {
   Toast.show({
     type,
+    position: "bottom",
     text1: message,
+  });
+};
+
+export const showErrorToast = () => {
+  Toast.show({
+    type: "error",
+    position: "bottom",
+    text1: "에러가 발생했습니다. 잠시 후 다시 시도해주세요.",
   });
 };
 
