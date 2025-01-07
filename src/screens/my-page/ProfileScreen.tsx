@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { SegmentedButtons, Text } from "react-native-paper";
 import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import { Color, Gender } from "../../enum";
 
+import { useMutation } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import dayjs from "dayjs";
 import { View } from "react-native";
+import { getTokens, setTokens } from "../../common/tokenUtil";
+import { showErrorToast, showToast } from "../../common/util";
 import DatePicker from "../../components/common/DatePicker";
 import TimePicker from "../../components/common/TimePicker";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { useSignup } from "../../context/SignupContext";
+import { MutationSignup } from "../../graphql/user";
 import { RootStackParamList } from "../../navigation/interface";
 
 const baseDate = new Date(new Date().getFullYear() - 30, 0, 1);
@@ -20,17 +26,22 @@ interface MyPageScreenProps {
 }
 
 export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
+  const { signupData } = useSignup();
+  const [signup, { data, error }] = useMutation<{ signup: { accessToken: string; refreshToken: string } }>(
+    MutationSignup
+  );
+
   const [name, setName] = useState<string | undefined>(undefined);
   const [gender, setGender] = useState<Gender>(Gender.FEMALE);
-  const [birthDay, setBirthDay] = useState<Date>(baseDate);
+  const [birthday, setBirthday] = useState<Date>(baseDate);
   const [coupleStartDate, setCoupleStartDate] = useState<Date | undefined>(undefined);
 
   const [weddingDate, setWeddingDate] = useState<Date | undefined>(undefined);
   const [weddingTime, setWeddingTime] = useState<string | undefined>(undefined);
 
-  const changeBirthDay = (date?: Date) => {
+  const changeBirthday = (date?: Date) => {
     if (date) {
-      setBirthDay(date);
+      setBirthday(date);
     }
     return;
   };
@@ -42,6 +53,52 @@ export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const selectedButtonStyle = {
     backgroundColor: Color.BLUE100,
   };
+
+  const combineDateAndTime = (date: Date | undefined, time: string | undefined): Date | undefined => {
+    if (!date || !time) return undefined;
+
+    const [hours, minutes] = time.split(":").map(Number); // "hh:mm"에서 시간과 분 추출
+    const combinedDate = new Date(date); // 기존 날짜 복사
+    combinedDate.setHours(hours, minutes, 0, 0); // 시간 설정
+
+    return combinedDate;
+  };
+
+  const newSignupData = useMemo(() => {
+    console.log(combineDateAndTime(weddingDate, weddingTime));
+    console.log(newSignupData);
+    return {
+      ...signupData,
+      name,
+      gender,
+      birthday: dayjs(birthday).format("YYYY-MM-DD"),
+      coupleStartDate: dayjs(coupleStartDate).format("YYYY-MM-DD"),
+      weddingDate: combineDateAndTime(weddingDate, weddingTime),
+    };
+  }, [name, gender, birthday, coupleStartDate, weddingDate, weddingTime]);
+
+  const onSignup = useCallback(async () => {
+    try {
+      await signup({ variables: newSignupData });
+
+      if (error) {
+        showToast(error.message, "error");
+        return;
+      }
+      if (data) {
+        console.log(data);
+        setTokens(data.signup.accessToken, data.signup.refreshToken);
+        showToast("회원가입이 완료되었습니다!", "success");
+      }
+
+      console.log(data);
+      const tokens = await getTokens();
+      console.log("tokens", tokens);
+      navigation.navigate("DefaultCategories");
+    } catch (err) {
+      showErrorToast();
+    }
+  }, [name, gender, birthday, coupleStartDate, newSignupData]);
 
   return (
     <WhiteSafeAreaView>
@@ -73,7 +130,7 @@ export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
         />
         <View>
           <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 20, marginBottom: 30 }}>생년월일 *</Text>
-          <DatePicker value={birthDay} onChange={changeBirthDay}></DatePicker>
+          <DatePicker value={birthday} onChange={changeBirthday}></DatePicker>
         </View>
 
         <View style={{ marginTop: 30 }}>
@@ -91,11 +148,7 @@ export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
         </View>
       </View>
 
-      <BottomButton
-        label="다음"
-        disabled={!name || !birthDay}
-        onPress={() => navigation.navigate("DefaultCategories")}
-      ></BottomButton>
+      <BottomButton label="다음" disabled={!name || !birthday} onPress={onSignup}></BottomButton>
     </WhiteSafeAreaView>
   );
 };

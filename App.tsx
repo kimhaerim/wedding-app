@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import { isLoggedIn } from "./src/common/tokenUtil";
+import { SignupProvider } from "./src/context/SignupContext";
 import client from "./src/graphql/apolloClient";
 import { RootNavigator, TabNavigator } from "./src/navigation";
 
@@ -21,11 +22,13 @@ export default function App() {
 
   return (
     <>
-      <PaperProvider>
-        <ApolloProvider client={client}>
-          <NavigationContainer>{loggedIn ? <TabNavigator /> : <RootNavigator />}</NavigationContainer>
-        </ApolloProvider>
-      </PaperProvider>
+      <SignupProvider>
+        <PaperProvider>
+          <ApolloProvider client={client}>
+            <NavigationContainer>{loggedIn ? <TabNavigator /> : <RootNavigator />}</NavigationContainer>
+          </ApolloProvider>
+        </PaperProvider>
+      </SignupProvider>
       <Toast />
     </>
   );

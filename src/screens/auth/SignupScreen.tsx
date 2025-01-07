@@ -9,8 +9,10 @@ import BottomButton from "../../components/common/BottomButton";
 import Button from "../../components/common/Button";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { useSignup } from "../../context/SignupContext";
 import { Color } from "../../enum";
 import { QueryExistsUser } from "../../graphql/user";
+import { ISignup } from "../../interface";
 import { RootStackParamList } from "../../navigation/interface";
 
 const enum SignupField {
@@ -19,11 +21,7 @@ const enum SignupField {
   CONFIRM_PASSWORD = "confirmPassword",
 }
 
-interface SignupData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+type SignupData = Pick<ISignup, "email" | "password"> & { confirmPassword: string };
 
 interface SignupProps {
   navigation: StackNavigationProp<RootStackParamList, "Signup">;
@@ -31,6 +29,7 @@ interface SignupProps {
 }
 
 export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
+  const { updateSignupData } = useSignup();
   const [existsUser] = useLazyQuery<{ existsUser: boolean }, { email: string }>(QueryExistsUser);
 
   const [isExistsUser, setIsExistsUser] = useState<boolean>(true);
@@ -79,7 +78,7 @@ export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
         }
       }
     },
-    [formData.password]
+    [formData]
   );
 
   const handleInputChange = useCallback(
@@ -114,9 +113,34 @@ export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
       });
   }, [existsUser, formData.email]);
 
+  const handleNextButton = useCallback(() => {
+    const { confirmPassword, ...signupData } = formData;
+    Object.entries(signupData).forEach(([key, value]) => {
+      updateSignupData(key as keyof ISignup, value);
+    });
+
+    navigation.navigate("Profile");
+  }, [formData, updateSignupData, navigation]);
+
   const isFormValid = useMemo(
     () => formValidity.isEmailValid && formValidity.isPasswordValid && formValidity.isPasswordMatching && !isExistsUser,
     [formValidity, isExistsUser]
+  );
+
+  const isEmailCheckButtonEnabled = useMemo(() => formValidity.isEmailValid, [formValidity.isEmailValid]);
+
+  const emailCheckButtonStyle = useMemo(
+    () => ({
+      backgroundColor: isEmailCheckButtonEnabled ? Color.BLUE200 : Color.GRAY,
+    }),
+    [isEmailCheckButtonEnabled]
+  );
+
+  const emailCheckButtonTextStyle = useMemo(
+    () => ({
+      color: isEmailCheckButtonEnabled ? Color.BLACK : Color.DARK_GRAY,
+    }),
+    [isEmailCheckButtonEnabled]
   );
 
   return (
@@ -132,11 +156,8 @@ export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
           style={{ marginBottom: 0 }}
         />
 
-        <Button
-          onPress={handleEmailCheck}
-          style={{ backgroundColor: !formValidity.isEmailValid ? Color.GRAY : Color.BLUE200 }}
-        >
-          <Text style={{ color: !formValidity.isEmailValid ? Color.DARK_GRAY : Color.BLACK }}>이메일 중복 확인</Text>
+        <Button onPress={handleEmailCheck} style={emailCheckButtonStyle}>
+          <Text style={emailCheckButtonTextStyle}>이메일 중복 확인</Text>
         </Button>
 
         <InputText
@@ -159,7 +180,7 @@ export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {
         />
       </View>
 
-      <BottomButton label="다음" disabled={!isFormValid} onPress={() => navigation.navigate("Profile")} />
+      <BottomButton label="다음" disabled={!isFormValid} onPress={handleNextButton} />
     </WhiteSafeAreaView>
   );
 };

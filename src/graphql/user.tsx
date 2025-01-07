@@ -13,3 +13,44 @@ export const QueryLogin = gql`
     }
   }
 `;
+
+export const QueryUser = gql`
+  query user {
+    user {
+      id
+      email
+      name
+      birthday
+      gender
+      partner {
+        id
+      }
+    }
+  }
+`;
+
+export const MutationSignup = gql`
+  mutation signup(
+    $email: String!
+    $password: String!
+    $name: String!
+    $birthday: String
+    $gender: Gender!
+    $coupleId: Int
+    $weddingDate: DateTime
+    $coupleStartDate: String
+  ) {
+    signup(
+      email: $email
+      password: $password
+      name: $name
+      birthday: $birthday
+      gender: $gender
+      coupleId: $coupleId
+      weddingDate: $weddingDate
+      coupleStartDate: $coupleStartDate
+    ) {
+      accessToken
+    }
+  }
+`;

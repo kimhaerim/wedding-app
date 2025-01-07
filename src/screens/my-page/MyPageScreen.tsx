@@ -1,16 +1,18 @@
+import { useQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, Icon, Text } from "react-native-paper";
-import { calculateDday, convertDateToString } from "../../common/util";
+import { calculateDday, convertDateToString, showErrorToast, showToast } from "../../common/util";
 import Button from "../../components/common/Button";
 import Row from "../../components/common/Row";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color, Gender } from "../../enum";
+import { QueryUser } from "../../graphql/user";
 import { ICouple, IUser } from "../../interface";
-import { coupleMockData, userWithPartnerMockData } from "../../mock/CheckListMockData";
+import { coupleMockData } from "../../mock/CheckListMockData";
 import SelectDateModal from "../../modal/SelectDateModal";
 import { MyPageStackParamList } from "../../navigation/interface";
 
@@ -21,8 +23,9 @@ interface MyPageScreenProps {
 
 export const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const today = dayjs();
+  const { data, loading, error, refetch } = useQuery<{ user: IUser }>(QueryUser);
+  const [user, setUser] = useState<IUser>();
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
-  const [user, setUser] = useState<IUser>(userWithPartnerMockData);
 
   const [coupleStartDate, setCoupleStartDate] = useState<Date | undefined>(couple.weddingDate ?? undefined);
   const [coupleStartDateVisible, setCoupleStartDateVisible] = useState<boolean>(false);
@@ -30,11 +33,30 @@ export const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
   const [weddingDate, setWeddingDate] = useState<Date | undefined>(couple.weddingDate ?? undefined);
   const [weddingDateVisible, setWeddingDateVisible] = useState<boolean>(false);
 
-  const partnerInvite = user.partner
+  const partnerInvite = user?.partner
     ? "커플 정보 보러가기"
-    : user.gender === Gender.FEMALE
+    : user?.gender === Gender.FEMALE
     ? "예랑이 초대하기"
     : "예신 초대하기";
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    if (error) {
+      console.log(error);
+      showToast(error.message, "error");
+      refetch();
+    }
+    if (!data) {
+      showErrorToast();
+      refetch();
+      return;
+    }
+
+    setUser(data.user);
+  }, [error, data]);
 
   return (
     <WhiteSafeAreaView>
@@ -47,11 +69,11 @@ export const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
           }}
         >
           <View style={[styles.genderContainer]}>
-            <Text style={{ fontSize: 40, textAlign: "center" }}>{user.gender === Gender.FEMALE ? "🙍‍♀️" : "🙍‍♂️"}</Text>
+            <Text style={{ fontSize: 40, textAlign: "center" }}>{user?.gender === Gender.FEMALE ? "🙍‍♀️" : "🙍‍♂️"}</Text>
           </View>
 
           <View style={[styles.profileContainer]}>
-            <Text style={[styles.text, { marginBottom: 20, fontSize: 16 }]}>{user.name}</Text>
+            <Text style={[styles.text, { marginBottom: 20, fontSize: 16 }]}>{user?.name}</Text>
 
             <View>
               <Text style={[styles.text]}>

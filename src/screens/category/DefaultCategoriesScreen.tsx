@@ -1,11 +1,14 @@
+import { useMutation } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
+import { showErrorToast, showToast } from "../../common/util";
 import CategoryButton from "../../components/category/CategoryButton";
 import BottomButton from "../../components/common/BottomButton";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { MutationAddCategories } from "../../graphql/category";
 import { RootStackParamList } from "../../navigation/interface";
 
 interface DefaultCategoriesProps {
@@ -25,6 +28,7 @@ export const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navi
     "🌅 스냅 촬영",
   ];
 
+  const [addCategories, { error }] = useMutation(MutationAddCategories);
   const [userCategories, setUserCategories] = useState<string[]>([]);
 
   const handleUserCategories = useCallback((category: string) => {
@@ -35,6 +39,25 @@ export const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navi
       return [...prevCategories, category];
     });
   }, []);
+
+  const handleAddCategories = useCallback(async () => {
+    if (userCategories.length === 0) {
+      return;
+    }
+
+    const addCategoriesData = userCategories.map((category) => ({ title: category }));
+    try {
+      await addCategories({ variables: { categories: addCategoriesData } });
+      if (error) {
+        showToast(error.message, "error");
+        return;
+      }
+    } catch (err) {
+      showErrorToast();
+    }
+
+    navigation.navigate("ConfirmSignup");
+  }, [userCategories]);
 
   return (
     <WhiteSafeAreaView>
@@ -58,7 +81,7 @@ export const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navi
       <BottomButton
         label={userCategories.length > 0 ? "다음" : "다음에 설정하기"}
         disabled={false}
-        onPress={() => navigation.navigate("ConfirmSignup")}
+        onPress={handleAddCategories}
       ></BottomButton>
     </WhiteSafeAreaView>
   );

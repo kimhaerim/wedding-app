@@ -8,3 +8,14 @@ export interface IUser {
   gender: Gender;
   partner?: IUser;
 }
+
+export interface ISignup {
+  email: string;
+  password: string;
+  name: string;
+  birthday?: string;
+  gender: Gender;
+  coupleId?: number;
+  weddingDate?: Date;
+  coupleStartDate?: string;
+}

@@ -60,6 +60,7 @@ export const EmailLoginScreen = ({ route, navigation }: EmailLoginScreenProps) =
 
   const handleLogin = useCallback(async () => {
     if (isEmailValid && isPasswordValid) {
+      console.log(email, password);
       try {
         const { data, error } = await login({ variables: { email, password } });
         if (error) {
@@ -97,7 +98,7 @@ export const EmailLoginScreen = ({ route, navigation }: EmailLoginScreenProps) =
           secureTextEntry
         />
 
-        <Button mode="text" textColor={Color.DARK_GRAY} onPress={() => console.log("회원가입")}>
+        <Button mode="text" textColor={Color.DARK_GRAY} onPress={() => navigation.navigate("Signup")}>
           회원가입 &gt;
         </Button>
         <Button mode="text" textColor={Color.DARK_GRAY} onPress={() => console.log("아이디 / 비밀번호 찾기")}>
