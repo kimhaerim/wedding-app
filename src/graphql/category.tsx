@@ -5,3 +5,12 @@ export const MutationAddCategories = gql`
     addCategories(categories: $categories)
   }
 `;
+
+export const QueryGetCategories = gql`
+  query getCategories {
+    categories {
+      id
+      title
+    }
+  }
+`;

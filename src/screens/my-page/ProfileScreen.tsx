@@ -10,7 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
 import { View } from "react-native";
 import { getTokens, setTokens } from "../../common/tokenUtil";
-import { showErrorToast, showToast } from "../../common/util";
+import { combineDateAndTime, showErrorToast, showToast } from "../../common/util";
 import DatePicker from "../../components/common/DatePicker";
 import TimePicker from "../../components/common/TimePicker";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
@@ -54,19 +54,7 @@ export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
     backgroundColor: Color.BLUE100,
   };
 
-  const combineDateAndTime = (date: Date | undefined, time: string | undefined): Date | undefined => {
-    if (!date || !time) return undefined;
-
-    const [hours, minutes] = time.split(":").map(Number); // "hh:mm"에서 시간과 분 추출
-    const combinedDate = new Date(date); // 기존 날짜 복사
-    combinedDate.setHours(hours, minutes, 0, 0); // 시간 설정
-
-    return combinedDate;
-  };
-
   const newSignupData = useMemo(() => {
-    console.log(combineDateAndTime(weddingDate, weddingTime));
-    console.log(newSignupData);
     return {
       ...signupData,
       name,

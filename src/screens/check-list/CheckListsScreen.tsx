@@ -1,20 +1,21 @@
-import { useQuery } from "@apollo/client";
-import { RouteProp } from "@react-navigation/native";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Text } from "react-native-paper";
-import { calculateDday, convertDateToString } from "../../common/util";
+import { calculateDday, convertDateToString, showErrorToast, showToast } from "../../common/util";
 import { CategoryButton } from "../../components/category";
 import CheckListItem from "../../components/check-list/CheckListItem";
 import Button from "../../components/common/Button";
 import FloatingButton from "../../components/common/FloatingButton";
 import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { QueryGetCheckList } from "../../graphql/checkList";
-import { ICheckList, ICouple } from "../../interface";
-import { checkListMockData, coupleMockData, userCategoriesMockData } from "../../mock/CheckListMockData";
+import { QueryGetCategories } from "../../graphql/category";
+import { QueryGetCheckLists } from "../../graphql/checkList";
+import { ICategory, ICheckList, ICouple } from "../../interface";
+import { coupleMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
 import SelectDateModal from "../../modal/SelectDateModal";
 import { CheckListStackParamList } from "../../navigation/interface";
@@ -25,22 +26,83 @@ interface CheckListsScreenProps {
 }
 
 export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
-  const { loading, error, data } = useQuery<ICheckList, { id: number }>(QueryGetCheckList, {
-    variables: { id: 1 },
-  });
+  const {
+    data: categories,
+    loading: categoryLoading,
+    error: categoryError,
+  } = useQuery<{ categories: ICategory[] }>(QueryGetCategories);
+
+  const [getCheckLists] = useLazyQuery<
+    { checkLists: ICheckList[] },
+    { categoryId?: number; offset: number; limit: number }
+  >(QueryGetCheckLists, { fetchPolicy: "network-only" });
 
   const today = dayjs();
-  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
-  const [checkLists, setCheckLists] = useState<ICheckList[]>(checkListMockData);
+  const [checkLists, setCheckLists] = useState<ICheckList[]>([]);
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
-  const [userCategories, setUserCategories] = useState<{ id: number; category: string }[]>(userCategoriesMockData);
+  const [userCategories, setUserCategories] = useState<{ id: number; title: string }[]>([]);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
   const [weddingDate, setWeddingDate] = useState<Date | undefined>(couple.weddingDate ?? undefined);
   const [weddingDateVisible, setWeddingDateVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (categoryLoading) {
+      return;
+    }
+
+    if (categoryError) {
+      console.log(categoryError);
+      showToast(categoryError.message, "error");
+    }
+    if (!categories) {
+      showErrorToast();
+
+      return;
+    }
+
+    console.log(categories.categories);
+    setUserCategories([{ id: 0, title: "전체" }, ...categories.categories]);
+  }, [categoryError, categories]);
+
+  const handleChangeSelectedCategory = useCallback(
+    (categoryId: number) => {
+      setSelectedCategoryId(categoryId);
+    },
+    [selectedCategoryId]
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchCheckLists = async () => {
+        try {
+          const { data, error } = await getCheckLists({
+            variables: {
+              categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
+              offset: 0,
+              limit: 10,
+            },
+          });
+          if (error) {
+            showToast(error.message, "error");
+          }
+          if (data) {
+            console.log(data.checkLists);
+            setCheckLists(data.checkLists);
+          }
+        } catch (err) {
+          showErrorToast();
+        }
+      };
+
+      fetchCheckLists();
+    }, [selectedCategoryId])
+  );
 
   const handleMenuButtonPress = useCallback(
     (id: number | undefined) => {
@@ -70,6 +132,15 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
 
     setCheckListId(undefined);
   };
+
+  const handleFloatingAddButtonPress = useCallback(() => {
+    const isFromCategory = selectedCategoryId !== 0;
+
+    navigation.navigate("EditCheckList", {
+      isFromCategory,
+      categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
+    });
+  }, [selectedCategoryId, navigation]);
 
   const loadMoreData = () => {
     setPage((prevPage) => prevPage + 1);
@@ -111,9 +182,9 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
           renderItem={({ item }) => (
             <CategoryButton
               key={item.id}
-              label={item.category}
-              isPressed={item.id === selectedCategory}
-              onPress={() => setSelectedCategory(item.id)}
+              label={item.title}
+              isPressed={item.id === selectedCategoryId}
+              onPress={() => handleChangeSelectedCategory(item.id)}
             ></CategoryButton>
           )}
           horizontal={true}
@@ -139,7 +210,7 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
         />
       </View>
 
-      <FloatingButton onPress={() => navigation.navigate("EditCheckList", { isFromCategory: false })}></FloatingButton>
+      <FloatingButton onPress={handleFloatingAddButtonPress}></FloatingButton>
 
       <ConfirmModal
         title="체크리스트를 정말 삭제하시겠습니까?"

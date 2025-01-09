@@ -18,6 +18,16 @@ export const showErrorToast = () => {
   });
 };
 
+export const combineDateAndTime = (date: Date | undefined, time: string | undefined): Date | undefined => {
+  if (!date || !time) return undefined;
+
+  const [hours, minutes] = time.split(":").map(Number);
+  const combinedDate = new Date(date);
+  combinedDate.setHours(hours, minutes, 0, 0);
+
+  return combinedDate;
+};
+
 export const validateEmail = (email: string) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email)) {

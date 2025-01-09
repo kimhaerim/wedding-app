@@ -1,5 +1,5 @@
 export enum CheckListStatus {
-  CONFIRMED = "confirmed",
-  PENDING = "pending",
-  REJECTED = "rejected",
+  CONFIRMED = "CONFIRMED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
 }
