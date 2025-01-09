@@ -1,17 +1,17 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { useQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import { formatCurrency } from "../../common/util";
+import { formatCurrency, showErrorToast, showToast } from "../../common/util";
 import CategoryButton from "../../components/category/CategoryButton";
 import FloatingButton from "../../components/common/FloatingButton";
 import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
+import { QueryGetCategories } from "../../graphql/category";
 import { ICategory } from "../../interface/category.interface";
-import { categoryMockData } from "../../mock/CheckListMockData";
-import ConfirmModal from "../../modal/ConfirmModal";
 import { CategoryStackParamList } from "../../navigation/interface";
 
 const defaultCategories = [
@@ -31,10 +31,32 @@ interface CategoryListsScreenProps {
 }
 
 export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
-  const [userCategories, setUserCategories] = useState<ICategory[]>(categoryMockData);
+  const {
+    data: categories,
+    loading: categoryLoading,
+    error: categoryError,
+  } = useQuery<{ categories: ICategory[] }>(QueryGetCategories, { fetchPolicy: "network-only" });
+
+  const [userCategories, setUserCategories] = useState<ICategory[]>([]);
 
   const [page, setPage] = useState<number>(0);
-  const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (categoryLoading) {
+      return;
+    }
+
+    if (categoryError) {
+      showToast(categoryError.message, "error");
+    }
+    if (!categories) {
+      showErrorToast();
+
+      return;
+    }
+
+    setUserCategories(categories.categories);
+  }, [categoryError, categories]);
 
   const renderItem = useCallback(
     (item: ICategory) => {
@@ -108,13 +130,6 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
       </View>
 
       <FloatingButton onPress={() => navigation.navigate("EditCategory", {})} />
-
-      <ConfirmModal
-        title="카테고리를 정말 삭제하시겠습니까?"
-        description="체크리스트와 비용 정보도 모두 삭제됩니다."
-        visible={removeModalVisible}
-        hideModal={() => setRemoveModalVisible(false)}
-      ></ConfirmModal>
     </WhiteSafeAreaView>
   );
 };

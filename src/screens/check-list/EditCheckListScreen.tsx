@@ -44,9 +44,9 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
   }, [navigation, checkListId]);
 
   const [checkList, setCheckList] = useState<ICheckList | undefined>(undefined);
-  const [description, setDescription] = useState<string | undefined>(checkList ? checkList.description : undefined);
+  const [description, setDescription] = useState<string | undefined>(undefined);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-  const [memo, setMemo] = useState<string | undefined>(checkList ? checkList.memo : undefined);
+  const [memo, setMemo] = useState<string | undefined>(undefined);
   const [checkListStatus, setCheckListStatus] = useState<CheckListStatus>(CheckListStatus.PENDING);
   const [reservedAt, setReservedAt] = useState<Date | undefined>(undefined);
   const [reservedTime, setReservedTime] = useState<string | undefined>(undefined);
@@ -140,7 +140,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
     }
 
     navigation.navigate("CheckListsHome");
-  }, [categoryId, description, memo, checkListStatus, reservedAt]);
+  }, [editCheckListData]);
 
   const handleUpdateCheckList = useCallback(async () => {
     if (!description) {
@@ -150,8 +150,8 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
     try {
       await updateCheckList({ variables: editCheckListData });
 
-      if (error) {
-        showToast(error.message, "error");
+      if (updateError) {
+        showToast(updateError.message, "error");
         return;
       }
     } catch (err) {
@@ -159,7 +159,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
     }
 
     navigation.navigate("CheckListsHome");
-  }, [categoryId, description, memo, checkListStatus, reservedAt]);
+  }, [editCheckListData]);
 
   const renderFormItems = () => {
     return [
