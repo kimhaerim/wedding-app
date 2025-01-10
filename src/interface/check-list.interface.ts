@@ -10,6 +10,16 @@ export interface IAddCheckList {
   status?: CheckListStatus;
 }
 
+export interface IUpdateCheckList {
+  id: number;
+  categoryId?: number;
+  description?: string;
+  reservedDate?: Date;
+  completedAt?: string;
+  memo?: string;
+  status?: CheckListStatus;
+}
+
 export interface ICheckList {
   id: number;
   description: string;

@@ -14,8 +14,8 @@ export interface IAddCategory {
 
 export interface IUpdateCategory {
   id: number;
-  title: string;
-  budgetAmount: number;
+  title?: string;
+  budgetAmount?: number;
 }
 
 export interface ICategoryBudgetAmount {

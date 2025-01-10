@@ -3,5 +3,5 @@ export type CategoryStackParamList = {
   CategoryDetail: { categoryId: number };
   EditCategory: { categoryId?: number; categoryTitle?: string };
   CheckListDetail: { checkListId: number };
-  EditCheckList: { checkListId?: number; isFromCategory: boolean };
+  EditCheckList: { checkListId?: number; isFromCategory: boolean; categoryId: number };
 };

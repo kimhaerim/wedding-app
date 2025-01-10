@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { View } from "react-native";
@@ -9,7 +9,8 @@ import BottomButton from "../../components/common/BottomButton";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { MutationAddCategory, MutationUpdateCategory, QueryGetCategory } from "../../graphql/category";
-import { ICategory } from "../../interface/category.interface";
+import { useApiMutation } from "../../hooks/useGql";
+import { IAddCategory, ICategory, IUpdateCategory } from "../../interface/category.interface";
 import { CategoryStackParamList } from "../../navigation/interface";
 
 interface EditCategoryScreenProps {
@@ -24,55 +25,34 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
     navigation.setOptions({ headerTitle: categoryId ? "카테고리 수정" : "카테고리 저장" });
   }, [navigation, categoryId]);
 
-  const [getCategory, { error: categoryError, loading: categoryLoading }] = useLazyQuery<
-    { category: ICategory },
-    { id: number }
-  >(QueryGetCategory);
+  const [getCategory, { loading: categoryLoading }] = useLazyQuery<{ category: ICategory }, { id: number }>(
+    QueryGetCategory,
+    { fetchPolicy: "network-only", onCompleted: ({ category }) => setCategory(category) }
+  );
 
-  const [addCategory, { error: addError }] = useMutation(MutationAddCategory);
-  const [updateCategory, { error: updateError }] = useMutation(MutationUpdateCategory);
+  const { mutate: addCategory } = useApiMutation<{ addCategory: number }, IAddCategory>(MutationAddCategory);
+  const { mutate: updateCategory } = useApiMutation<{ updateCategory: boolean }, IUpdateCategory>(
+    MutationUpdateCategory
+  );
 
   const [category, setCategory] = useState<ICategory | undefined>(undefined);
 
-  const [inputTitle, setInputTitle] = useState<string | undefined>(categoryTitle ? categoryTitle : undefined);
+  const [inputTitle, setInputTitle] = useState<string>(categoryTitle ? categoryTitle : "");
   const [inputBudgetAmount, setInputBudgetAmount] = useState<number>(0);
 
   const isEdit = useMemo(() => (categoryId ? true : false), [categoryId]);
 
-  const getCategoryData = useMemo(() => {
-    const data = { title: inputTitle, budgetAmount: inputBudgetAmount };
-    if (!isEdit) {
-      return data;
-    }
-
-    return { id: categoryId, ...data };
-  }, [inputTitle, inputBudgetAmount]);
+  const getCategoryData = useMemo(
+    () => ({ title: inputTitle, budgetAmount: inputBudgetAmount }),
+    [inputTitle, inputBudgetAmount]
+  );
 
   useEffect(() => {
-    console.log("categoryId", categoryId);
     if (!categoryId) {
       return;
     }
 
-    const fetchCategory = async () => {
-      if (categoryLoading) {
-        return;
-      }
-
-      if (categoryError) {
-        showToast(categoryError.message, "error");
-      }
-
-      const { data } = await getCategory({ variables: { id: categoryId } });
-      if (!data) {
-        showErrorToast();
-        return;
-      }
-
-      setCategory(data.category);
-    };
-
-    fetchCategory();
+    getCategory({ variables: { id: categoryId } });
   }, [categoryId]);
 
   useEffect(() => {
@@ -82,44 +62,57 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
     }
   }, [category]);
 
-  const handleBottomButtonPress = useCallback(() => {
-    if (isEdit) {
-      handleUpdateCategory();
-      navigation.navigate("CategoryHome");
+  const handleAddCategory = useCallback(async () => {
+    if (!getCategoryData.title) {
+      showToast("이름은 필수입니다.", "info");
       return;
     }
 
-    handleAddCategory();
-    navigation.navigate("EditCheckList", { isFromCategory: true });
-  }, []);
+    try {
+      const { data: addResult } = await addCategory({ variables: getCategoryData });
+      if (!addResult) {
+        showErrorToast();
+        return;
+      }
+
+      return addResult.addCategory;
+    } catch {
+      showErrorToast();
+    }
+  }, [getCategoryData]);
 
   const handleUpdateCategory = useCallback(async () => {
-    console.log(getCategoryData);
-    try {
-      await updateCategory({ variables: getCategoryData });
+    if (!categoryId) {
+      showErrorToast();
+      return;
+    }
 
-      if (updateError) {
-        showToast(updateError.message, "error");
-        return;
-      }
-    } catch (err) {
+    try {
+      await updateCategory({ variables: { ...getCategoryData, id: categoryId } });
+    } catch {
       showErrorToast();
     }
   }, [getCategoryData]);
 
-  const handleAddCategory = useCallback(async () => {
-    console.log(getCategoryData);
-    try {
-      await addCategory({ variables: getCategoryData });
-
-      if (addError) {
-        showToast(addError.message, "error");
-        return;
-      }
-    } catch (err) {
-      showErrorToast();
+  const handleEditCategory = useCallback(async () => {
+    if (!inputTitle) {
+      showToast("이름은 필수 입니다.", "info");
     }
-  }, [getCategoryData]);
+
+    if (isEdit && categoryId) {
+      await handleUpdateCategory();
+      navigation.replace("CategoryDetail", { categoryId });
+      return;
+    }
+
+    const newCategoryId = await handleAddCategory();
+    if (!newCategoryId) {
+      navigation.replace("CategoryHome");
+      return;
+    }
+
+    navigation.replace("EditCheckList", { isFromCategory: true, categoryId: newCategoryId });
+  }, [navigation]);
 
   return (
     <WhiteSafeAreaView>
@@ -147,8 +140,8 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
 
       <BottomButton
         label={isEdit ? "수정" : "다음"}
-        disabled={inputTitle?.length === 0}
-        onPress={handleBottomButtonPress}
+        disabled={inputTitle?.length === 0 || categoryLoading}
+        onPress={handleEditCategory}
       ></BottomButton>
     </WhiteSafeAreaView>
   );

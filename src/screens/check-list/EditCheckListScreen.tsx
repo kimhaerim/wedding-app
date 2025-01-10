@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
@@ -15,7 +15,8 @@ import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { CheckListStatus, Color } from "../../enum";
 import { QueryGetCategories } from "../../graphql/category";
 import { MutationAddCheckList, MutationUpdateCheckList, QueryGetCheckList } from "../../graphql/checkList";
-import { ICheckList } from "../../interface";
+import { useApiMutation } from "../../hooks/useGql";
+import { IAddCheckList, ICheckList, IUpdateCheckList } from "../../interface";
 import { ICategory } from "../../interface/category.interface";
 import { CheckListStackParamList } from "../../navigation/interface";
 
@@ -27,25 +28,24 @@ interface EditCheckListScreenProps {
 export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, route }) => {
   const { checkListId, isFromCategory, categoryId } = route.params;
 
-  const [getCheckList, { error: checkListError }] = useLazyQuery<{ checkList: ICheckList }, { id: number }>(
-    QueryGetCheckList,
-    { fetchPolicy: "no-cache" }
-  );
-  const [addCheckList, { error: addError }] = useMutation<{ addCheckList: number }>(MutationAddCheckList, {});
-  const [updateCheckList, { error: updateError }] = useMutation(MutationUpdateCheckList);
+  const { data: categories } = useQuery<{ categories: ICategory[] }>(QueryGetCategories);
 
-  const {
-    data: categories,
-    loading: categoryLoading,
-    error: categoryError,
-  } = useQuery<{ categories: ICategory[] }>(QueryGetCategories);
+  const [getCheckList, { loading }] = useLazyQuery<{ checkList: ICheckList }, { id: number }>(QueryGetCheckList, {
+    fetchPolicy: "no-cache",
+    onCompleted: ({ checkList }) => setCheckList(checkList),
+  });
+
+  const { mutate: addCheckList } = useApiMutation<{ addCheckList: number }, IAddCheckList>(MutationAddCheckList);
+  const { mutate: updateCheckList } = useApiMutation<{ updateCheckList: boolean }, IUpdateCheckList>(
+    MutationUpdateCheckList
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerTitle: checkListId ? "체크리스트 수정" : "체크리스트 저장" });
   }, [navigation, checkListId]);
 
   const [checkList, setCheckList] = useState<ICheckList | undefined>(undefined);
-  const [description, setDescription] = useState<string | undefined>(undefined);
+  const [description, setDescription] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [memo, setMemo] = useState<string | undefined>(undefined);
   const [checkListStatus, setCheckListStatus] = useState<CheckListStatus>(CheckListStatus.PENDING);
@@ -73,45 +73,21 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
       return;
     }
 
-    const fetchCheckLists = async () => {
-      if (checkListError) {
-        showToast(checkListError.message, "error");
-      }
-
-      const { data } = await getCheckList({ variables: { id: checkListId } });
-      if (!data) {
-        showErrorToast();
-        return;
-      }
-
-      setCheckList(data.checkList);
-    };
-
-    fetchCheckLists();
+    getCheckList({ variables: { id: checkListId } });
   }, [checkListId]);
 
   const isEdit = useMemo(() => (checkListId ? true : false), [checkListId]);
 
-  const editCheckListData = useMemo(() => {
+  const getCheckListData = useMemo(() => {
     const combinedReservedAt = combineDateAndTime(reservedAt, reservedTime);
-
     const checkListCategoryId = categoryId ? categoryId : selectedCategoryId ? selectedCategoryId : undefined;
-
-    const data = {
+    return {
       description,
       categoryId: checkListCategoryId,
       memo,
       status: checkListStatus,
       reservedDate: combinedReservedAt,
     };
-    if (isEdit) {
-      return {
-        ...data,
-        id: checkListId,
-      };
-    }
-
-    return data;
   }, [categoryId, description, memo, checkListStatus, reservedAt, reservedTime]);
 
   const segmentedButtonStyle = {
@@ -123,36 +99,32 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
   };
 
   const handleAddCheckList = useCallback(async () => {
+    const addVariables = getCheckListData;
+    if (!addVariables.description) {
+      showToast("이름은 필수입니다.", "info");
+      return;
+    }
+
     try {
-      const result = await addCheckList({ variables: editCheckListData });
-      if (addError) {
-        showToast(addError.message, "error");
-        return;
-      }
-
-      if (!result.data) {
-        showErrorToast();
-        return;
-      }
-
-      return result.data.addCheckList;
-    } catch (err) {
+      const { data: addResult } = await addCheckList({ variables: addVariables });
+      return addResult?.addCheckList;
+    } catch {
       showErrorToast();
     }
-  }, [editCheckListData]);
+  }, [getCheckListData]);
 
   const handleUpdateCheckList = useCallback(async () => {
-    try {
-      await updateCheckList({ variables: editCheckListData });
+    if (!checkListId) {
+      showErrorToast();
+      return;
+    }
 
-      if (updateError) {
-        showToast(updateError.message, "error");
-        return;
-      }
-    } catch (err) {
+    try {
+      await updateCheckList({ variables: { ...getCheckListData, id: checkListId } });
+    } catch {
       showErrorToast();
     }
-  }, [editCheckListData]);
+  }, [getCheckListData]);
 
   const handleEditCheckList = useCallback(async () => {
     if (!description) {
@@ -172,7 +144,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
     }
 
     navigation.replace("CheckListDetail", { checkListId: newCheckListId });
-  }, [editCheckListData]);
+  }, [getCheckListData]);
 
   const renderFormItems = () => {
     return [
@@ -281,7 +253,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
       />
       <BottomButton
         label={isEdit ? "수정" : "추가"}
-        disabled={!description || description?.length === 0}
+        disabled={!description || description?.length === 0 || loading}
         onPress={handleEditCheckList}
       />
     </WhiteSafeAreaView>
