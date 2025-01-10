@@ -49,14 +49,16 @@ export const validatePassword = (password: string) => {
   return { isValid: true, errorMessage: "" };
 };
 
-export const convertDateToString = (inputDate: Date) => {
+export const convertDateToString = (dateString: string | Date) => {
+  const inputDate = new Date(dateString);
   const year = inputDate.getFullYear();
   const month = inputDate.getMonth() + 1;
   const date = inputDate.getDate();
   return `${year}년 ${month}월 ${date}일`;
 };
 
-export const convertDateTimeToString = (inputDate: Date) => {
+export const convertDateTimeToString = (dateString: string | Date) => {
+  const inputDate = new Date(dateString);
   const year = inputDate.getFullYear();
   const month = inputDate.getMonth() + 1;
   const date = inputDate.getDate();

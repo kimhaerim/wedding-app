@@ -9,7 +9,7 @@ export const QueryGetCheckList = gql`
       isCompleted
       memo
       status
-      cost {
+      costs {
         amount
       }
     }

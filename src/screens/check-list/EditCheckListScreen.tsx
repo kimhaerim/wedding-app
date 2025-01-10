@@ -28,9 +28,10 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
   const { checkListId, isFromCategory, categoryId } = route.params;
 
   const [getCheckList, { error: checkListError }] = useLazyQuery<{ checkList: ICheckList }, { id: number }>(
-    QueryGetCheckList
+    QueryGetCheckList,
+    { fetchPolicy: "no-cache" }
   );
-  const [addCheckList, { error }] = useMutation(MutationAddCheckList);
+  const [addCheckList, { error: addError }] = useMutation<{ addCheckList: number }>(MutationAddCheckList, {});
   const [updateCheckList, { error: updateError }] = useMutation(MutationUpdateCheckList);
 
   const {
@@ -93,28 +94,25 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
 
   const editCheckListData = useMemo(() => {
     const combinedReservedAt = combineDateAndTime(reservedAt, reservedTime);
+
     const checkListCategoryId = categoryId ? categoryId : selectedCategoryId ? selectedCategoryId : undefined;
 
+    const data = {
+      description,
+      categoryId: checkListCategoryId,
+      memo,
+      status: checkListStatus,
+      reservedDate: combinedReservedAt,
+    };
     if (isEdit) {
       return {
-        ...checkList,
+        ...data,
         id: checkListId,
-        description,
-        categoryId: checkListCategoryId,
-        memo,
-        status: checkListStatus,
-        reservedAt: combinedReservedAt,
       };
     }
 
-    return {
-      categoryId: checkListCategoryId,
-      description: description,
-      memo,
-      checkListStatus,
-      reservedAt: combinedReservedAt,
-    };
-  }, [categoryId, description, memo, checkListStatus, reservedAt]);
+    return data;
+  }, [categoryId, description, memo, checkListStatus, reservedAt, reservedTime]);
 
   const segmentedButtonStyle = {
     backgroundColor: Color.WHITE,
@@ -125,28 +123,25 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
   };
 
   const handleAddCheckList = useCallback(async () => {
-    if (!description) {
-      showToast("이름은 필수 입니다.", "info");
-    }
-
     try {
-      await addCheckList({ variables: editCheckListData });
-      if (error) {
-        showToast(error.message, "error");
+      const result = await addCheckList({ variables: editCheckListData });
+      if (addError) {
+        showToast(addError.message, "error");
         return;
       }
+
+      if (!result.data) {
+        showErrorToast();
+        return;
+      }
+
+      return result.data.addCheckList;
     } catch (err) {
       showErrorToast();
     }
-
-    navigation.navigate("CheckListsHome");
   }, [editCheckListData]);
 
   const handleUpdateCheckList = useCallback(async () => {
-    if (!description) {
-      showToast("이름은 필수 입니다.", "info");
-    }
-
     try {
       await updateCheckList({ variables: editCheckListData });
 
@@ -157,8 +152,26 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
     } catch (err) {
       showErrorToast();
     }
+  }, [editCheckListData]);
 
-    navigation.navigate("CheckListsHome");
+  const handleEditCheckList = useCallback(async () => {
+    if (!description) {
+      showToast("이름은 필수 입니다.", "info");
+    }
+
+    if (isEdit && checkListId) {
+      await handleUpdateCheckList();
+      navigation.replace("CheckListDetail", { checkListId });
+      return;
+    }
+
+    const newCheckListId = await handleAddCheckList();
+    if (!newCheckListId) {
+      showErrorToast();
+      return;
+    }
+
+    navigation.replace("CheckListDetail", { checkListId: newCheckListId });
   }, [editCheckListData]);
 
   const renderFormItems = () => {
@@ -269,7 +282,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
       <BottomButton
         label={isEdit ? "수정" : "추가"}
         disabled={!description || description?.length === 0}
-        onPress={isEdit ? handleUpdateCheckList : handleAddCheckList}
+        onPress={handleEditCheckList}
       />
     </WhiteSafeAreaView>
   );

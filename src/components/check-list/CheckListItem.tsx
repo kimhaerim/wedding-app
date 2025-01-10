@@ -40,7 +40,9 @@ const CheckListItem: React.FC<CheckListItemProps> = (props) => {
         </View>
       </View>
 
-      {item.reservedDate && <Text style={styles.dateText}>{convertDateTimeToString(item.reservedDate)}</Text>}
+      {item.reservedDate && (
+        <Text style={styles.dateText}>{convertDateTimeToString(item.reservedDate as unknown as string)}</Text>
+      )}
       {item.memo && (
         <>
           <Divider />
