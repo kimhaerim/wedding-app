@@ -39,3 +39,9 @@ export interface ICost {
   memo?: string;
   costType: CostType;
 }
+
+export interface IGetCheckListVariables {
+  categoryId?: number;
+  offset: number;
+  limit: number;
+}

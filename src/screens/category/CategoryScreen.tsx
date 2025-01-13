@@ -8,7 +8,6 @@ import { Text } from "react-native-paper";
 import { useQuery } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { showErrorToast, showToast } from "../../common/util";
 import CheckListWithCostItem from "../../components/check-list/CheckListWithCostItem";
 import EditDeleteButtons from "../../components/common/EditDeleteButtons";
 import FloatingButton from "../../components/common/FloatingButton";
@@ -34,32 +33,23 @@ export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, rout
     data,
     loading: categoryLoading,
     error: categoryError,
-  } = useQuery<{ category: ICategory }, { id: number }>(QueryGetCategory, { variables: { id: categoryId } });
+    refetch,
+  } = useQuery<{ category: ICategory }, { id: number }>(QueryGetCategory, {
+    variables: { id: categoryId },
+    fetchPolicy: "network-only",
+  });
 
   const checkListCount = 1;
 
   useEffect(() => {
-    if (categoryLoading) {
-      // showErrorToast();
-      // navigation.navigate("CategoryHome");
-      return;
-    }
+    const focusListener = navigation.addListener("focus", () => {
+      refetch();
+    });
 
-    if (!data) {
-      showErrorToast();
-      // navigation.navigate("CategoryHome");
-      return;
-    }
-    if (categoryError) {
-      showToast(categoryError.message, "error");
-      // navigation.navigate("CategoryHome");
-      return;
-    }
-
-    setCategory(data.category);
-  }, [data, categoryLoading, navigation]);
-
-  const [category, setCategory] = useState<ICategory>();
+    return () => {
+      focusListener();
+    };
+  }, [navigation, refetch]);
 
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
@@ -81,7 +71,7 @@ export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, rout
         break;
       case "edit":
         console.log("수정", id);
-        navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: true });
+        // navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: true });
 
         break;
       case "delete":
@@ -103,22 +93,22 @@ export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, rout
 
   return (
     <WhiteSafeAreaView>
-      {category && (
+      {data && (
         <>
           <View style={{ flexDirection: "row", alignItems: "center", marginLeft: 20, marginTop: 10 }}>
             <View>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>{category.title}</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>{data.category.title}</Text>
             </View>
             <Text style={{ marginLeft: 10, fontSize: 10 }}>{`${checkListCount}개`}</Text>
           </View>
-          <BudgetSummary category={category} combinedCost={combinedCost} />
+          <BudgetSummary category={data.category} combinedCost={combinedCost} />
           <EditDeleteButtons
             onEditButtonPress={handleEditButtonPress}
             onRemoveButtonPress={() => setRemoveCategoryModalVisible(true)}
           />
           <ScrollView>
             <View style={{ margin: 10 }}>
-              {category.checkList.map((checkList) => (
+              {data.category.checkList.map((checkList) => (
                 <CheckListWithCostItem
                   key={`checkList-${checkList.id}`}
                   checkList={checkList}

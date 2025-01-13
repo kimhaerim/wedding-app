@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useQuery } from "@apollo/client";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import { formatCurrency, showErrorToast, showToast } from "../../common/util";
+import { formatCurrency } from "../../common/util";
 import CategoryButton from "../../components/category/CategoryButton";
 import FloatingButton from "../../components/common/FloatingButton";
 import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { QueryGetCategories } from "../../graphql/category";
-import { ICategory } from "../../interface/category.interface";
+import { ICategory, IGetCategoryVariables } from "../../interface/category.interface";
 import { CategoryStackParamList } from "../../navigation/interface";
 
 const defaultCategories = [
@@ -30,33 +30,55 @@ interface CategoryListsScreenProps {
   route: RouteProp<CategoryStackParamList, "CategoryHome">;
 }
 
+const LIMIT = 10;
 export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ navigation }) => {
-  const {
-    data: categories,
-    loading: categoryLoading,
-    error: categoryError,
-  } = useQuery<{ categories: ICategory[] }>(QueryGetCategories, { fetchPolicy: "network-only" });
-
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+  const [userDefaultCategories, setUserDefaultCategories] = useState<string[]>([]);
   const [userCategories, setUserCategories] = useState<ICategory[]>([]);
 
-  const [page, setPage] = useState<number>(0);
+  const { data: categories, loading } = useQuery<{ categories: ICategory[] }, IGetCategoryVariables>(
+    QueryGetCategories,
+    {
+      variables: { offset: page * LIMIT, limit: LIMIT },
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        if (page === 0) {
+          setUserCategories(data.categories);
+        } else if (page > 0) {
+          setUserCategories((prev) => [...prev, ...data.categories]);
+        }
+
+        if (data.categories.length >= LIMIT) {
+          setHasMore(true);
+        } else if (data.categories.length < LIMIT) {
+          setHasMore(false);
+        }
+      },
+    }
+  );
 
   useEffect(() => {
-    if (categoryLoading) {
+    const result = defaultCategories.filter(
+      (category) => !categories?.categories.map((userCategory) => userCategory.title).includes(category)
+    );
+
+    setUserDefaultCategories(result);
+  }, [categories]);
+
+  const loadMoreData = useCallback(() => {
+    if (loading || !hasMore) {
       return;
     }
 
-    if (categoryError) {
-      showToast(categoryError.message, "error");
-    }
-    if (!categories) {
-      showErrorToast();
+    setPage((prevPage) => prevPage + 1);
+  }, [loading, hasMore]);
 
-      return;
-    }
-
-    setUserCategories(categories.categories);
-  }, [categoryError, categories]);
+  useFocusEffect(
+    useCallback(() => {
+      setPage(0);
+    }, [])
+  );
 
   const renderItem = useCallback(
     (item: ICategory) => {
@@ -72,7 +94,7 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
         </ShadowView>
       );
     },
-    [userCategories]
+    [categories]
   );
 
   const handleDefaultCategoryOnPress = useCallback(
@@ -82,51 +104,38 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
     [navigation]
   );
 
-  const loadMoreData = () => {
-    setPage((prevPage) => prevPage + 1);
-
-    // 추가 호출 API
-    const newCategories: ICategory[] = [];
-
-    if (newCategories.length > 0) {
-      // setCosts((prevLists) => [...prevLists, ...newCheckLists]);
-    }
-
-    if (newCategories.length <= 10) {
-      setPage(-1);
-    }
-  };
-
   return (
     <WhiteSafeAreaView>
-      <View style={{ margin: 10 }}>
-        <Text style={[styles.title]}>기본 카테고리 목록</Text>
-        <Text style={{ fontSize: 12, marginTop: 10 }}>클릭 시 추가 가능합니다.</Text>
+      {userDefaultCategories.length > 0 && (
+        <View style={{ margin: 10 }}>
+          <Text style={[styles.title]}>기본 카테고리 목록</Text>
+          <Text style={{ fontSize: 12, marginTop: 10 }}>클릭 시 추가 가능합니다.</Text>
 
-        <View style={[styles.defaultCategoryContainer]}>
-          {defaultCategories.map((category) => (
-            <CategoryButton
-              key={category}
-              isPressed={true}
-              onPress={() => handleDefaultCategoryOnPress(category)}
-              label={category}
-            ></CategoryButton>
-          ))}
+          <View style={[styles.defaultCategoryContainer]}>
+            {userDefaultCategories.map((category) => (
+              <CategoryButton
+                key={category}
+                isPressed={true}
+                onPress={() => handleDefaultCategoryOnPress(category)}
+                label={category}
+              ></CategoryButton>
+            ))}
+          </View>
         </View>
+      )}
 
-        <Divider style={{ marginTop: 10 }} />
+      <Divider style={{ marginTop: 10 }} />
 
+      <View style={{ flex: 1, margin: 10 }}>
         <Text style={[styles.title]}>추가된 카테고리 목록</Text>
 
-        <View>
-          <FlatList
-            data={userCategories}
-            keyExtractor={(item) => `${item.id}`}
-            renderItem={({ item }) => renderItem(item)}
-            onEndReached={loadMoreData}
-            onEndReachedThreshold={0.5}
-          />
-        </View>
+        <FlatList
+          data={userCategories}
+          keyExtractor={(item) => `category-${item.id}`}
+          renderItem={({ item }) => renderItem(item)}
+          onEndReached={loadMoreData}
+          onEndReachedThreshold={0.5}
+        />
       </View>
 
       <FloatingButton onPress={() => navigation.navigate("EditCategory", {})} />

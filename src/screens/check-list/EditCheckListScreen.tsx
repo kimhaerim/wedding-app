@@ -143,6 +143,10 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
       return;
     }
 
+    if (isFromCategory) {
+      return;
+    }
+
     navigation.replace("CheckListDetail", { checkListId: newCheckListId });
   }, [getCheckListData]);
 

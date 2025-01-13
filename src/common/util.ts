@@ -19,8 +19,11 @@ export const showErrorToast = () => {
 };
 
 export const combineDateAndTime = (date: Date | undefined, time: string | undefined): Date | undefined => {
-  if (!date || !time) return undefined;
+  if (!date) return undefined;
 
+  if (!time) {
+    return new Date(date);
+  }
   const [hours, minutes] = time.split(":").map(Number);
   const combinedDate = new Date(date);
   combinedDate.setHours(hours, minutes, 0, 0);

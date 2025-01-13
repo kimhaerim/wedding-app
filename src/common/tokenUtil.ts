@@ -26,13 +26,13 @@ export const getTokens = async () => {
 export const isLoggedIn = async () => {
   try {
     const tokens = await getTokens();
+    console.log(tokens);
     if (tokens && tokens.accessToken) {
-      // accessToken이 존재하면 로그인 상태
       return true;
     }
-    return false; // accessToken이 없으면 비로그인 상태
+    return false;
   } catch {
     showErrorToast();
-    return false; // 에러 발생 시 안전하게 false 반환
+    return false;
   }
 };

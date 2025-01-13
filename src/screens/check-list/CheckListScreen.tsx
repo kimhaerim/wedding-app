@@ -1,9 +1,9 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import { convertDateTimeToString, showErrorToast, showToast } from "../../common/util";
+import { convertDateTimeToString } from "../../common/util";
 import Badge from "../../components/common/Badge";
 import CheckBox from "../../components/common/CheckBox";
 import FloatingButton from "../../components/common/FloatingButton";
@@ -29,18 +29,13 @@ interface CheckListScreenProps {
 export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) => {
   const { checkListId } = route.params;
 
-  const {
-    data,
-    error: checkListError,
-    loading: checkListLoading,
-  } = useQuery<{ checkList: ICheckList }, { id: number }>(QueryGetCheckList, {
+  const { data } = useQuery<{ checkList: ICheckList }, { id: number }>(QueryGetCheckList, {
     variables: { id: checkListId },
     fetchPolicy: "network-only",
   });
 
   const [page, setPage] = useState<number>(0);
   const [costId, setCostId] = useState<number | undefined>(undefined);
-  const [checkList, setCheckList] = useState<ICheckList | undefined>(undefined);
   const [removeCostModalVisible, setRemoveCostModalVisible] = useState<boolean>(false);
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
     totalCost: 200000,
@@ -50,30 +45,6 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [removeCheckListModalVisible, setRemoveCheckListModalVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log(checkListId);
-    if (checkListLoading) {
-      return;
-    }
-
-    console.log("checkListDetail", checkListId);
-
-    if (!data) {
-      console.log(data);
-      showErrorToast();
-      // navigation.navigate("CheckListsHome");
-      return;
-    }
-
-    if (checkListError) {
-      showToast(checkListError.message, "error");
-      return;
-    }
-
-    setCheckList(data.checkList);
-    console.log("data.checkList", data.checkList);
-  }, [data, checkListLoading, navigation]);
 
   const loadMoreData = () => {
     setPage((prevPage) => prevPage + 1);
@@ -105,40 +76,42 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
 
   return (
     <WhiteSafeAreaView>
-      {checkList && (
+      {data && (
         <>
           <View style={{ margin: 20 }}>
-            {checkList.category && <Badge label={checkList.category.title} backgroundColor={Color.BLUE200}></Badge>}
+            {data.checkList.category && (
+              <Badge label={data.checkList.category.title} backgroundColor={Color.BLUE200}></Badge>
+            )}
 
             <CheckBox
               style={{ marginTop: 10 }}
-              label={checkList.description}
-              isChecked={checkList.isCompleted}
+              label={data.checkList.description}
+              isChecked={data.checkList.isCompleted}
               onPress={() => "클릭"}
               labelStyle={{ fontWeight: "bold", fontSize: 18 }}
             ></CheckBox>
 
             <View style={{ flexDirection: "row", alignItems: "center" }}></View>
-            {checkList.reservedDate && (
+            {data.checkList.reservedDate && (
               <Text style={{ color: Color.DARK_GRAY, marginBottom: 5 }}>
-                {convertDateTimeToString(checkList.reservedDate)}
+                {convertDateTimeToString(data.checkList.reservedDate)}
               </Text>
             )}
-            {checkList.memo && <Text style={{ fontSize: 12 }}>{checkList.memo}</Text>}
+            {data.checkList.memo && <Text style={{ fontSize: 12 }}>{data.checkList.memo}</Text>}
           </View>
 
           <EditDeleteButtons
             onEditButtonPress={() =>
               navigation.navigate("EditCheckList", {
                 checkListId,
-                isFromCategory: checkList.category ? true : false,
+                isFromCategory: data.checkList.category ? true : false,
               })
             }
             onRemoveButtonPress={() => setRemoveCheckListModalVisible(true)}
           />
 
           <Divider />
-          {checkList.category && (
+          {data.checkList.category && (
             <View
               style={{
                 backgroundColor: Color.WHITE,
@@ -159,7 +132,7 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
 
           <View style={{ margin: 10, marginTop: 0, flex: 1 }}>
             <FlatList
-              data={checkList.costs}
+              data={data.checkList.costs}
               keyExtractor={(item) => `${item.id}`}
               renderItem={({ item }) => (
                 <ShadowView>
@@ -191,11 +164,11 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
             hideModal={() => setRemoveCheckListModalVisible(false)}
           ></ConfirmModal>
 
-          {checkList.category && (
+          {data.checkList.category && (
             <BudgetDetailModal
               visible={isExpanded}
-              checkList={checkList}
-              category={checkList.category}
+              checkList={data.checkList}
+              category={data.checkList.category}
               combinedCost={combinedCost}
               hideModal={() => setIsExpanded(false)}
             />

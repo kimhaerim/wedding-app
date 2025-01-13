@@ -19,8 +19,8 @@ export const MutationUpdateCategory = gql`
 `;
 
 export const QueryGetCategories = gql`
-  query getCategories {
-    categories {
+  query getCategories($offset: Int!, $limit: Int!) {
+    categories(offset: $offset, limit: $limit) {
       id
       budgetAmount
       title

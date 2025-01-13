@@ -1,11 +1,11 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
-import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import { Text } from "react-native-paper";
-import { calculateDday, convertDateToString, showErrorToast, showToast } from "../../common/util";
+import { calculateDday, convertDateToString } from "../../common/util";
 import { CategoryButton } from "../../components/category";
 import CheckListItem from "../../components/check-list/CheckListItem";
 import Button from "../../components/common/Button";
@@ -14,7 +14,7 @@ import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { QueryGetCategories } from "../../graphql/category";
 import { QueryGetCheckLists } from "../../graphql/checkList";
-import { ICategory, ICheckList, ICouple } from "../../interface";
+import { ICategory, ICheckList, ICouple, IGetCategoryVariables, IGetCheckListVariables } from "../../interface";
 import { coupleMockData } from "../../mock/CheckListMockData";
 import ConfirmModal from "../../modal/ConfirmModal";
 import SelectDateModal from "../../modal/SelectDateModal";
@@ -25,83 +25,91 @@ interface CheckListsScreenProps {
   route: RouteProp<CheckListStackParamList, "CheckListsHome">;
 }
 
+const LIMIT = 10;
 export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
-  const {
-    data: categories,
-    loading: categoryLoading,
-    error: categoryError,
-  } = useQuery<{ categories: ICategory[] }>(QueryGetCategories);
+  const [categoryPage, setCategoryPage] = useState<number>(0);
+  const [categoryHasMore, setCategoryHasMore] = useState<boolean>(false);
+  const [userCategories, setUserCategories] = useState<{ id: number; title: string }[]>([]);
 
-  const [getCheckLists] = useLazyQuery<
-    { checkLists: ICheckList[] },
-    { categoryId?: number; offset: number; limit: number }
-  >(QueryGetCheckLists, { fetchPolicy: "network-only" });
+  const { loading: categoryLoading } = useQuery<{ categories: ICategory[] }, IGetCategoryVariables>(
+    QueryGetCategories,
+    {
+      variables: { offset: categoryPage * LIMIT, limit: LIMIT },
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        const defaultCategory = { id: 0, title: "전체" };
+        if (categoryPage === 0) {
+          setUserCategories([defaultCategory, ...data.categories]);
+        } else if (categoryPage > 0) {
+          setUserCategories((prev) => [...prev, ...data.categories]);
+        }
+
+        if (data.categories.length >= LIMIT) {
+          setCategoryHasMore(true);
+        } else if (data.categories.length < LIMIT) {
+          setCategoryHasMore(false);
+        }
+      },
+    }
+  );
+
+  const loadCategoryMoreData = useCallback(() => {
+    if (categoryLoading || !categoryHasMore) {
+      return;
+    }
+
+    setCategoryPage((prevPage) => prevPage + 1);
+  }, [categoryLoading, categoryHasMore]);
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+  const [checkListPage, setCheckListPage] = useState<number>(0);
+  const [checkListHasMore, setCheckListHasMore] = useState<boolean>(true);
+
+  const { loading: queryLoading } = useQuery<{ checkLists: ICheckList[] }, IGetCheckListVariables>(QueryGetCheckLists, {
+    variables: {
+      offset: checkListPage * LIMIT,
+      limit: LIMIT,
+      categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (checkListPage === 0) {
+        setCheckLists(data.checkLists);
+      } else if (checkListPage > 0) {
+        setCheckLists((prev) => [...prev, ...data.checkLists]);
+      }
+
+      if (data.checkLists.length >= LIMIT) {
+        setCheckListHasMore(true);
+      } else if (data.checkLists.length < LIMIT) {
+        setCheckListHasMore(false);
+      }
+    },
+  });
 
   const today = dayjs();
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
-
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
-  const [page, setPage] = useState<number>(0);
   const [checkLists, setCheckLists] = useState<ICheckList[]>([]);
   const [couple, setCouple] = useState<ICouple>(coupleMockData);
-  const [userCategories, setUserCategories] = useState<{ id: number; title: string }[]>([]);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
 
   const [weddingDate, setWeddingDate] = useState<Date | undefined>(couple.weddingDate ?? undefined);
   const [weddingDateVisible, setWeddingDateVisible] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (categoryLoading) {
-      return;
-    }
-
-    if (categoryError) {
-      console.log(categoryError);
-      showToast(categoryError.message, "error");
-    }
-    if (!categories) {
-      showErrorToast();
-
-      return;
-    }
-
-    console.log(categories.categories);
-    setUserCategories([{ id: 0, title: "전체" }, ...categories.categories]);
-  }, [categoryError, categories]);
+  useFocusEffect(
+    useCallback(() => {
+      setCategoryPage(0);
+      setCheckListPage(0);
+    }, [])
+  );
 
   const handleChangeSelectedCategory = useCallback(
     (categoryId: number) => {
+      setCheckListPage(0);
       setSelectedCategoryId(categoryId);
     },
     [selectedCategoryId]
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchCheckLists = async () => {
-        try {
-          const { data, error } = await getCheckLists({
-            variables: {
-              categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
-              offset: 0,
-              limit: 10,
-            },
-          });
-          if (error) {
-            showToast(error.message, "error");
-          }
-          if (data) {
-            console.log(data.checkLists);
-            setCheckLists(data.checkLists);
-          }
-        } catch (err) {
-          showErrorToast();
-        }
-      };
-
-      fetchCheckLists();
-    }, [selectedCategoryId])
   );
 
   const handleMenuButtonPress = useCallback(
@@ -142,20 +150,13 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
     });
   }, [selectedCategoryId, navigation]);
 
-  const loadMoreData = () => {
-    setPage((prevPage) => prevPage + 1);
-
-    // 추가 호출 API
-    const newCheckLists: ICheckList[] = [];
-
-    if (newCheckLists.length > 0) {
-      setCheckLists((prevLists) => [...prevLists, ...newCheckLists]);
+  const loadCheckListMoreData = useCallback(() => {
+    if (queryLoading || !checkListHasMore) {
+      return;
     }
 
-    if (newCheckLists.length <= 10) {
-      setPage(-1);
-    }
-  };
+    setCheckListPage((prevPage) => prevPage + 1);
+  }, [queryLoading, checkListHasMore]);
 
   return (
     <WhiteSafeAreaView>
@@ -188,6 +189,8 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
             ></CategoryButton>
           )}
           horizontal={true}
+          onEndReached={loadCategoryMoreData}
+          onEndReachedThreshold={0.1}
         />
       </View>
 
@@ -205,8 +208,9 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
               />
             </ShadowView>
           )}
-          onEndReached={loadMoreData}
-          onEndReachedThreshold={0.5}
+          onEndReached={loadCheckListMoreData}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={queryLoading ? <ActivityIndicator /> : null}
         />
       </View>
 

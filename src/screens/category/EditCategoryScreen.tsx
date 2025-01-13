@@ -36,7 +36,6 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
   );
 
   const [category, setCategory] = useState<ICategory | undefined>(undefined);
-
   const [inputTitle, setInputTitle] = useState<string>(categoryTitle ? categoryTitle : "");
   const [inputBudgetAmount, setInputBudgetAmount] = useState<number>(0);
 
@@ -95,13 +94,14 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
   }, [getCategoryData]);
 
   const handleEditCategory = useCallback(async () => {
+    console.log(inputTitle);
     if (!inputTitle) {
       showToast("이름은 필수 입니다.", "info");
     }
 
     if (isEdit && categoryId) {
       await handleUpdateCategory();
-      navigation.replace("CategoryDetail", { categoryId });
+      navigation.pop();
       return;
     }
 
@@ -112,7 +112,7 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
     }
 
     navigation.replace("EditCheckList", { isFromCategory: true, categoryId: newCategoryId });
-  }, [navigation]);
+  }, [navigation, getCategoryData]);
 
   return (
     <WhiteSafeAreaView>

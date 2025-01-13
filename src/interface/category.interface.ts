@@ -23,3 +23,8 @@ export interface ICategoryBudgetAmount {
   paidBudgetAmount: number;
   unpaidBudgetAmount: number;
 }
+
+export interface IGetCategoryVariables {
+  offset: number;
+  limit: number;
+}
