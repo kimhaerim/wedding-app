@@ -35,7 +35,7 @@ export interface ICost {
   id: number;
   title: string;
   amount: number;
-  paymentDate?: Date;
+  paymentDate?: string;
   memo?: string;
   costType: CostType;
 }

@@ -10,7 +10,12 @@ export const QueryGetCheckList = gql`
       memo
       status
       costs {
+        id
+        title
         amount
+        paymentDate
+        memo
+        costType
       }
     }
   }

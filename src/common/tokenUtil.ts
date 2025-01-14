@@ -26,7 +26,6 @@ export const getTokens = async () => {
 export const isLoggedIn = async () => {
   try {
     const tokens = await getTokens();
-    console.log(tokens);
     if (tokens && tokens.accessToken) {
       return true;
     }

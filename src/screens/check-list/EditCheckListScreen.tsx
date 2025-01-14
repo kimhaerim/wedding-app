@@ -133,7 +133,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
 
     if (isEdit && checkListId) {
       await handleUpdateCheckList();
-      navigation.replace("CheckListDetail", { checkListId });
+      navigation.goBack();
       return;
     }
 
@@ -147,7 +147,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
       return;
     }
 
-    navigation.replace("CheckListDetail", { checkListId: newCheckListId });
+    navigation.replace("EditCost", { checkListId: newCheckListId });
   }, [getCheckListData]);
 
   const renderFormItems = () => {

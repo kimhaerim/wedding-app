@@ -1,4 +1,4 @@
 export enum CostType {
-  BASE = "base",
-  ADDITIONAL = "additional",
+  BASE = "BASE",
+  ADDITIONAL = "ADDITIONAL",
 }

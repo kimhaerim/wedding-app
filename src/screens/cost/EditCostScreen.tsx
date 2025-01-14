@@ -1,34 +1,126 @@
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useLayoutEffect, useState } from "react";
+import dayjs from "dayjs";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { SegmentedButtons, Text } from "react-native-paper";
+import { showErrorToast, showToast } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
 import DatePicker from "../../components/common/DatePicker";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color, CostType } from "../../enum";
-import { CalendarStackParamList } from "../../navigation/interface";
+import { MutationAddCost, MutationUpdateCost, QueryGetCOst } from "../../graphql/cost";
+import { IAddCost, ICost, IUpdateCost } from "../../interface";
+import { CheckListStackParamList } from "../../navigation/interface";
 
 interface EditCostScreenProps {
-  navigation: StackNavigationProp<CalendarStackParamList, "EditCost">;
-  route: RouteProp<CalendarStackParamList, "EditCost">;
+  navigation: StackNavigationProp<CheckListStackParamList, "EditCost">;
+  route: RouteProp<CheckListStackParamList, "EditCost">;
 }
 
 export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) => {
-  const { costId } = route.params;
+  const { costId, checkListId } = route.params;
+
+  const [getCost, { loading, error }] = useLazyQuery<{ cost: ICost }, { id: number }>(QueryGetCOst, {
+    fetchPolicy: "no-cache",
+    onCompleted: ({ cost }) => setCost(cost),
+  });
+
+  useEffect(() => {
+    if (!costId) {
+      return;
+    }
+
+    getCost({ variables: { id: costId } });
+  }, [costId]);
+
+  const [addCost, { error: addError }] = useMutation<{ addCost: number }, IAddCost>(MutationAddCost);
+  const [updateCost, {}] = useMutation<{ updateCost: boolean }, IUpdateCost>(MutationUpdateCost);
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerTitle: costId ? "비용 수정" : "비용 저장" });
   }, [navigation, costId]);
 
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-
+  const [cost, setCost] = useState<ICost | undefined>(undefined);
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
-  const [memo, setMemo] = useState<string>("");
+  const [memo, setMemo] = useState<string | undefined>(undefined);
   const [costType, setCostType] = useState<CostType>(CostType.BASE);
   const [paymentDate, setPaymentDate] = useState<Date | undefined>(undefined);
+
+  useEffect(() => {
+    if (!cost) {
+      return;
+    }
+
+    console.log(cost);
+    setTitle(cost.title);
+    setAmount(cost.amount);
+    setMemo(cost.memo);
+    setCostType(cost.costType);
+    setPaymentDate(cost.paymentDate ? new Date(cost.paymentDate) : undefined);
+  }, [cost]);
+
+  const getCostData = useMemo(() => {
+    const paymentDateString = dayjs(paymentDate).format("YYYY-MM-DD");
+    const data = { title, amount, memo, costType, paymentDate: paymentDateString, checkListId };
+    return costId ? { costId, ...data } : data;
+  }, [title, amount, memo, costType, paymentDate]);
+
+  const handleAddCost = useCallback(async () => {
+    const addVariables = getCostData;
+    console.log(addVariables);
+    if (!addVariables.title) {
+      showToast("이름은 필수입니다.", "info");
+      return;
+    }
+
+    try {
+      const { data: addResult } = await addCost({ variables: addVariables });
+      console.log(error);
+      return addResult?.addCost;
+    } catch (err) {
+      console.log(err);
+      showErrorToast();
+    }
+  }, [getCostData]);
+
+  const handleUpdateCost = useCallback(async () => {
+    const updateVariables = getCostData;
+
+    if (!costId) {
+      console.log(costId);
+      showErrorToast();
+      return;
+    }
+
+    try {
+      await updateCost({ variables: { ...updateVariables, id: costId } });
+    } catch (err) {
+      console.log(err);
+      showErrorToast();
+    }
+  }, [getCostData]);
+
+  const handleEditCost = useCallback(async () => {
+    if (costId) {
+      await handleUpdateCost();
+      navigation.goBack();
+      return;
+    }
+
+    const newCostId = await handleAddCost();
+    if (!newCostId) {
+      showErrorToast();
+      return;
+    }
+
+    if (checkListId) {
+      navigation.replace("CheckListDetail", { checkListId });
+    }
+  }, [getCostData]);
 
   const segmentedButtonStyle = {
     backgroundColor: Color.WHITE,
@@ -39,7 +131,7 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
   };
 
   return (
-    <WhiteSafeAreaView style={{ flex: 1 }}>
+    <WhiteSafeAreaView>
       <View style={{ margin: 20 }}>
         <InputText
           label="비용 *"
@@ -60,7 +152,7 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
 
         <Text style={{ fontSize: 16, marginTop: 10, marginBottom: 10, fontWeight: "bold" }}>결제 형태 *</Text>
         <SegmentedButtons
-          value={costType}
+          value={costType ?? CostType.BASE}
           onValueChange={(value) => setCostType(value as CostType)}
           buttons={[
             {
@@ -78,16 +170,22 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
 
         <View style={{ marginBottom: 50 }}>
           <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 20, marginBottom: 30 }}>결제일</Text>
-          <DatePicker value={paymentDate} onChange={setPaymentDate}></DatePicker>
+          <DatePicker label="날짜" value={paymentDate} onChange={setPaymentDate}></DatePicker>
         </View>
 
-        <InputText label="메모" value={memo} onChangeText={setMemo} style={{ height: 150 }}></InputText>
+        <InputText
+          label="메모"
+          value={memo ?? ""}
+          onChangeText={setMemo}
+          style={{ height: 150 }}
+          placeholder="ex. 짝궁 할인 무제한 가능, 본식 후에는 추가 결제 필요 등"
+        ></InputText>
       </View>
 
       <BottomButton
-        label={isEdit ? "수정" : "추가"}
-        disabled={title.length === 0}
-        onPress={() => console.log("0")}
+        label={costId ? "수정" : "추가"}
+        disabled={title?.length === 0}
+        onPress={handleEditCost}
       ></BottomButton>
     </WhiteSafeAreaView>
   );

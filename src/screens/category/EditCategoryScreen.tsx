@@ -94,7 +94,6 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
   }, [getCategoryData]);
 
   const handleEditCategory = useCallback(async () => {
-    console.log(inputTitle);
     if (!inputTitle) {
       showToast("이름은 필수 입니다.", "info");
     }

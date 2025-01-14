@@ -28,8 +28,6 @@ const CostItem: React.FC<CostItemProps> = (props) => {
       <View style={styles.costListRow}>
         {item.title && <Text style={{ fontWeight: "bold", fontSize: 15 }}>{item.title}</Text>}
         <View style={styles.menuContainer}>
-          <Text>{formatCurrency(item.amount)}</Text>
-
           <Menu
             visible={costId === item.id}
             onDismiss={() => onMenuButtonPress(undefined)}
@@ -45,6 +43,8 @@ const CostItem: React.FC<CostItemProps> = (props) => {
           </Menu>
         </View>
       </View>
+
+      <Text>{formatCurrency(item.amount)}</Text>
 
       <Text style={styles.dateText}> {item.paymentDate ? convertDateToString(item.paymentDate) : "지불 예정"}</Text>
       {item.memo && (

@@ -60,7 +60,6 @@ export const EmailLoginScreen = ({ route, navigation }: EmailLoginScreenProps) =
 
   const handleLogin = useCallback(async () => {
     if (isEmailValid && isPasswordValid) {
-      console.log(email, password);
       try {
         const { data, error } = await login({ variables: { email, password } });
         if (error) {

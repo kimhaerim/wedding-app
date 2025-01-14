@@ -1,4 +1,4 @@
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useCallback, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
@@ -11,7 +11,7 @@ import ShadowView from "../../components/common/ShadowView";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import CostItem from "../../components/cost/CostItem";
 import { Color } from "../../enum";
-import { ICheckList, ICost, ICostByCheckList } from "../../interface";
+import { ICheckList, ICostByCheckList } from "../../interface";
 import ConfirmModal from "../../modal/ConfirmModal";
 import { CheckListStackParamList } from "../../navigation/interface";
 
@@ -29,12 +29,11 @@ interface CheckListScreenProps {
 export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigation }) => {
   const { checkListId } = route.params;
 
-  const { data } = useQuery<{ checkList: ICheckList }, { id: number }>(QueryGetCheckList, {
+  const { data, refetch } = useQuery<{ checkList: ICheckList }, { id: number }>(QueryGetCheckList, {
     variables: { id: checkListId },
     fetchPolicy: "network-only",
   });
 
-  const [page, setPage] = useState<number>(0);
   const [costId, setCostId] = useState<number | undefined>(undefined);
   const [removeCostModalVisible, setRemoveCostModalVisible] = useState<boolean>(false);
   const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
@@ -46,20 +45,11 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
 
   const [removeCheckListModalVisible, setRemoveCheckListModalVisible] = useState<boolean>(false);
 
-  const loadMoreData = () => {
-    setPage((prevPage) => prevPage + 1);
-
-    // 추가 호출 API
-    const newCost: ICost[] = [];
-
-    if (newCost.length > 0) {
-      // setCosts((prevLists) => [...prevLists, ...newCheckLists]);
-    }
-
-    if (newCost.length <= 10) {
-      setPage(-1);
-    }
-  };
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [])
+  );
 
   const handleEditCost = useCallback(
     (costId: number) => {
@@ -145,12 +135,10 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
                   />
                 </ShadowView>
               )}
-              onEndReached={loadMoreData}
-              onEndReachedThreshold={0.5}
             />
           </View>
 
-          <FloatingButton onPress={() => console.log("추가하기 클릭")}></FloatingButton>
+          <FloatingButton onPress={() => navigation.navigate("EditCost", {})}></FloatingButton>
 
           <ConfirmModal
             title="비용 정보를 정말 삭제하시겠습니까?"
