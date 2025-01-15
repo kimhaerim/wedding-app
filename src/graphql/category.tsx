@@ -24,6 +24,13 @@ export const QueryGetCategories = gql`
       id
       budgetAmount
       title
+      categoryBudgetDetails {
+        budgetAmount
+        remainingBudget
+        totalCost
+        paidCost
+        unpaidCost
+      }
     }
   }
 `;
@@ -48,6 +55,30 @@ export const QueryGetCategory = gql`
           costType
         }
       }
+    }
+  }
+`;
+
+export const QueryGetCategoryBudgetDetails = gql`
+  query getCategoryBudgetDetails($offset: Int!, $limit: Int!) {
+    categoryBudgetDetails(offset: $offset, limit: $limit) {
+      budgetAmount
+      remainingBudget
+      totalCost
+      paidCost
+      unpaidCost
+    }
+  }
+`;
+
+export const QueryGetTotalCategoryBudget = gql`
+  query getTotalCategoryBudget($targetYear: Int, $targetMonth: Int) {
+    totalCategoryBudget(targetYear: $targetYear, targetMonth: $targetMonth) {
+      budgetAmount
+      remainingBudget
+      totalCost
+      paidCost
+      unpaidCost
     }
   }
 `;

@@ -138,7 +138,7 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
             />
           </View>
 
-          <FloatingButton onPress={() => navigation.navigate("EditCost", {})}></FloatingButton>
+          <FloatingButton onPress={() => navigation.navigate("EditCost", { checkListId })}></FloatingButton>
 
           <ConfirmModal
             title="비용 정보를 정말 삭제하시겠습니까?"

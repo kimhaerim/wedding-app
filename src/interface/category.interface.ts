@@ -4,7 +4,16 @@ export interface ICategory {
   id: number;
   title: string;
   budgetAmount: number;
+  categoryBudgetDetails: ICategoryBudgetDetails;
   checkList: ICheckList[];
+}
+
+export interface ICategoryBudgetDetails {
+  budgetAmount: number;
+  remainingBudget: number;
+  totalCost: number;
+  paidCost: number;
+  unpaidCost: number;
 }
 
 export interface IAddCategory {
@@ -16,12 +25,6 @@ export interface IUpdateCategory {
   id: number;
   title?: string;
   budgetAmount?: number;
-}
-
-export interface ICategoryBudgetAmount {
-  totalBudgetAmount: number;
-  paidBudgetAmount: number;
-  unpaidBudgetAmount: number;
 }
 
 export interface IGetCategoryVariables {

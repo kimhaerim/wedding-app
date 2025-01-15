@@ -34,6 +34,42 @@ export const QueryGetCheckLists = gql`
   }
 `;
 
+export const QueryDailyCheckListByMonth = gql`
+  query getDailyCheckListByMonth(
+    $targetYear: Int!
+    $targetMonth: Int!
+    $orderBy: CheckListOrderBy!
+    $orderOption: OrderOption!
+  ) {
+    dailyCheckListByMonth(
+      targetYear: $targetYear
+      targetMonth: $targetMonth
+      orderBy: $orderBy
+      orderOption: $orderOption
+    ) {
+      reservedDate
+      checkLists {
+        id
+        description
+        reservedDate
+        isCompleted
+        memo
+        status
+      }
+    }
+  }
+`;
+
+export const QueryCheckListCount = gql`
+  query getCheckListCount($targetYear: Int, $targetMonth: Int) {
+    checkListCount(targetYear: $targetYear, targetMonth: $targetMonth) {
+      totalCount
+      completedCount
+      incompleteCount
+    }
+  }
+`;
+
 export const MutationAddCheckList = gql`
   mutation addCheckList(
     $categoryId: Int

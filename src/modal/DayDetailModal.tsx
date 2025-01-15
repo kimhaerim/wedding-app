@@ -10,7 +10,7 @@ import CheckBox from "../components/common/CheckBox";
 import Row from "../components/common/Row";
 import ShadowView from "../components/common/ShadowView";
 import Title from "../components/common/Title";
-import { CalendarType, Color } from "../enum";
+import { CalendarType, Color, CostType } from "../enum";
 import { ICheckList, ICost } from "../interface";
 import { CalendarStackParamList } from "../navigation/interface";
 import BottomModal from "./BottomModal";
@@ -115,11 +115,11 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
         />
       </View>
 
-      <View style={{ marginTop: 10 }}>
+      <View style={{ marginTop: 10, flex: 1 }}>
         {calendarType === CalendarType.CHECK_LIST && (
           <>
             {checkList.length > 0 ? (
-              <View>
+              <>
                 <FlatList
                   data={checkList}
                   keyExtractor={(item) => `checkList-${item.id}`}
@@ -130,7 +130,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
                     <Text>닫기</Text>
                   </Button>
                 </View>
-              </View>
+              </>
             ) : (
               <Button style={{ marginTop: 30 }} onPress={handleAddCheckListPress}>
                 <Text>새로운 체크리스트 추가하기</Text>
@@ -142,17 +142,23 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
         {calendarType === CalendarType.COST && (
           <>
             {costs.length > 0 ? (
-              <View>
+              <>
                 <FlatList
+                  scrollEnabled={true}
                   data={costs}
                   keyExtractor={(item) => `cost-${item.id}`}
                   renderItem={({ item }) => (
                     <ShadowView>
                       <TouchableOpacity onPress={() => handleCheckListPress(item.id)} key={`cost-${item.id}`}>
-                        <Row>
-                          <Text style={{ fontSize: 10 }}>{convertCostType(item.costType)}</Text>
+                        <Row style={{ marginBottom: 10 }}>
+                          <Badge
+                            backgroundColor={item.costType === CostType.BASE ? Color.BLUE : Color.DARK_GRAY}
+                            label={convertCostType(item.costType)}
+                            labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
+                          ></Badge>
+
                           <Text
-                            style={{ fontSize: 10, marginLeft: 10, color: item.paymentDate ? Color.BLUE : Color.RED }}
+                            style={{ fontSize: 12, marginLeft: 10, color: item.paymentDate ? Color.BLUE : Color.RED }}
                           >
                             {item.paymentDate ? "결제 완료" : "결제 전"}
                           </Text>
@@ -177,7 +183,7 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
                     <Text>닫기</Text>
                   </Button>
                 </View>
-              </View>
+              </>
             ) : (
               <Button style={{ marginTop: 30 }} onPress={handleAddCostPress}>
                 <Text>새로운 지출 내역 추가하기</Text>

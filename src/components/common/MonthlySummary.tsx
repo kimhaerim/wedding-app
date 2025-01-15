@@ -12,7 +12,6 @@ interface MonthlySummaryProps {
     incompleteCount: number;
   };
   paymentSummary: {
-    totalAmount: number;
     completedAmount: number;
     pendingAmount: number;
   };
@@ -47,10 +46,8 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = (props) => {
 
           <Divider style={styles.divider} />
 
-          <Row style={styles.row}>
-            <Text style={styles.boldText}>지불 내역</Text>
-            <Text style={styles.rightAlignedText}>{paymentSummary.totalAmount.toLocaleString()}원</Text>
-          </Row>
+          <Text style={{ ...styles.boldText, marginVertical: 8 }}>지불 내역</Text>
+
           <Row style={styles.row}>
             <Text style={styles.boldText}>완료</Text>
             <Text style={styles.rightAlignedText}>{paymentSummary.completedAmount.toLocaleString()}원</Text>

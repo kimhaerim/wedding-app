@@ -13,6 +13,22 @@ export const QueryGetCOst = gql`
   }
 `;
 
+export const QueryDailyCostsByMonth = gql`
+  query getDailyCostsByMonth($targetYear: Int!, $targetMonth: Int!) {
+    dailyCostsByMonth(targetYear: $targetYear, targetMonth: $targetMonth) {
+      paymentDate
+      costs {
+        id
+        title
+        amount
+        paymentDate
+        memo
+        costType
+      }
+    }
+  }
+`;
+
 export const MutationAddCost = gql`
   mutation addCost(
     $title: String!

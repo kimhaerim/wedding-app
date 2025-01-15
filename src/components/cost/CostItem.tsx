@@ -46,7 +46,7 @@ const CostItem: React.FC<CostItemProps> = (props) => {
 
       <Text>{formatCurrency(item.amount)}</Text>
 
-      <Text style={styles.dateText}> {item.paymentDate ? convertDateToString(item.paymentDate) : "지불 예정"}</Text>
+      <Text style={styles.dateText}> {item.paymentDate ? convertDateToString(item.paymentDate) : "결제 예정"}</Text>
       {item.memo && (
         <>
           <Divider style={{ marginBottom: 10 }} />

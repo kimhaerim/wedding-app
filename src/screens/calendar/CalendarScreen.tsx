@@ -4,25 +4,61 @@ import { StyleSheet, View } from "react-native";
 import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CommonCalendar from "../../components/calendar/Calendar";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { Color } from "../../enum";
+import { CheckListOrderBy, Color, OrderOption } from "../../enum";
 import { ICheckList, ICost } from "../../interface/check-list.interface";
 
+import { useQuery } from "@apollo/client";
 import { Text } from "react-native-paper";
 import MonthlySummary from "../../components/common/MonthlySummary";
-import { checkListMockData, costsMockData } from "../../mock/CheckListMockData";
+import { QueryGetTotalCategoryBudget } from "../../graphql/category";
+import { QueryCheckListCount, QueryDailyCheckListByMonth } from "../../graphql/checkList";
+import { QueryDailyCostsByMonth } from "../../graphql/cost";
+import { ICategoryBudgetDetails } from "../../interface";
 import DayDetailModal from "../../modal/DayDetailModal";
 
 export const CalendarScreen: React.FC = () => {
   const today = new Date();
 
-  const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
-
-  const [selected, setSelected] = useState(today.toISOString().split("T")[0]);
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth() + 1);
 
-  const [checkLists, setCheckLists] = useState<ICheckList[]>(checkListMockData);
-  const [costs, setCosts] = useState<ICost[]>(costsMockData);
+  const { data: dailyCheckList } = useQuery<{
+    dailyCheckListByMonth: { reservedDate: string; checkLists: ICheckList[] }[];
+  }>(QueryDailyCheckListByMonth, {
+    variables: {
+      targetYear: currentYear,
+      targetMonth: currentMonth,
+      orderBy: CheckListOrderBy.CREATED_AT,
+      orderOption: OrderOption.DESC,
+    },
+  });
+
+  const { data: dailyCost } = useQuery<{
+    dailyCostsByMonth: { paymentDate: string; costs: ICost[] }[];
+  }>(QueryDailyCostsByMonth, {
+    variables: {
+      targetYear: currentYear,
+      targetMonth: currentMonth,
+    },
+  });
+
+  const { data: checkListCount } = useQuery<{
+    checkListCount: { totalCount: number; completedCount: number; incompleteCount: number };
+  }>(QueryCheckListCount, {
+    variables: { targetYear: currentYear, targetMonth: currentMonth },
+  });
+
+  const { data: categoryBudgetAmount } = useQuery<{ totalCategoryBudget: ICategoryBudgetDetails }>(
+    QueryGetTotalCategoryBudget,
+    {
+      variables: { targetYear: currentYear, targetMonth: currentMonth },
+      fetchPolicy: "network-only",
+    }
+  );
+
+  const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
+
+  const [selected, setSelected] = useState(today.toISOString().split("T")[0]);
 
   const [checkListAgendaList, setCheckListAgendaList] = useState<ICheckList[]>([]);
   const [costAgendaLists, setCostAgendaLists] = useState<ICost[]>([]);
@@ -32,47 +68,53 @@ export const CalendarScreen: React.FC = () => {
   });
 
   const markedDate = useMemo(() => {
+    if (!dailyCheckList?.dailyCheckListByMonth || !dailyCost?.dailyCostsByMonth) {
+      console.log(!dailyCheckList);
+      return {};
+    }
+
     const result: MarkedDates = {};
-    checkLists.forEach((checkList) => {
-      if (checkList.reservedDate) {
-        const reservedDateString = checkList.reservedDate?.toISOString().split("T")[0];
-        const isSelected = selected === reservedDateString;
+    dailyCheckList.dailyCheckListByMonth.forEach((checkList) => {
+      const isSelected = selected === checkList.reservedDate;
+      checkList.checkLists.some((data, i) => {
         const dot = {
-          key: `checkList-${checkList.id}`,
+          key: `checkList-${data.id}`,
           color: Color.BLUE,
         };
 
-        if (result[reservedDateString]) {
-          result[reservedDateString].selected = isSelected;
-          result[reservedDateString].dots?.push(dot);
-        } else if (!result[reservedDateString]) {
-          result[reservedDateString] = { selected: isSelected, marked: true, dots: [dot] };
+        if (result[checkList.reservedDate]) {
+          result[checkList.reservedDate].selected = isSelected;
+          result[checkList.reservedDate].dots?.push(dot);
+        } else if (!result[checkList.reservedDate]) {
+          result[checkList.reservedDate] = { selected: isSelected, marked: true, dots: [dot] };
         }
-      }
+
+        return i === 4;
+      });
     });
 
-    costs.forEach((cost) => {
-      if (cost.paymentDate) {
-        const paymentDateString = cost.paymentDate?.toISOString().split("T")[0];
-        const isSelected = selected === paymentDateString;
+    dailyCost.dailyCostsByMonth.forEach((cost) => {
+      const isSelected = selected === cost.paymentDate;
+
+      cost.costs.some((data, i) => {
         const dot = {
-          key: `cost-${cost.id}`,
+          key: `cost-${data.id}`,
           color: Color.RED,
         };
 
-        if (result[paymentDateString]) {
-          result[paymentDateString].selected = isSelected;
-          result[paymentDateString].dots?.push(dot);
-        } else if (!result[paymentDateString]) {
-          result[paymentDateString] = { selected: isSelected, marked: true, dots: [dot] };
+        if (result[cost.paymentDate]) {
+          result[cost.paymentDate].selected = isSelected;
+          result[cost.paymentDate].dots?.push(dot);
+        } else if (!result[cost.paymentDate]) {
+          result[cost.paymentDate] = { selected: isSelected, marked: true, dots: [dot] };
         }
-      }
+
+        return i === 4;
+      });
     });
 
     return result;
-  }, [checkLists, costs]);
-
-  const checkListCount = { allCount: 20, completedCount: 15, incompleteCount: 5 };
+  }, [dailyCheckList, dailyCost]);
 
   const onMonthChange = useCallback(
     (date: DateData) => {
@@ -83,23 +125,25 @@ export const CalendarScreen: React.FC = () => {
   );
 
   useEffect(() => {
-    const checkListSections: ICheckList[] = checkLists.filter((checkList) => {
-      const reservedDateString = checkList.reservedDate?.toISOString().split("T")[0];
-      return reservedDateString === selected;
-    });
-    setCheckListAgendaList(checkListSections);
+    if (dailyCheckList) {
+      const checkListSections: ICheckList[] = dailyCheckList.dailyCheckListByMonth
+        .filter((checkList) => selected === checkList.reservedDate)
+        .flatMap((checkList) => checkList.checkLists);
+      setCheckListAgendaList(checkListSections);
+    }
 
-    const costSections: ICost[] = costs.filter((cost) => {
-      const paymentDateString = cost.paymentDate?.toISOString().split("T")[0];
-      return paymentDateString === selected;
-    });
-    setCostAgendaLists(costSections);
+    if (dailyCost) {
+      const costSections: ICost[] = dailyCost.dailyCostsByMonth
+        .filter((cost) => cost.paymentDate === selected)
+        .flatMap((cost) => cost.costs);
+      setCostAgendaLists(costSections);
+    }
   }, [selected]);
 
   useEffect(() => {
     const markedDates = { [selected]: { selected: true, disableTouchEvent: true }, ...markedDate };
     setMarkedDates(markedDates);
-  }, [selected]);
+  }, [selected, dailyCheckList, dailyCost]);
 
   const onDayPress = useCallback(
     (date: string) => {
@@ -115,14 +159,13 @@ export const CalendarScreen: React.FC = () => {
         <MonthlySummary
           currentMonth={currentMonth}
           checkListCount={{
-            allCount: checkListCount.allCount,
-            completedCount: checkListCount.completedCount,
-            incompleteCount: checkListCount.incompleteCount,
+            allCount: checkListCount?.checkListCount.totalCount ?? 0,
+            completedCount: checkListCount?.checkListCount.completedCount ?? 0,
+            incompleteCount: checkListCount?.checkListCount.incompleteCount ?? 0,
           }}
           paymentSummary={{
-            totalAmount: 200000,
-            completedAmount: 100000,
-            pendingAmount: 100000,
+            completedAmount: categoryBudgetAmount?.totalCategoryBudget.paidCost ?? 0,
+            pendingAmount: categoryBudgetAmount?.totalCategoryBudget.unpaidCost ?? 0,
           }}
         />
 
