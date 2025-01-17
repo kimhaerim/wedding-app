@@ -2,10 +2,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { Color } from "../enum";
 import { CategoryScreen, EditCategoryScreen } from "../screens/category";
-import { BudgetScreen } from "../screens/cost";
+import { CheckListScreen, EditCheckListScreen } from "../screens/check-list";
+import { BudgetScreen, EditCostScreen } from "../screens/cost";
 import { BudgetStackParamList } from "./interface/BudgetStackParamList";
 
-const Stack = createStackNavigator<BudgetStackParamList>();
+const BudgetStack = createStackNavigator<BudgetStackParamList>();
 
 export const BudgetNavigator = () => {
   const defaultOptions = {
@@ -15,19 +16,41 @@ export const BudgetNavigator = () => {
   };
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <BudgetStack.Navigator>
+      <BudgetStack.Screen
         name="BudgetHome"
         component={BudgetScreen}
         options={{ ...defaultOptions, headerTitle: "예산 / 지출" }}
       />
-      <Stack.Screen
+      <BudgetStack.Screen
         name="CategoryDetail"
         component={CategoryScreen}
         options={{ ...defaultOptions, headerTitle: "예산 / 지출" }}
       />
-      <Stack.Screen name="EditCategory" component={EditCategoryScreen} options={defaultOptions} />
-    </Stack.Navigator>
+      <BudgetStack.Screen
+        name="CheckListDetail"
+        component={CheckListScreen}
+        options={{ ...defaultOptions, headerTitle: "체크리스트" }}
+      />
+      <BudgetStack.Screen
+        name="EditCategory"
+        component={EditCategoryScreen}
+        options={defaultOptions}
+        initialParams={{ fromNavigator: "BudgetHome" }}
+      />
+      <BudgetStack.Screen
+        name="EditCheckList"
+        component={EditCheckListScreen}
+        options={{ ...defaultOptions }}
+        initialParams={{ fromNavigator: "BudgetHome" }}
+      />
+      <BudgetStack.Screen
+        name="EditCost"
+        component={EditCostScreen}
+        options={{ ...defaultOptions }}
+        initialParams={{ fromNavigator: "BudgetHome" }}
+      />
+    </BudgetStack.Navigator>
   );
 };
 

@@ -9,20 +9,20 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
 import { View } from "react-native";
-import { getTokens, setTokens } from "../../common/tokenUtil";
+import { setTokens } from "../../common/tokenUtil";
 import { combineDateAndTime, showErrorToast, showToast } from "../../common/util";
 import DatePicker from "../../components/common/DatePicker";
 import TimePicker from "../../components/common/TimePicker";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { useSignup } from "../../context/SignupContext";
 import { MutationSignup } from "../../graphql/user";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
 const baseDate = new Date(new Date().getFullYear() - 30, 0, 1);
 
 interface MyPageScreenProps {
-  navigation: StackNavigationProp<RootStackParamList, "Profile">;
-  route: RouteProp<RootStackParamList, "Profile">;
+  navigation: StackNavigationProp<AuthStackParamList, "Profile">;
+  route: RouteProp<AuthStackParamList, "Profile">;
 }
 
 export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
@@ -74,14 +74,10 @@ export const ProfileScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
         return;
       }
       if (data) {
-        console.log(data);
         setTokens(data.signup.accessToken, data.signup.refreshToken);
         showToast("회원가입이 완료되었습니다!", "success");
       }
 
-      console.log(data);
-      const tokens = await getTokens();
-      console.log("tokens", tokens);
       navigation.navigate("DefaultCategories");
     } catch (err) {
       showErrorToast();

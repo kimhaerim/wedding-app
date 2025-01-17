@@ -7,11 +7,11 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Button, Text } from "react-native-paper";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
 interface ConfirmSignupProps {
-  navigation: StackNavigationProp<RootStackParamList, "ConfirmSignup">;
-  route: RouteProp<RootStackParamList, "ConfirmSignup">;
+  navigation: StackNavigationProp<AuthStackParamList, "ConfirmSignup">;
+  route: RouteProp<AuthStackParamList, "ConfirmSignup">;
 }
 
 export const ConfirmSignupScreen: React.FC<ConfirmSignupProps> = () => {

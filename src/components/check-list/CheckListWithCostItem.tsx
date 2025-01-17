@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { convertCostType, convertDateTimeToString, convertDateToString, formatCurrency } from "../../common/util";
 import { Color, CostType } from "../../enum";
@@ -21,7 +21,7 @@ const CheckListWithCostItem: React.FC<CheckListWithCostItemProps> = (props) => {
   const { checkList, checkListId, onCheckListPress, onMenuItemPress, onMenuButtonPress } = props;
 
   return (
-    <ShadowView key={`checkList-${checkList.id}`}>
+    <ShadowView>
       <View>
         <View style={styles.checkListRow}>
           <CheckBox label={checkList.description} isChecked={checkList.isCompleted} onPress={onCheckListPress} />
@@ -42,28 +42,28 @@ const CheckListWithCostItem: React.FC<CheckListWithCostItemProps> = (props) => {
         {checkList.memo && <Text style={styles.memoText}>{checkList.memo}</Text>}
 
         {checkList.costs.length > 0 && (
-          <ScrollView
+          <FlatList
             horizontal
-            showsHorizontalScrollIndicator={false}
+            data={checkList.costs}
+            keyExtractor={(item) => `cost-${item.id}`}
             contentContainerStyle={{ flexDirection: "row" }}
             style={{ marginVertical: 10, width: "100%" }}
-          >
-            {checkList.costs.map((cost: any) => (
-              <View key={`cost-${cost.id}`} style={styles.costItemContainer}>
+            renderItem={({ item }) => (
+              <View style={styles.costItemContainer}>
                 <Badge
-                  backgroundColor={cost.costType === CostType.BASE ? Color.BLUE : Color.DARK_GRAY}
-                  label={convertCostType(cost.costType)}
+                  backgroundColor={item.costType === CostType.BASE ? Color.BLUE : Color.DARK_GRAY}
+                  label={convertCostType(item.costType)}
                   labelStyle={{ color: Color.WHITE, fontSize: 12, textAlign: "center" }}
                 />
-                <Text style={{ fontWeight: "bold", fontSize: 15, marginTop: 10 }}>{cost.title || "제목 없음"}</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 15, marginTop: 10 }}>{item.title || "제목 없음"}</Text>
                 <Text style={styles.dateText}>
-                  {cost.paymentDate ? convertDateToString(cost.paymentDate) : "지불 예정"}
+                  {item.paymentDate ? convertDateToString(item.paymentDate) : "지불 예정"}
                 </Text>
-                <Text style={{ marginTop: 5 }}>{formatCurrency(cost.amount)}</Text>
-                {cost.memo && <Text style={styles.memoText}>{cost.memo}</Text>}
+                <Text style={{ marginTop: 5 }}>{formatCurrency(item.amount)}</Text>
+                {item.memo && <Text style={styles.memoText}>{item.memo}</Text>}
               </View>
-            ))}
-          </ScrollView>
+            )}
+          />
         )}
       </View>
     </ShadowView>

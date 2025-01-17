@@ -13,7 +13,7 @@ import { useSignup } from "../../context/SignupContext";
 import { Color } from "../../enum";
 import { QueryExistsUser } from "../../graphql/user";
 import { ISignup } from "../../interface";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
 const enum SignupField {
   EMAIL = "email",
@@ -24,8 +24,8 @@ const enum SignupField {
 type SignupData = Pick<ISignup, "email" | "password"> & { confirmPassword: string };
 
 interface SignupProps {
-  navigation: StackNavigationProp<RootStackParamList, "Signup">;
-  route: RouteProp<RootStackParamList, "Signup">;
+  navigation: StackNavigationProp<AuthStackParamList, "Signup">;
+  route: RouteProp<AuthStackParamList, "Signup">;
 }
 
 export const SignupScreen: React.FC<SignupProps> = ({ navigation }) => {

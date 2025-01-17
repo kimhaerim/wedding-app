@@ -6,7 +6,7 @@ import { CheckListScreen, EditCheckListScreen } from "../screens/check-list";
 import { EditCostScreen } from "../screens/cost";
 import { CalendarStackParamList } from "./interface";
 
-const Stack = createStackNavigator<CalendarStackParamList>();
+const CalendarStack = createStackNavigator<CalendarStackParamList>();
 
 export const CalendarNavigator = () => {
   const defaultOptions = {
@@ -16,22 +16,30 @@ export const CalendarNavigator = () => {
   };
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <CalendarStack.Navigator>
+      <CalendarStack.Screen
         name="CalendarHome"
         component={CalendarScreen}
         options={{ ...defaultOptions, headerTitle: "캘린더" }}
       />
-
-      <Stack.Screen name="EditCheckList" component={EditCheckListScreen} options={{ ...defaultOptions }} />
-      <Stack.Screen
+      <CalendarStack.Screen
         name="CheckListDetail"
         component={CheckListScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트" }}
       />
-
-      <Stack.Screen name="EditCost" component={EditCostScreen} options={{ ...defaultOptions }} />
-    </Stack.Navigator>
+      <CalendarStack.Screen
+        name="EditCheckList"
+        component={EditCheckListScreen}
+        options={{ ...defaultOptions }}
+        initialParams={{ fromNavigator: "CalendarHome" }}
+      />
+      <CalendarStack.Screen
+        name="EditCost"
+        component={EditCostScreen}
+        options={{ ...defaultOptions }}
+        initialParams={{ fromNavigator: "CalendarHome" }}
+      />
+    </CalendarStack.Navigator>
   );
 };
 

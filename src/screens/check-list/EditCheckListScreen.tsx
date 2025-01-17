@@ -1,6 +1,5 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -18,17 +17,21 @@ import { MutationAddCheckList, MutationUpdateCheckList, QueryGetCheckList } from
 import { useApiMutation } from "../../hooks/useGql";
 import { IAddCheckList, ICheckList, IUpdateCheckList } from "../../interface";
 import { ICategory } from "../../interface/category.interface";
-import { CheckListStackParamList } from "../../navigation/interface";
+import { EditCheckListNavigationType, EditCheckListRouteProp } from "../../navigation/interface";
 
-interface EditCheckListScreenProps {
-  navigation: StackNavigationProp<CheckListStackParamList, "EditCheckList">;
-  route: RouteProp<CheckListStackParamList, "EditCheckList">;
-}
+export const EditCheckListScreen: React.FC = () => {
+  const route = useRoute<EditCheckListRouteProp>();
+  const navigation = useNavigation<EditCheckListNavigationType>();
 
-export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ navigation, route }) => {
-  const { checkListId, isFromCategory, categoryId } = route.params;
+  const { checkListId, isFromCategory, categoryId, fromNavigator } = route.params;
+  let reservedDate: string | undefined = undefined;
+  if ("reservedAt" in route.params) {
+    reservedDate = route.params.reservedAt;
+  }
 
-  const { data: categories } = useQuery<{ categories: ICategory[] }>(QueryGetCategories);
+  const { data: categories } = useQuery<{ categories: ICategory[] }>(QueryGetCategories, {
+    variables: { offset: 0, limit: 10 },
+  });
 
   const [getCheckList, { loading }] = useLazyQuery<{ checkList: ICheckList }, { id: number }>(QueryGetCheckList, {
     fetchPolicy: "no-cache",
@@ -79,7 +82,10 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
   const isEdit = useMemo(() => (checkListId ? true : false), [checkListId]);
 
   const getCheckListData = useMemo(() => {
-    const combinedReservedAt = combineDateAndTime(reservedAt, reservedTime);
+    const combinedReservedAt = reservedDate
+      ? combineDateAndTime(new Date(reservedDate), "00:00")
+      : combineDateAndTime(reservedAt, reservedTime);
+
     const checkListCategoryId = categoryId ? categoryId : selectedCategoryId ? selectedCategoryId : undefined;
     return {
       description,
@@ -127,8 +133,9 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
   }, [getCheckListData]);
 
   const handleEditCheckList = useCallback(async () => {
-    if (!description) {
-      showToast("이름은 필수 입니다.", "info");
+    if (isFromCategory && description.length === 0) {
+      navigation.goBack();
+      return;
     }
 
     if (isEdit && checkListId) {
@@ -143,12 +150,31 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
       return;
     }
 
-    if (isFromCategory) {
-      return;
+    if (fromNavigator === "CalendarHome") {
+      navigation.goBack();
+    } else {
+      navigation.replace("EditCost", { checkListId: newCheckListId, isFromCheckList: true, fromNavigator });
+    }
+  }, [getCheckListData]);
+
+  const bottomLabel = useMemo(() => {
+    if (isEdit) {
+      return "수정";
+    }
+    if (isFromCategory && description.length === 0) {
+      return "다음에";
     }
 
-    navigation.replace("EditCost", { checkListId: newCheckListId });
-  }, [getCheckListData]);
+    return "저장";
+  }, [isEdit, isFromCategory, description]);
+
+  const buttonDisabled = useMemo(() => {
+    if (isFromCategory && description.length === 0 && !loading) {
+      return false;
+    }
+
+    return description.length === 0 || loading;
+  }, [isEdit, isFromCategory, description]);
 
   const renderFormItems = () => {
     return [
@@ -185,7 +211,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
             </>
           ),
         },
-      {
+      !reservedDate && {
         key: "reservedAt",
         component: (
           <>
@@ -255,11 +281,7 @@ export const EditCheckListScreen: React.FC<EditCheckListScreenProps> = ({ naviga
         keyExtractor={(item) => item.key}
         contentContainerStyle={{ margin: 20 }}
       />
-      <BottomButton
-        label={isEdit ? "수정" : "추가"}
-        disabled={!description || description?.length === 0 || loading}
-        onPress={handleEditCheckList}
-      />
+      <BottomButton label={bottomLabel} disabled={buttonDisabled} onPress={handleEditCheckList} />
     </WhiteSafeAreaView>
   );
 };

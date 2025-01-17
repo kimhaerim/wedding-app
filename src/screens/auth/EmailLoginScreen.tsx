@@ -12,7 +12,7 @@ import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color } from "../../enum";
 import { QueryLogin } from "../../graphql/user";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
 const enum EmailLoginField {
   EMAIL = "email",
@@ -20,8 +20,8 @@ const enum EmailLoginField {
 }
 
 type EmailLoginScreenProps = {
-  route: RouteProp<RootStackParamList, "EmailLogin">;
-  navigation: StackNavigationProp<RootStackParamList, "EmailLogin">;
+  route: RouteProp<AuthStackParamList, "EmailLogin">;
+  navigation: StackNavigationProp<AuthStackParamList, "EmailLogin">;
 };
 
 export const EmailLoginScreen = ({ route, navigation }: EmailLoginScreenProps) => {

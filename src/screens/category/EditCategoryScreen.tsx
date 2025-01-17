@@ -11,15 +11,15 @@ import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { MutationAddCategory, MutationUpdateCategory, QueryGetCategory } from "../../graphql/category";
 import { useApiMutation } from "../../hooks/useGql";
 import { IAddCategory, ICategory, IUpdateCategory } from "../../interface/category.interface";
-import { CategoryStackParamList } from "../../navigation/interface";
+import { BudgetStackParamList } from "../../navigation/interface/BudgetStackParamList";
 
 interface EditCategoryScreenProps {
-  navigation: StackNavigationProp<CategoryStackParamList, "EditCategory">;
-  route: RouteProp<CategoryStackParamList, "EditCategory">;
+  navigation: StackNavigationProp<BudgetStackParamList, "EditCategory">;
+  route: RouteProp<BudgetStackParamList, "EditCategory">;
 }
 
 export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigation, route }) => {
-  const { categoryId, categoryTitle } = route.params;
+  const { categoryId, categoryTitle, fromNavigator } = route.params;
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerTitle: categoryId ? "카테고리 수정" : "카테고리 저장" });
@@ -106,11 +106,11 @@ export const EditCategoryScreen: React.FC<EditCategoryScreenProps> = ({ navigati
 
     const newCategoryId = await handleAddCategory();
     if (!newCategoryId) {
-      navigation.replace("CategoryHome");
+      navigation.replace("BudgetHome");
       return;
     }
 
-    navigation.replace("EditCheckList", { isFromCategory: true, categoryId: newCategoryId });
+    navigation.replace("EditCheckList", { categoryId: newCategoryId, isFromCategory: true, fromNavigator });
   }, [navigation, getCategoryData]);
 
   return (

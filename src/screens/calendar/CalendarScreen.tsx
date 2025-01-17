@@ -5,15 +5,15 @@ import { DateData, MarkedDates } from "react-native-calendars/src/types";
 import CommonCalendar from "../../components/calendar/Calendar";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { CheckListOrderBy, Color, OrderOption } from "../../enum";
-import { ICheckList, ICost } from "../../interface/check-list.interface";
 
 import { useQuery } from "@apollo/client";
+import { useFocusEffect } from "@react-navigation/native";
 import { Text } from "react-native-paper";
 import MonthlySummary from "../../components/common/MonthlySummary";
 import { QueryGetTotalCategoryBudget } from "../../graphql/category";
 import { QueryCheckListCount, QueryDailyCheckListByMonth } from "../../graphql/checkList";
 import { QueryDailyCostsByMonth } from "../../graphql/cost";
-import { ICategoryBudgetDetails } from "../../interface";
+import { ICategoryBudgetDetails, ICheckList, ICost } from "../../interface";
 import DayDetailModal from "../../modal/DayDetailModal";
 
 export const CalendarScreen: React.FC = () => {
@@ -22,7 +22,7 @@ export const CalendarScreen: React.FC = () => {
   const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth() + 1);
 
-  const { data: dailyCheckList } = useQuery<{
+  const { data: dailyCheckList, refetch: refetchCheckList } = useQuery<{
     dailyCheckListByMonth: { reservedDate: string; checkLists: ICheckList[] }[];
   }>(QueryDailyCheckListByMonth, {
     variables: {
@@ -33,7 +33,7 @@ export const CalendarScreen: React.FC = () => {
     },
   });
 
-  const { data: dailyCost } = useQuery<{
+  const { data: dailyCost, refetch: refetchCost } = useQuery<{
     dailyCostsByMonth: { paymentDate: string; costs: ICost[] }[];
   }>(QueryDailyCostsByMonth, {
     variables: {
@@ -52,10 +52,15 @@ export const CalendarScreen: React.FC = () => {
     QueryGetTotalCategoryBudget,
     {
       variables: { targetYear: currentYear, targetMonth: currentMonth },
-      fetchPolicy: "network-only",
     }
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      refetchCheckList();
+      refetchCost();
+    }, [])
+  );
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
 
   const [selected, setSelected] = useState(today.toISOString().split("T")[0]);
@@ -69,7 +74,6 @@ export const CalendarScreen: React.FC = () => {
 
   const markedDate = useMemo(() => {
     if (!dailyCheckList?.dailyCheckListByMonth || !dailyCost?.dailyCostsByMonth) {
-      console.log(!dailyCheckList);
       return {};
     }
 
@@ -114,7 +118,7 @@ export const CalendarScreen: React.FC = () => {
     });
 
     return result;
-  }, [dailyCheckList, dailyCost]);
+  }, [dailyCheckList, dailyCost, selected]);
 
   const onMonthChange = useCallback(
     (date: DateData) => {
@@ -186,6 +190,7 @@ export const CalendarScreen: React.FC = () => {
         ></CommonCalendar>
 
         <DayDetailModal
+          fromNavigator={"CalendarHome"}
           selectedDate={selected}
           isVisible={showDetailModal}
           checkList={checkListAgendaList}

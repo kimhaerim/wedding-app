@@ -9,11 +9,11 @@ import CategoryButton from "../../components/category/CategoryButton";
 import BottomButton from "../../components/common/BottomButton";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { MutationAddCategories } from "../../graphql/category";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
 interface DefaultCategoriesProps {
-  navigation: StackNavigationProp<RootStackParamList, "DefaultCategories">;
-  route: RouteProp<RootStackParamList, "DefaultCategories">;
+  navigation: StackNavigationProp<AuthStackParamList, "DefaultCategories">;
+  route: RouteProp<AuthStackParamList, "DefaultCategories">;
 }
 
 export const DefaultCategoriesScreen: React.FC<DefaultCategoriesProps> = ({ navigation }) => {

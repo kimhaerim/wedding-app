@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ICategory } from "../../interface/category.interface";
 
-import { ScrollView, View } from "react-native";
+import { FlatList, View } from "react-native";
 
 import { Text } from "react-native-paper";
 
 import { useQuery } from "@apollo/client";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import CheckListWithCostItem from "../../components/check-list/CheckListWithCostItem";
 import EditDeleteButtons from "../../components/common/EditDeleteButtons";
@@ -14,7 +14,6 @@ import FloatingButton from "../../components/common/FloatingButton";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import BudgetSummary from "../../components/cost/BudgetSummary";
 import { QueryGetCategory } from "../../graphql/category";
-import { ICostByCheckList } from "../../interface/cost.interface";
 import ConfirmModal from "../../modal/ConfirmModal";
 import { CategoryStackParamList } from "../../navigation/interface";
 
@@ -29,36 +28,21 @@ interface CategoryScreenProps {
 export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) => {
   const { categoryId } = route.params;
 
-  const {
-    data,
-    loading: categoryLoading,
-    error: categoryError,
-    refetch,
-  } = useQuery<{ category: ICategory }, { id: number }>(QueryGetCategory, {
+  const { data, refetch } = useQuery<{ category: ICategory }, { id: number }>(QueryGetCategory, {
     variables: { id: categoryId },
     fetchPolicy: "network-only",
   });
 
   const checkListCount = 1;
 
-  useEffect(() => {
-    const focusListener = navigation.addListener("focus", () => {
+  useFocusEffect(
+    useCallback(() => {
       refetch();
-    });
-
-    return () => {
-      focusListener();
-    };
-  }, [navigation, refetch]);
-
+    }, [])
+  );
   const [checkListId, setCheckListId] = useState<number | undefined>(undefined);
   const [removeModalVisible, setRemoveModalVisible] = useState<boolean>(false);
   const [removeCategoryModalVisible, setRemoveCategoryModalVisible] = useState<boolean>(false);
-  const [combinedCost, setCombinedCost] = useState<ICostByCheckList>({
-    totalCost: 200000,
-    paidCost: 100000,
-    unpaidCost: 100000,
-  });
 
   const handleMenuButtonPress = (id: number | undefined) => {
     setCheckListId(id);
@@ -70,14 +54,10 @@ export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, rout
         navigation.navigate("CheckListDetail", { checkListId: id });
         break;
       case "edit":
-        console.log("수정", id);
-        // navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: true });
-
+        navigation.navigate("EditCheckList", { checkListId: id, isFromCategory: true, categoryId });
         break;
       case "delete":
-        console.log("삭제", id);
         setRemoveModalVisible(true);
-
         break;
       default:
         break;
@@ -87,7 +67,6 @@ export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, rout
   };
 
   const handleEditButtonPress = useCallback(() => {
-    // console.log(categoryId, category.title);
     navigation.navigate("EditCategory", { categoryId });
   }, [categoryId]);
 
@@ -101,29 +80,36 @@ export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, rout
             </View>
             <Text style={{ marginLeft: 10, fontSize: 10 }}>{`${checkListCount}개`}</Text>
           </View>
-          <BudgetSummary category={data.category} combinedCost={combinedCost} />
+          <BudgetSummary
+            category={{
+              budgetAmount: data.category.budgetAmount,
+              remainingBudget: data.category.categoryBudgetDetails?.remainingBudget ?? 0,
+            }}
+            combinedCost={data.category.categoryBudgetDetails ?? { totalCost: 0, paidCost: 0, unpaidCost: 0 }}
+          />
           <EditDeleteButtons
             onEditButtonPress={handleEditButtonPress}
             onRemoveButtonPress={() => setRemoveCategoryModalVisible(true)}
           />
-          <ScrollView>
-            <View style={{ margin: 10 }}>
-              {data.category.checkList.map((checkList) => (
-                <CheckListWithCostItem
-                  key={`checkList-${checkList.id}`}
-                  checkList={checkList}
-                  checkListId={checkListId}
-                  onCheckListPress={() => console.log(checkList.id)}
-                  onMenuButtonPress={handleMenuButtonPress}
-                  onMenuItemPress={handleMenuItemPress}
-                />
-              ))}
-            </View>
-          </ScrollView>
+          <FlatList
+            data={data.category.checkList}
+            keyExtractor={(item) => `category-${item.id}`}
+            renderItem={({ item }) => (
+              <CheckListWithCostItem
+                checkList={item}
+                checkListId={checkListId}
+                onCheckListPress={() => console.log(item.id)}
+                onMenuButtonPress={handleMenuButtonPress}
+                onMenuItemPress={handleMenuItemPress}
+              />
+            )}
+          />
         </>
       )}
 
-      <FloatingButton onPress={() => console.log("추가하기 클릭")}></FloatingButton>
+      <FloatingButton
+        onPress={() => navigation.navigate("EditCheckList", { categoryId, isFromCategory: true })}
+      ></FloatingButton>
 
       <ConfirmModal
         title="카데고리를 정말 삭제하시겠습니까?"

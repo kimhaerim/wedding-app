@@ -7,7 +7,7 @@ import { Divider, Text } from "react-native-paper";
 import BottomButton from "../../components/common/BottomButton";
 import CheckBox from "../../components/common/CheckBox";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
 const initialAgreements = {
   isAllAgreed: false,
@@ -16,8 +16,8 @@ const initialAgreements = {
 };
 
 interface AgreeToTermsProps {
-  navigation: StackNavigationProp<RootStackParamList, "AgreeToTerms">;
-  route: RouteProp<RootStackParamList, "AgreeToTerms">;
+  navigation: StackNavigationProp<AuthStackParamList, "AgreeToTerms">;
+  route: RouteProp<AuthStackParamList, "AgreeToTerms">;
 }
 
 export const AgreeToTermsScreen: React.FC<AgreeToTermsProps> = ({ navigation }) => {

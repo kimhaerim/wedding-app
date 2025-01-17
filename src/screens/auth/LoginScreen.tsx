@@ -5,10 +5,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Button, Text } from "react-native-paper";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color } from "../../enum";
-import { RootStackParamList } from "../../navigation/interface";
+import { AuthStackParamList } from "../../navigation/interface";
 
-type LoginNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
-type LoginRouteProp = RouteProp<RootStackParamList, "Login">;
+type LoginNavigationProp = StackNavigationProp<AuthStackParamList, "Login">;
+type LoginRouteProp = RouteProp<AuthStackParamList, "Login">;
 
 interface LoginScreenProps {
   navigation: LoginNavigationProp;

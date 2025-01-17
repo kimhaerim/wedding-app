@@ -53,7 +53,7 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
 
   const handleEditCost = useCallback(
     (costId: number) => {
-      navigation.navigate("EditCost", { costId });
+      navigation.navigate("EditCost", { costId, checkListId });
       setCostId(undefined);
     },
     [costId]

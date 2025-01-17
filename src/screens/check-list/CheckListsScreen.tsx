@@ -26,7 +26,7 @@ interface CheckListsScreenProps {
 }
 
 const LIMIT = 10;
-export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }) => {
+export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation, route }) => {
   const [categoryPage, setCategoryPage] = useState<number>(0);
   const [categoryHasMore, setCategoryHasMore] = useState<boolean>(false);
   const [userCategories, setUserCategories] = useState<{ id: number; title: string }[]>([]);
@@ -129,7 +129,7 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
         break;
 
       case "edit":
-        navigation.navigate("EditCheckList", { checkListId, isFromCategory: false });
+        navigation.navigate("EditCheckList", { checkListId, isFromCategory: false, fromNavigator: "CheckListHome" });
         break;
 
       case "delete":
@@ -149,6 +149,7 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation }
     navigation.navigate("EditCheckList", {
       isFromCategory,
       categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
+      fromNavigator: "CheckListHome",
     });
   }, [selectedCategoryId, navigation]);
 

@@ -1,5 +1,6 @@
-import { CheckListStatus, CostType } from "../enum";
+import { CheckListStatus } from "../enum";
 import { ICategory } from "./category.interface";
+import { ICost } from "./cost.interface";
 
 export interface IAddCheckList {
   categoryId?: number;
@@ -29,15 +30,6 @@ export interface ICheckList {
   status?: CheckListStatus;
   costs: ICost[];
   category?: ICategory;
-}
-
-export interface ICost {
-  id: number;
-  title: string;
-  amount: number;
-  paymentDate?: string;
-  memo?: string;
-  costType: CostType;
 }
 
 export interface IGetCheckListVariables {

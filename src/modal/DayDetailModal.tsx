@@ -16,6 +16,7 @@ import { CalendarStackParamList } from "../navigation/interface";
 import BottomModal from "./BottomModal";
 
 interface DayDetailModalProps {
+  fromNavigator: string;
   isVisible: boolean;
   checkList: ICheckList[];
   costs: ICost[];
@@ -25,7 +26,14 @@ interface DayDetailModalProps {
 
 type CheckListNavigationProp = StackNavigationProp<CalendarStackParamList, "CheckListDetail" | "EditCheckList">;
 
-const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, costs, selectedDate, hideModal }) => {
+const DayDetailModal: React.FC<DayDetailModalProps> = ({
+  fromNavigator,
+  isVisible,
+  checkList,
+  costs,
+  selectedDate,
+  hideModal,
+}) => {
   const [calendarType, setCalendarType] = useState<CalendarType>(
     checkList.length === 0 && costs.length === 0
       ? CalendarType.CHECK_LIST
@@ -43,12 +51,12 @@ const DayDetailModal: React.FC<DayDetailModalProps> = ({ isVisible, checkList, c
 
   const handleAddCheckListPress = () => {
     hideModal();
-    navigation.navigate("EditCheckList", { isFromCategory: false });
+    navigation.navigate("EditCheckList", { isFromCategory: false, fromNavigator, reservedAt: selectedDate });
   };
 
   const handleAddCostPress = () => {
     hideModal();
-    navigation.navigate("EditCost", {});
+    navigation.navigate("EditCost", { fromNavigator, isFromCheckList: false });
   };
 
   const formattedDate = useMemo(() => convertDateToString(new Date(selectedDate)), [selectedDate]);

@@ -5,14 +5,14 @@ import { Color } from "../../enum";
 import BudgetSummaryRow from "./BudgetSummaryRow";
 
 interface BudgetSummaryProps {
-  category: { budgetAmount: number };
+  category: { budgetAmount: number; remainingBudget: number };
   combinedCost: { totalCost: number; paidCost: number; unpaidCost: number };
 }
 
 const BudgetSummary: React.FC<BudgetSummaryProps> = (props) => {
   const { category, combinedCost } = props;
-  const remainingBudget = category.budgetAmount - combinedCost.totalCost;
-  const remainingBudgetColor = remainingBudget < 0 ? Color.RED : Color.BLACK;
+
+  const remainingBudgetColor = category.remainingBudget < 0 ? Color.RED : Color.BLACK;
 
   return (
     <View style={styles.container}>
@@ -29,7 +29,7 @@ const BudgetSummary: React.FC<BudgetSummaryProps> = (props) => {
       <BudgetSummaryRow
         iconSource="wallet-outline"
         label="남은 예산"
-        value={remainingBudget}
+        value={category.remainingBudget}
         valueStyle={{
           color: remainingBudgetColor,
           fontWeight: "bold",

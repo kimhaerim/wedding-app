@@ -45,7 +45,6 @@ export const MyPageScreen: React.FC<MyPageScreenProps> = ({ navigation }) => {
     }
 
     if (error) {
-      console.log(error);
       showToast(error.message, "error");
       refetch();
     }

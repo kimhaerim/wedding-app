@@ -1,6 +1,5 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { View } from "react-native";
@@ -13,17 +12,14 @@ import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
 import { Color, CostType } from "../../enum";
 import { MutationAddCost, MutationUpdateCost, QueryGetCOst } from "../../graphql/cost";
 import { IAddCost, ICost, IUpdateCost } from "../../interface";
-import { CheckListStackParamList } from "../../navigation/interface";
+import { EditCostNavigationType, EditCostRouteProp } from "../../navigation/interface";
 
-interface EditCostScreenProps {
-  navigation: StackNavigationProp<CheckListStackParamList, "EditCost">;
-  route: RouteProp<CheckListStackParamList, "EditCost">;
-}
+export const EditCostScreen: React.FC = () => {
+  const route = useRoute<EditCostRouteProp>();
+  const navigation = useNavigation<EditCostNavigationType>();
+  const { costId, checkListId, fromNavigator } = route.params;
 
-export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, route }) => {
-  const { costId, checkListId } = route.params;
-
-  const [getCost, { loading, error }] = useLazyQuery<{ cost: ICost }, { id: number }>(QueryGetCOst, {
+  const [getCost] = useLazyQuery<{ cost: ICost }, { id: number }>(QueryGetCOst, {
     fetchPolicy: "no-cache",
     onCompleted: ({ cost }) => setCost(cost),
   });
@@ -36,7 +32,7 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
     getCost({ variables: { id: costId } });
   }, [costId]);
 
-  const [addCost, { error: addError }] = useMutation<{ addCost: number }, IAddCost>(MutationAddCost);
+  const [addCost] = useMutation<{ addCost: number }, IAddCost>(MutationAddCost);
   const [updateCost, {}] = useMutation<{ updateCost: boolean }, IUpdateCost>(MutationUpdateCost);
 
   useLayoutEffect(() => {
@@ -55,7 +51,6 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
       return;
     }
 
-    console.log(cost);
     setTitle(cost.title);
     setAmount(cost.amount);
     setMemo(cost.memo);
@@ -71,7 +66,6 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
 
   const handleAddCost = useCallback(async () => {
     const addVariables = getCostData;
-    console.log(addVariables);
     if (!addVariables.title) {
       showToast("이름은 필수입니다.", "info");
       return;
@@ -79,10 +73,8 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
 
     try {
       const { data: addResult } = await addCost({ variables: addVariables });
-      console.log(error);
       return addResult?.addCost;
     } catch (err) {
-      console.log(err);
       showErrorToast();
     }
   }, [getCostData]);
@@ -91,7 +83,6 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
     const updateVariables = getCostData;
 
     if (!costId) {
-      console.log(costId);
       showErrorToast();
       return;
     }
@@ -99,7 +90,6 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
     try {
       await updateCost({ variables: { ...updateVariables, id: costId } });
     } catch (err) {
-      console.log(err);
       showErrorToast();
     }
   }, [getCostData]);
@@ -118,7 +108,7 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
     }
 
     if (checkListId) {
-      navigation.replace("CheckListDetail", { checkListId });
+      navigation.goBack();
     }
   }, [getCostData]);
 
@@ -183,7 +173,7 @@ export const EditCostScreen: React.FC<EditCostScreenProps> = ({ navigation, rout
       </View>
 
       <BottomButton
-        label={costId ? "수정" : "추가"}
+        label={costId ? "수정" : "저장"}
         disabled={title?.length === 0}
         onPress={handleEditCost}
       ></BottomButton>

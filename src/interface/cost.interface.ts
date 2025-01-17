@@ -3,7 +3,7 @@ import { CostType } from "../enum";
 export interface IAddCost {
   title: string;
   amount: number;
-  checkListId?: number;
+  checkListId: number;
   categoryId?: number;
   paymentDate?: string;
   memo?: string;
@@ -14,7 +14,7 @@ export interface IUpdateCost {
   id: number;
   title?: string;
   amount?: number;
-  checkListId?: number;
+  checkListId: number;
   categoryId?: number;
   paymentDate?: string;
   memo?: string;
@@ -30,4 +30,13 @@ export interface ICostByCheckList {
 export interface ICostsByCategoryId {
   categoryId: number;
   costs: ICostByCheckList;
+}
+
+export interface ICost {
+  id: number;
+  title: string;
+  amount: number;
+  paymentDate?: string;
+  memo?: string;
+  costType: CostType;
 }

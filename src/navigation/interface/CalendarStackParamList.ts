@@ -1,6 +1,12 @@
 export type CalendarStackParamList = {
   CalendarHome: undefined;
-  EditCheckList: { checkListId?: number; isFromCategory: boolean };
   CheckListDetail: { checkListId: number };
-  EditCost: { costId?: number; checkListId?: number };
+  EditCheckList: {
+    checkListId?: number;
+    isFromCategory: boolean;
+    categoryId?: number;
+    fromNavigator: string;
+    reservedAt: string;
+  };
+  EditCost: { costId?: number; checkListId?: number; fromNavigator: string; isFromCheckList: boolean };
 };

@@ -36,6 +36,7 @@ interface BudgetScreenProps {
 
 const LIMIT = 10;
 export const BudgetScreen: React.FC<BudgetScreenProps> = ({ navigation }) => {
+  const fromNavigator = "BudgetHome";
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(false);
   const [userCategories, setUserCategories] = useState<ICategory[]>([]);
@@ -74,7 +75,7 @@ export const BudgetScreen: React.FC<BudgetScreenProps> = ({ navigation }) => {
 
   const handleDefaultCategoryOnPress = useCallback(
     (category: string) => {
-      navigation.navigate("EditCategory", { categoryTitle: category });
+      navigation.navigate("EditCategory", { categoryTitle: category, fromNavigator });
     },
     [navigation]
   );
@@ -92,8 +93,8 @@ export const BudgetScreen: React.FC<BudgetScreenProps> = ({ navigation }) => {
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
 
             <View>
-              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#333" }}>기본 카테고리 추가</Text>
-              <Text style={{ fontSize: 14, color: "#666", marginTop: 5 }}>클릭하면 카테고리 추가가 가능해요.</Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#333" }}>기본 카테고리 저장</Text>
+              <Text style={{ fontSize: 14, color: "#666", marginTop: 5 }}>클릭하면 카테고리 저장 가능해요.</Text>
             </View>
 
             <View style={{ marginTop: 15, flexDirection: "row", flexWrap: "wrap" }}>
@@ -110,18 +111,18 @@ export const BudgetScreen: React.FC<BudgetScreenProps> = ({ navigation }) => {
             <Divider style={{ marginTop: 20, marginBottom: 20 }} />
 
             <View>
-              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#333" }}>카테고리 추가</Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#333" }}>카테고리 저장</Text>
             </View>
 
             <Button
-              onPress={() => navigation.navigate("EditCategory", {})}
+              onPress={() => navigation.navigate("EditCategory", { fromNavigator })}
               style={{
                 backgroundColor: Color.BLUE,
                 width: 200,
                 marginTop: 10,
               }}
             >
-              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 13 }}>카테고리 직접 추가하기</Text>
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 13 }}>카테고리 직접 저장하기</Text>
             </Button>
           </View>
         ) : (
@@ -245,7 +246,7 @@ export const BudgetScreen: React.FC<BudgetScreenProps> = ({ navigation }) => {
         visible={removeModalVisible}
         hideModal={() => setRemoveModalVisible(false)}
       ></ConfirmModal>
-      <FloatingButton onPress={() => navigation.navigate("EditCategory", {})} />
+      <FloatingButton onPress={() => navigation.navigate("EditCategory", { fromNavigator })} />
     </WhiteSafeAreaView>
   );
 };

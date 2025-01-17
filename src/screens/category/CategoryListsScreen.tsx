@@ -109,7 +109,7 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
       {userDefaultCategories.length > 0 && (
         <View style={{ margin: 10 }}>
           <Text style={[styles.title]}>기본 카테고리 목록</Text>
-          <Text style={{ fontSize: 12, marginTop: 10 }}>클릭 시 추가 가능합니다.</Text>
+          <Text style={{ fontSize: 12, marginTop: 10 }}>클릭 시 저장 가능합니다.</Text>
 
           <View style={[styles.defaultCategoryContainer]}>
             {userDefaultCategories.map((category) => (
@@ -127,7 +127,7 @@ export const CategoryListsScreen: React.FC<CategoryListsScreenProps> = ({ naviga
       <Divider style={{ marginTop: 10 }} />
 
       <View style={{ flex: 1, margin: 10 }}>
-        <Text style={[styles.title]}>추가된 카테고리 목록</Text>
+        <Text style={[styles.title]}>저장된 카테고리 목록</Text>
 
         <FlatList
           data={userCategories}

@@ -5,7 +5,7 @@ import { CheckListScreen, CheckListsScreen, EditCheckListScreen } from "../scree
 import { EditCostScreen } from "../screens/cost";
 import { CheckListStackParamList } from "./interface";
 
-const Stack = createStackNavigator<CheckListStackParamList>();
+const CheckListStack = createStackNavigator<CheckListStackParamList>();
 
 export const CheckListNavigator = () => {
   const defaultOptions = {
@@ -15,23 +15,30 @@ export const CheckListNavigator = () => {
   };
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <CheckListStack.Navigator>
+      <CheckListStack.Screen
         name="CheckListsHome"
         component={CheckListsScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트" }}
       />
-
-      <Stack.Screen name="EditCheckList" component={EditCheckListScreen} options={{ ...defaultOptions }} />
-
-      <Stack.Screen
+      <CheckListStack.Screen
         name="CheckListDetail"
         component={CheckListScreen}
         options={{ ...defaultOptions, headerTitle: "체크리스트 상세" }}
       />
-
-      <Stack.Screen name="EditCost" component={EditCostScreen} options={{ ...defaultOptions }} />
-    </Stack.Navigator>
+      <CheckListStack.Screen
+        name="EditCheckList"
+        component={EditCheckListScreen}
+        initialParams={{ fromNavigator: "CheckListsHome" }}
+        options={{ ...defaultOptions }}
+      />
+      <CheckListStack.Screen
+        name="EditCost"
+        component={EditCostScreen}
+        options={{ ...defaultOptions }}
+        initialParams={{ fromNavigator: "CheckListsHome" }}
+      />
+    </CheckListStack.Navigator>
   );
 };
 

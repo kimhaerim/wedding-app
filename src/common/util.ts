@@ -24,10 +24,19 @@ export const combineDateAndTime = (date: Date | undefined, time: string | undefi
   if (!time) {
     return new Date(date);
   }
-  const [hours, minutes] = time.split(":").map(Number);
-  const combinedDate = new Date(date);
-  combinedDate.setHours(hours, minutes, 0, 0);
+  const [hours, minutes] = time
+    .replace(/\s?[AP]M/i, "")
+    .trim()
+    .split(":")
+    .map(Number);
 
+  const isPM = time.toLowerCase().includes("pm");
+  let normalizedHours = hours;
+  if (isPM && hours !== 12) normalizedHours += 12;
+  if (!isPM && hours === 12) normalizedHours = 0;
+
+  const combinedDate = new Date(date);
+  combinedDate.setHours(normalizedHours, minutes, 0, 0);
   return combinedDate;
 };
 

@@ -49,11 +49,20 @@ export const QueryGetCategory = gql`
         memo
         status
         costs {
+          id
+          title
           amount
           paymentDate
           memo
           costType
         }
+      }
+      categoryBudgetDetails {
+        budgetAmount
+        remainingBudget
+        totalCost
+        paidCost
+        unpaidCost
       }
     }
   }
