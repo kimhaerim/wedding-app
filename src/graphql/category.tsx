@@ -39,15 +39,14 @@ export const QueryGetCategory = gql`
   query getCategory($id: Int!) {
     category(id: $id) {
       id
-      budgetAmount
       title
+      budgetAmount
       checkList {
         id
         description
         reservedDate
         isCompleted
         memo
-        status
         costs {
           id
           title
@@ -55,6 +54,7 @@ export const QueryGetCategory = gql`
           paymentDate
           memo
           costType
+          isIncludeBudget
         }
       }
       categoryBudgetDetails {

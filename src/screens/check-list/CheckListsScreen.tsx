@@ -65,30 +65,31 @@ export const CheckListsScreen: React.FC<CheckListsScreenProps> = ({ navigation, 
   const [checkListPage, setCheckListPage] = useState<number>(0);
   const [checkListHasMore, setCheckListHasMore] = useState<boolean>(true);
 
-  const { loading: queryLoading, refetch } = useQuery<{ checkLists: ICheckList[] }, IGetCheckListVariables>(
-    QueryGetCheckLists,
-    {
-      variables: {
-        offset: checkListPage * LIMIT,
-        limit: LIMIT,
-        categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
-      },
-      fetchPolicy: "network-only",
-      onCompleted: (data) => {
-        if (checkListPage === 0) {
-          setCheckLists(data.checkLists);
-        } else if (checkListPage > 0) {
-          setCheckLists((prev) => [...prev, ...data.checkLists]);
-        }
+  const {
+    loading: queryLoading,
+    refetch,
+    error,
+  } = useQuery<{ checkLists: ICheckList[] }, IGetCheckListVariables>(QueryGetCheckLists, {
+    variables: {
+      offset: checkListPage * LIMIT,
+      limit: LIMIT,
+      categoryId: selectedCategoryId === 0 ? undefined : selectedCategoryId,
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      if (checkListPage === 0) {
+        setCheckLists(data.checkLists);
+      } else if (checkListPage > 0) {
+        setCheckLists((prev) => [...prev, ...data.checkLists]);
+      }
 
-        if (data.checkLists.length >= LIMIT) {
-          setCheckListHasMore(true);
-        } else if (data.checkLists.length < LIMIT) {
-          setCheckListHasMore(false);
-        }
-      },
-    }
-  );
+      if (data.checkLists.length >= LIMIT) {
+        setCheckListHasMore(true);
+      } else if (data.checkLists.length < LIMIT) {
+        setCheckListHasMore(false);
+      }
+    },
+  });
 
   const today = dayjs();
 

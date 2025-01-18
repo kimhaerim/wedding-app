@@ -9,6 +9,7 @@ export const QueryGetCOst = gql`
       paymentDate
       memo
       costType
+      isIncludeBudget
     }
   }
 `;
@@ -24,6 +25,7 @@ export const QueryDailyCostsByMonth = gql`
         paymentDate
         memo
         costType
+        isIncludeBudget
       }
     }
   }
@@ -32,21 +34,21 @@ export const QueryDailyCostsByMonth = gql`
 export const MutationAddCost = gql`
   mutation addCost(
     $title: String!
-    $categoryId: Int
-    $checkListId: Int
+    $checkListId: Int!
     $amount: Int!
     $paymentDate: String
     $memo: String
     $costType: CostType!
+    $isIncludeBudget: Boolean
   ) {
     addCost(
       title: $title
-      categoryId: $categoryId
       checkListId: $checkListId
       amount: $amount
       paymentDate: $paymentDate
       memo: $memo
       costType: $costType
+      isIncludeBudget: $isIncludeBudget
     )
   }
 `;
@@ -55,22 +57,22 @@ export const MutationUpdateCost = gql`
   mutation updateCost(
     $id: Int!
     $title: String
-    $categoryId: Int
-    $checkListId: Int
+    $checkListId: Int!
     $amount: Int
     $paymentDate: DateTime
     $memo: String
     $costType: CostType
+    $isIncludeBudget: Boolean
   ) {
     updateCost(
       id: $id
       title: $title
-      categoryId: $categoryId
       checkListId: $checkListId
       amount: $amount
       paymentDate: $paymentDate
       memo: $memo
       costType: $costType
+      isIncludeBudget: $isIncludeBudget
     )
   }
 `;

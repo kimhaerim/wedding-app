@@ -8,6 +8,7 @@ export interface IAddCost {
   paymentDate?: string;
   memo?: string;
   costType: CostType;
+  isIncludeBudget: boolean;
 }
 
 export interface IUpdateCost {
@@ -19,6 +20,7 @@ export interface IUpdateCost {
   paymentDate?: string;
   memo?: string;
   costType?: CostType;
+  isIncludeBudget?: boolean;
 }
 
 export interface ICostByCheckList {
@@ -39,4 +41,5 @@ export interface ICost {
   paymentDate?: string;
   memo?: string;
   costType: CostType;
+  isIncludeBudget: boolean;
 }

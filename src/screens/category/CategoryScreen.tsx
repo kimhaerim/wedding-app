@@ -28,7 +28,7 @@ interface CategoryScreenProps {
 export const CategoryScreen: React.FC<CategoryScreenProps> = ({ navigation, route }) => {
   const { categoryId } = route.params;
 
-  const { data, refetch } = useQuery<{ category: ICategory }, { id: number }>(QueryGetCategory, {
+  const { data, refetch, error } = useQuery<{ category: ICategory }, { id: number }>(QueryGetCategory, {
     variables: { id: categoryId },
     fetchPolicy: "network-only",
   });

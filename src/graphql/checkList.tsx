@@ -8,7 +8,6 @@ export const QueryGetCheckList = gql`
       reservedDate
       isCompleted
       memo
-      status
       costs {
         id
         title
@@ -16,6 +15,7 @@ export const QueryGetCheckList = gql`
         paymentDate
         memo
         costType
+        isIncludeBudget
       }
     }
   }
@@ -29,7 +29,6 @@ export const QueryGetCheckLists = gql`
       reservedDate
       isCompleted
       memo
-      status
     }
   }
 `;
@@ -54,7 +53,6 @@ export const QueryDailyCheckListByMonth = gql`
         reservedDate
         isCompleted
         memo
-        status
       }
     }
   }
@@ -72,12 +70,11 @@ export const QueryCheckListCount = gql`
 
 export const MutationAddCheckList = gql`
   mutation addCheckList(
-    $categoryId: Int
+    $categoryId: Int!
     $description: String!
     $reservedDate: DateTime
     $completedAt: String
     $memo: String
-    $status: CheckListStatus
   ) {
     addCheckList(
       categoryId: $categoryId
@@ -85,7 +82,6 @@ export const MutationAddCheckList = gql`
       reservedDate: $reservedDate
       completedAt: $completedAt
       memo: $memo
-      status: $status
     )
   }
 `;
@@ -98,7 +94,6 @@ export const MutationUpdateCheckList = gql`
     $reservedDate: DateTime
     $completedAt: String
     $memo: String
-    $status: CheckListStatus
   ) {
     updateCheckList(
       id: $id
@@ -107,7 +102,6 @@ export const MutationUpdateCheckList = gql`
       reservedDate: $reservedDate
       completedAt: $completedAt
       memo: $memo
-      status: $status
     )
   }
 `;

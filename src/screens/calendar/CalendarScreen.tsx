@@ -168,8 +168,8 @@ export const CalendarScreen: React.FC = () => {
             incompleteCount: checkListCount?.checkListCount.incompleteCount ?? 0,
           }}
           paymentSummary={{
-            completedAmount: categoryBudgetAmount?.totalCategoryBudget.paidCost ?? 0,
-            pendingAmount: categoryBudgetAmount?.totalCategoryBudget.unpaidCost ?? 0,
+            completedAmount: categoryBudgetAmount?.totalCategoryBudget?.paidCost ?? 0,
+            pendingAmount: categoryBudgetAmount?.totalCategoryBudget?.unpaidCost ?? 0,
           }}
         />
 

@@ -3,7 +3,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { FlatList, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { SegmentedButtons, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { combineDateAndTime, showErrorToast, showToast } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
 import DatePicker from "../../components/common/DatePicker";
@@ -235,39 +235,6 @@ export const EditCheckListScreen: React.FC = () => {
             style={{ height: 150 }}
             placeholder="ex. 웨딩홀 투어1 : 보증인원 200명"
           />
-        ),
-      },
-      {
-        key: "status",
-        component: (
-          <>
-            <Text style={{ fontSize: 16, marginVertical: 10, fontWeight: "bold" }}>상태</Text>
-            <Text style={{ fontSize: 12, marginBottom: 10, color: Color.DARK_GRAY }}>
-              확정으로 선택 시 비용이 예산에 반영됩니다.
-            </Text>
-            <SegmentedButtons
-              value={checkListStatus}
-              onValueChange={(value) => setCheckListStatus(value as CheckListStatus)}
-              style={{ borderColor: Color.DARK_GRAY }}
-              buttons={[
-                {
-                  value: CheckListStatus.CONFIRMED,
-                  label: "✔️ 확정",
-                  style: checkListStatus === CheckListStatus.CONFIRMED ? selectedButtonStyle : segmentedButtonStyle,
-                },
-                {
-                  value: CheckListStatus.PENDING,
-                  label: "보류",
-                  style: checkListStatus === CheckListStatus.PENDING ? selectedButtonStyle : segmentedButtonStyle,
-                },
-                {
-                  value: CheckListStatus.REJECTED,
-                  label: "❌ 탈락",
-                  style: checkListStatus === CheckListStatus.REJECTED ? selectedButtonStyle : segmentedButtonStyle,
-                },
-              ]}
-            />
-          </>
         ),
       },
     ].filter((item) => item !== false && item !== null && item !== undefined);

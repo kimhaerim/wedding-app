@@ -6,6 +6,7 @@ import { View } from "react-native";
 import { SegmentedButtons, Text } from "react-native-paper";
 import { showErrorToast, showToast } from "../../common/util";
 import BottomButton from "../../components/common/BottomButton";
+import CheckBox from "../../components/common/CheckBox";
 import DatePicker from "../../components/common/DatePicker";
 import InputText from "../../components/common/InputText";
 import WhiteSafeAreaView from "../../components/common/WhiteSafeAreaView";
@@ -17,7 +18,7 @@ import { EditCostNavigationType, EditCostRouteProp } from "../../navigation/inte
 export const EditCostScreen: React.FC = () => {
   const route = useRoute<EditCostRouteProp>();
   const navigation = useNavigation<EditCostNavigationType>();
-  const { costId, checkListId, fromNavigator } = route.params;
+  const { costId, checkListId } = route.params;
 
   const [getCost] = useLazyQuery<{ cost: ICost }, { id: number }>(QueryGetCOst, {
     fetchPolicy: "no-cache",
@@ -32,14 +33,16 @@ export const EditCostScreen: React.FC = () => {
     getCost({ variables: { id: costId } });
   }, [costId]);
 
-  const [addCost] = useMutation<{ addCost: number }, IAddCost>(MutationAddCost);
-  const [updateCost, {}] = useMutation<{ updateCost: boolean }, IUpdateCost>(MutationUpdateCost);
+  const [addCost, { error }] = useMutation<{ addCost: number }, IAddCost>(MutationAddCost);
+  const [updateCost] = useMutation<{ updateCost: boolean }, IUpdateCost>(MutationUpdateCost);
 
   useLayoutEffect(() => {
     navigation.setOptions({ headerTitle: costId ? "비용 수정" : "비용 저장" });
   }, [navigation, costId]);
 
   const [cost, setCost] = useState<ICost | undefined>(undefined);
+  const [isIncludeBudget, setIsIncludeBudget] = useState<boolean>(false);
+  const [selectedCheckListId, setSelectedCheckListId] = useState<number | undefined>(undefined);
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [memo, setMemo] = useState<string | undefined>(undefined);
@@ -47,6 +50,7 @@ export const EditCostScreen: React.FC = () => {
   const [paymentDate, setPaymentDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
+    setSelectedCheckListId(checkListId);
     if (!cost) {
       return;
     }
@@ -56,18 +60,28 @@ export const EditCostScreen: React.FC = () => {
     setMemo(cost.memo);
     setCostType(cost.costType);
     setPaymentDate(cost.paymentDate ? new Date(cost.paymentDate) : undefined);
-  }, [cost]);
+    setIsIncludeBudget(cost.isIncludeBudget);
+  }, [cost, checkListId]);
 
   const getCostData = useMemo(() => {
     const paymentDateString = dayjs(paymentDate).format("YYYY-MM-DD");
-    const data = { title, amount, memo, costType, paymentDate: paymentDateString, checkListId };
+    const data = {
+      title,
+      amount,
+      memo,
+      costType,
+      paymentDate: paymentDateString,
+      checkListId: selectedCheckListId,
+      isIncludeBudget,
+    };
     return costId ? { costId, ...data } : data;
-  }, [title, amount, memo, costType, paymentDate]);
+  }, [title, amount, memo, selectedCheckListId, costType, paymentDate, isIncludeBudget]);
 
   const handleAddCost = useCallback(async () => {
     const addVariables = getCostData;
-    if (!addVariables.title) {
-      showToast("이름은 필수입니다.", "info");
+
+    if (!addVariables.title || !addVariables.checkListId) {
+      showToast("이름/체크리스트 연결은 필수입니다.", "info");
       return;
     }
 
@@ -81,6 +95,10 @@ export const EditCostScreen: React.FC = () => {
 
   const handleUpdateCost = useCallback(async () => {
     const updateVariables = getCostData;
+    if (!updateVariables.title || !updateVariables.checkListId) {
+      showToast("이름/체크리스트 연결은 필수입니다.", "info");
+      return;
+    }
 
     if (!costId) {
       showErrorToast();
@@ -158,6 +176,13 @@ export const EditCostScreen: React.FC = () => {
           ]}
         />
 
+        <CheckBox
+          label="예산에 반영"
+          onPress={() => setIsIncludeBudget((prev) => !prev)}
+          isChecked={isIncludeBudget}
+          labelStyle={{ fontWeight: "bold" }}
+        />
+
         <View style={{ marginBottom: 50 }}>
           <Text style={{ fontSize: 16, fontWeight: "bold", marginTop: 20, marginBottom: 30 }}>결제일</Text>
           <DatePicker label="날짜" value={paymentDate} onChange={setPaymentDate}></DatePicker>
@@ -173,7 +198,7 @@ export const EditCostScreen: React.FC = () => {
       </View>
 
       <BottomButton
-        label={costId ? "수정" : "저장"}
+        label={costId ? "수정" : "저장"}
         disabled={title?.length === 0}
         onPress={handleEditCost}
       ></BottomButton>

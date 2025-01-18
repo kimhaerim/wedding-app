@@ -52,11 +52,10 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
   );
 
   const handleEditCost = useCallback(
-    (costId: number) => {
-      navigation.navigate("EditCost", { costId, checkListId });
-      setCostId(undefined);
+    (costId?: number) => {
+      navigation.navigate("EditCost", { costId, checkListId, isFromCheckList: true, fromNavigator: "CheckListHome" });
     },
-    [costId]
+    [checkListId, navigation]
   );
 
   const handleRemoveCost = useCallback(() => {
@@ -95,6 +94,7 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
               navigation.navigate("EditCheckList", {
                 checkListId,
                 isFromCategory: data.checkList.category ? true : false,
+                fromNavigator: "CheckListHome",
               })
             }
             onRemoveButtonPress={() => setRemoveCheckListModalVisible(true)}
@@ -138,7 +138,16 @@ export const CheckListScreen: React.FC<CheckListScreenProps> = ({ route, navigat
             />
           </View>
 
-          <FloatingButton onPress={() => navigation.navigate("EditCost", { checkListId })}></FloatingButton>
+          <FloatingButton
+            onPress={() => {
+              navigation.navigate("EditCost", {
+                costId,
+                checkListId,
+                isFromCheckList: true,
+                fromNavigator: "CheckListHome",
+              });
+            }}
+          ></FloatingButton>
 
           <ConfirmModal
             title="비용 정보를 정말 삭제하시겠습니까?"
